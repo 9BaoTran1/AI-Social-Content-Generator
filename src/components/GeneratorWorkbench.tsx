@@ -432,6 +432,24 @@ ${generatedResult.rationale}
               <div className="grid grid-cols-3 gap-1 text-[11px]">
                 <button
                   type="button"
+                  onClick={() => setModelSelection('gemini-3.6-flash')}
+                  className={`p-1.5 rounded-lg border text-center transition-all cursor-pointer ${
+                    modelSelection === 'gemini-3.6-flash'
+                      ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-2xs'
+                      : isDark
+                      ? 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                  }`}
+                >
+                  <div className="flex items-center justify-center gap-1">
+                    <Zap className="w-3 h-3 text-amber-400" />
+                    <span>Gemini 3.6</span>
+                  </div>
+                  <span className="text-[9px] opacity-80 block font-normal">Siêu tốc 1s (Mặc định)</span>
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => setModelSelection('gemini-3.7-flash')}
                   className={`p-1.5 rounded-lg border text-center transition-all cursor-pointer ${
                     modelSelection === 'gemini-3.7-flash'
@@ -442,7 +460,7 @@ ${generatedResult.rationale}
                   }`}
                 >
                   <div className="flex items-center justify-center gap-1">
-                    <Sparkles className="w-3 h-3" />
+                    <Sparkles className="w-3 h-3 text-indigo-300" />
                     <span>Gemini 3.7</span>
                   </div>
                   <span className="text-[9px] opacity-80 block font-normal">Chất lượng cao nhất</span>
@@ -464,24 +482,6 @@ ${generatedResult.rationale}
                     <span>3.7 Thinking</span>
                   </div>
                   <span className="text-[9px] opacity-80 block font-normal">Tư duy tâm lý sâu</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setModelSelection('gemini-2.5-flash')}
-                  className={`p-1.5 rounded-lg border text-center transition-all cursor-pointer ${
-                    modelSelection === 'gemini-2.5-flash'
-                      ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-2xs'
-                      : isDark
-                      ? 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  <div className="flex items-center justify-center gap-1">
-                    <Zap className="w-3 h-3 text-emerald-400" />
-                    <span>Gemini 2.5</span>
-                  </div>
-                  <span className="text-[9px] opacity-80 block font-normal">Siêu tốc & Ổn định</span>
                 </button>
               </div>
 

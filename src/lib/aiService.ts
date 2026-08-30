@@ -76,9 +76,7 @@ export async function generateOrderAI(params: {
     throw new Error('CHƯA_CÓ_API_KEY: Ứng dụng đang chạy ở chế độ tĩnh. Vui lòng nhập Gemini API Key của bạn để bắt đầu tạo nội dung.');
   }
 
-  const modelName = params.options?.modelSelection?.startsWith('gemini-2.5')
-    ? 'gemini-2.5-flash'
-    : 'gemini-2.5-flash';
+  const modelName = params.options?.modelSelection || 'gemini-3.6-flash';
 
   const systemInstruction = `Bạn là Content Master 10 năm kinh nghiệm và Social Media Copywriter hàng đầu Việt Nam.
 Nhiệm vụ: Tạo ra content đạt điểm 10/10 về độ TỰ NHIÊN, CHÂN THẬT, KHÔNG VĂN MẪU ROBOT và tối đa tỷ lệ chuyển đổi từ comment/post thành tin nhắn 1-1 (DM).
@@ -130,10 +128,11 @@ Trả về JSON đúng cấu trúc:
 
   const modelsToTry = [
     modelName,
-    'gemini-2.5-flash',
+    'gemini-3.6-flash',
+    'gemini-3.7-flash',
+    'gemini-3.5-flash',
     'gemini-flash-latest',
-    'gemini-2.0-flash',
-    'gemini-1.5-flash',
+    'gemini-3.1-flash-lite',
   ].filter((v, i, a) => a.indexOf(v) === i);
 
   let parsed: any = null;
@@ -241,7 +240,7 @@ Xuất JSON:
   }
   parts.push({ text: promptText });
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -303,7 +302,7 @@ export async function chatAI(params: {
   const systemInstruction = `Bạn là Content Master 10 năm kinh nghiệm hỗ trợ chuyển đổi comment thành inbox.
 Dự án khả dụng: ${JSON.stringify(params.programs)}`;
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
