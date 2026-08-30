@@ -35,10 +35,11 @@ import {
   Brain,
   Zap,
   Download,
-  SendHorizontal
+  SendHorizontal,
+  Key
 } from 'lucide-react';
 import { saveHistoryItem } from '../lib/storage';
-import { generateOrderAI } from '../lib/aiService';
+import { generateOrderAI, getApiKey, setApiKey } from '../lib/aiService';
 
 interface GeneratorWorkbenchProps {
   programs: ProgramItem[];
@@ -101,6 +102,7 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
   const [generatedResult, setGeneratedResult] = useState<GeneratedContent | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [inlineApiKey, setInlineApiKey] = useState<string>('');
 
   const copyWithFeedback = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -711,24 +713,86 @@ ${generatedResult.rationale}
               )}
             </div>
 
-            {/* Error Display with Direct Retry */}
+            {/* Error Display & Inline API Key Setup */}
             {error && (
-              <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/80 text-xs text-rose-800 dark:text-rose-300 space-y-2">
+              <div
+                className={`p-4 rounded-xl border space-y-3 text-xs ${
+                  error.includes('API_KEY') || error.includes('403') || error.includes('unregistered')
+                    ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-700/80 text-amber-900 dark:text-amber-200'
+                    : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/80 text-rose-800 dark:text-rose-300'
+                }`}
+              >
                 <div className="flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 flex-shrink-0 mt-0.5" />
-                  <span className="leading-relaxed flex-1">{error}</span>
+                  {error.includes('API_KEY') || error.includes('403') || error.includes('unregistered') ? (
+                    <Key className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                  ) : (
+                    <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 flex-shrink-0 mt-0.5" />
+                  )}
+                  <div className="flex-1 space-y-1">
+                    <p className="font-bold">
+                      {error.includes('API_KEY') || error.includes('403') || error.includes('unregistered')
+                        ? 'Cần nhập Gemini API Key để kích hoạt AI:'
+                        : 'Thông báo xử lý:'}
+                    </p>
+                    <p className="leading-relaxed text-[11px] opacity-90">
+                      {error.includes('API_KEY') || error.includes('403') || error.includes('unregistered')
+                        ? 'Website đang chạy ở chế độ tĩnh trực tiếp trên trình duyệt. Bạn chỉ cần dán Gemini API Key vào ô dưới để tạo content ngay:'
+                        : error}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex items-center justify-end gap-2 pt-1">
-                  <button
-                    type="button"
-                    onClick={handleGenerate}
-                    disabled={isLoading}
-                    className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-semibold text-[11px] flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <RefreshCw className={`w-3 h-3 ${isLoading ? 'animate-spin' : ''}`} />
-                    <span>Thử lại ngay</span>
-                  </button>
-                </div>
+
+                {/* Inline API Key Input when needed */}
+                {(error.includes('API_KEY') || error.includes('403') || error.includes('unregistered')) ? (
+                  <div className="space-y-2 pt-1">
+                    <div className="flex gap-2">
+                      <input
+                        type="password"
+                        value={inlineApiKey}
+                        onChange={(e) => setInlineApiKey(e.target.value)}
+                        placeholder="Dán Gemini API Key (AIzaSy...)"
+                        className="flex-1 border rounded-lg px-3 py-1.5 text-xs font-mono bg-white dark:bg-slate-900 border-amber-300 dark:border-amber-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (inlineApiKey.trim()) {
+                            setApiKey(inlineApiKey.trim());
+                            setError(null);
+                            handleGenerate();
+                          }
+                        }}
+                        className="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs cursor-pointer whitespace-nowrap shadow-xs"
+                      >
+                        Lưu & Tạo Ngay
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[11px] pt-1">
+                      <span className="text-amber-800 dark:text-amber-300">Chưa có key? Nhận miễn phí vĩnh viễn:</span>
+                      <a
+                        href="https://aistudio.google.com/app/apikey"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-bold underline text-indigo-600 dark:text-indigo-400 hover:text-indigo-700"
+                      >
+                        Lấy Key tại Google AI Studio ↗
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-end gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => handleGenerate()}
+                      disabled={isLoading}
+                      className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-semibold text-[11px] flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <RefreshCw className={`w-3 h-3 ${isLoading ? 'animate-spin' : ''}`} />
+                      <span>Thử lại ngay</span>
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 

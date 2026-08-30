@@ -2,8 +2,15 @@ import { ProgramItem, OrderType, GeneratedContent, GenerationOptions, ProgramTyp
 
 export function getApiKey(): string {
   if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlApiKey = urlParams.get('api_key') || urlParams.get('gemini_key');
+    if (urlApiKey && urlApiKey.trim()) {
+      localStorage.setItem('gemini_api_key', urlApiKey.trim());
+      return urlApiKey.trim();
+    }
+
     const saved = localStorage.getItem('gemini_api_key');
-    if (saved) return saved.trim();
+    if (saved && saved.trim()) return saved.trim();
   }
   return (import.meta as any).env?.VITE_GEMINI_API_KEY || '';
 }
@@ -55,6 +62,10 @@ export async function generateOrderAI(params: {
 
   // 2. Client-side Fallback (Direct Gemini REST API)
   const apiKey = getApiKey();
+  if (!apiKey || apiKey.trim() === '') {
+    throw new Error('CHƯA_CÓ_API_KEY: Ứng dụng đang chạy ở chế độ tĩnh. Vui lòng nhập Gemini API Key của bạn để bắt đầu tạo nội dung.');
+  }
+
   const modelName = params.options?.modelSelection?.startsWith('gemini-2.5')
     ? 'gemini-2.5-flash'
     : 'gemini-2.5-flash';
