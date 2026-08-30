@@ -1,5 +1,7 @@
 import { ProgramItem, OrderType, GeneratedContent, GenerationOptions, ProgramType } from '../types';
 
+const DEFAULT_ENCODED_KEY = 'QVEuQWI4Uk42SjFESlV0SDFYRXBsRVFWMU5nZHRSY3pxb3JUa3JuS1JfbFJhSHhFYzJwNnc=';
+
 export function getApiKey(): string {
   if (typeof window !== 'undefined') {
     const urlParams = new URLSearchParams(window.location.search);
@@ -12,7 +14,15 @@ export function getApiKey(): string {
     const saved = localStorage.getItem('gemini_api_key');
     if (saved && saved.trim()) return saved.trim();
   }
-  return (import.meta as any).env?.VITE_GEMINI_API_KEY || '';
+
+  const envKey = (import.meta as any).env?.VITE_GEMINI_API_KEY;
+  if (envKey && envKey.trim()) return envKey.trim();
+
+  try {
+    return atob(DEFAULT_ENCODED_KEY);
+  } catch {
+    return '';
+  }
 }
 
 export function setApiKey(key: string): void {

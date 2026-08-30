@@ -34,6 +34,7 @@ jobs:
         run: npx vite build
         env:
           VITE_BASE_PATH: /AI-Social-Content-Generator/
+          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
