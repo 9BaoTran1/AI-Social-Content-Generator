@@ -44,6 +44,7 @@ import { generateOrderAI, getApiKey, setApiKey } from '../lib/aiService';
 interface GeneratorWorkbenchProps {
   programs: ProgramItem[];
   initialOrderType?: OrderType;
+  initialContext?: string;
   onNavigateToPrograms: () => void;
   theme?: ThemeMode;
 }
@@ -74,12 +75,19 @@ const QUICK_IDEAS = [
 export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
   programs,
   initialOrderType = 'order_1',
+  initialContext = '',
   onNavigateToPrograms,
   theme = 'light',
 }) => {
   const isDark = theme === 'dark';
   const [selectedOrderType, setSelectedOrderType] = useState<OrderType>(initialOrderType);
-  const [context, setContext] = useState<string>('');
+  const [context, setContext] = useState<string>(initialContext);
+
+  useEffect(() => {
+    if (initialContext) {
+      setContext(initialContext);
+    }
+  }, [initialContext]);
   const [selectedProgramId, setSelectedProgramId] = useState<string>('auto');
   const [modelSelection, setModelSelection] = useState<AIModelOption>('gemini-3.7-flash');
   const [writingTone, setWritingTone] = useState<WritingToneOption>('empathy_story');

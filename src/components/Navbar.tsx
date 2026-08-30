@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check, Share2, Lock } from 'lucide-react';
+import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check, Share2, Lock, BookmarkCheck } from 'lucide-react';
 import { ThemeMode } from '../types';
 import { getApiKey, setApiKey } from '../lib/aiService';
 
 interface NavbarProps {
-  activeTab: 'workbench' | 'programs' | 'assistant';
-  setActiveTab: (tab: 'workbench' | 'programs' | 'assistant') => void;
+  activeTab: 'workbench' | 'benchmark' | 'programs' | 'assistant';
+  setActiveTab: (tab: 'workbench' | 'benchmark' | 'programs' | 'assistant') => void;
   onOpenAddProgram: () => void;
   programCount: { ws: number; ct: number };
   theme: ThemeMode;
@@ -101,7 +101,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <button
               onClick={() => setActiveTab('workbench')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all cursor-pointer ${
                 activeTab === 'workbench'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : isDark
@@ -114,8 +114,22 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
+              onClick={() => setActiveTab('benchmark')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all cursor-pointer ${
+                activeTab === 'benchmark'
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : isDark
+                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white'
+              }`}
+            >
+              <BookmarkCheck className="w-3.5 h-3.5" />
+              <span>Kho Mẫu Chuẩn</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('programs')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all cursor-pointer ${
                 activeTab === 'programs'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : isDark
@@ -129,7 +143,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => setActiveTab('assistant')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all cursor-pointer ${
                 activeTab === 'assistant'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : isDark

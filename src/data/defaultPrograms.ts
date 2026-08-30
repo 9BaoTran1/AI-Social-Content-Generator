@@ -331,5 +331,122 @@ Chúc bạn một ngày tích cực và hiệu quả ạ. ❤️`
     tags: ['Facebook', 'WS Only', 'Trung lập', 'Phân tích'],
     keyInsight: 'Không áp đặt 1 chiều, đồng cảm khách quan với áp lực công sở và giới thiệu WS nhẹ nhàng.',
     content: `Tình trạng này không phải một mình bạn, manager hiện còn bị đè lương dưới 18m trong khi vừa tái cấu trúc duy trì vận hành vừa phải đào tạo 6 newbie (trong đó có cháu sếp). Khi bản thân có thực lực nhưng chưa định vị rõ ràng bản sắc và thế mạnh riêng, rất dễ rơi vào trạng thái quá tải và mất phương hướng. Bạn có thể thử tham gia WS này để nhìn nhận lại điểm mạnh và có chiến lược phù hợp hơn cho giai đoạn tới nhé.`
+  },
+  {
+    id: 'bm-fb-talkshow-hr',
+    platform: 'Facebook',
+    category: 'Bài Viết Facebook Chuyên Sâu',
+    title: 'Bài viết Facebook HR / Quản lý Nhân sự - Talkshow Be The True Leader',
+    tags: ['Facebook', 'HR/HRBP', 'Talkshow', 'Workshop'],
+    keyInsight: 'Chạm vào nỗi đau làm "dâu trăm họ", chuyển từ làm nhiều việc sự vụ sang tư duy lãnh đạo chiến lược.',
+    content: `LÀM HR KHÔNG PHẢI LÀ LÀM DÂU TRĂM HỌ
+LÀM HR LÀ DẪN DẮT SỰ PHÁT TRIỂN CỦA CON NGƯỜI
+
+Sáng tuyển dụng. Trưa xử lý quan hệ lao động. Chiều tính lương. Tối giải quyết xung đột nội bộ.
+Nhiều lúc làm HR cứ như một “người dọn rác cảm xúc” cho cả công ty 🥲
+
+Nhưng trong thời đại AI ngày càng có thể làm thay các công việc hành chính, lọc CV, soạn JD, viết email, tổng hợp dữ liệu... Giỏi sự vụ thôi chưa chắc giúp bạn đi xa.
+
+Một người làm HR muốn lên tầm Lead/HRBP cần nhiều hơn thế:
+🧠 Tư duy chiến lược: Nhìn bức tranh lớn của doanh nghiệp, không chỉ giải quyết sự vụ
+🤝 Thấu cảm & EQ cao: Hiểu tâm lý nhân sự nhưng vẫn giữ được sự tỉnh táo và nguyên tắc
+🚀 Năng lực tạo ảnh hưởng: Nói để sếp nghe, nhân viên tin và phòng ban hợp tác
+⚡️ Quản trị bản thân: Giữ năng lượng tích cực khi hàng ngày phải đối diện với áp lực từ nhiều phía
+
+Nếu bạn đang làm HR, C&B, Tuyển dụng hoặc chuẩn bị bước lên vị trí Lead/Manager, có lẽ đã đến lúc không chỉ nâng cấp chuyên môn, mà phải nâng cấp tư duy lãnh đạo.
+
+🎯 TALKSHOW: BE THE TRUE LEADER – LEADER THÔNG THÁI THỜI ĐẠI MỚI
+📍 Online qua Zoom
+🎁 Miễn phí 100%
+✅ Thời gian: 19h-21h Thứ Năm
+
+👉 Một buổi để nhìn lại năng lực cốt lõi, tư duy lãnh đạo, EQ và giá trị riêng của người làm HR trong thời đại AI.
+
+Link đăng ký dưới comment nha.`
+  },
+  {
+    id: 'bm-fb-talkshow-ld',
+    platform: 'Facebook',
+    category: 'Bài Viết Facebook Chuyên Sâu',
+    title: 'Bài viết Facebook L&D / Training - Talkshow Be The True Leader',
+    tags: ['Facebook', 'L&D', 'Training', 'Talkshow'],
+    keyInsight: 'Định vị lại vai trò L&D: không chỉ chạy chương trình đa năng mà là người tạo ra năng lực cho tổ chức.',
+    content: `L&D KHÔNG PHẢI LÀ NGƯỜI CHỈ BIẾT TỔ CHỨC TRAINING
+L&D LÀ NGƯỜI DẪN DẮT SỰ PHÁT TRIỂN CỦA ĐỘI NGŨ
+
+Lên kế hoạch đào tạo
+Book phòng
+Gửi mail
+Theo dõi attendance
+Làm báo cáo
+Đánh giá sau chương trình…
+
+Có những lúc L&D bận đến mức trở thành “người chạy chương trình đa năng”, nhưng nhìn lại vẫn chưa trả lời được: “Mình đang tạo ra giá trị gì cho tổ chức?”
+
+Trong thời đại AI có thể hỗ trợ thiết kế nội dung, tạo tài liệu, tổng hợp dữ liệu và xây dựng chương trình học nhanh hơn rất nhiều, L&D càng không thể chỉ cạnh tranh bằng khả năng làm nhiều việc.
+
+Một người L&D muốn phát triển xa cần biết:
+🧠 Tư duy chiến lược: Hiểu vấn đề kinh doanh và xác định đúng năng lực cần phát triển
+🤝 Thấu hiểu con người: Không chỉ hỏi “nhân viên muốn học gì?” mà phải nhìn ra “họ thực sự cần thay đổi điều gì?”
+🚀 Tư duy lãnh đạo: Biết tạo ảnh hưởng, kết nối Stakeholder và dẫn dắt sự thay đổi
+⚡️ Quản trị bản thân: Giữ năng lượng, sự sáng tạo và khả năng học hỏi trong một nghề luôn phải “phát triển người khác”
+
+Nếu bạn đang làm L&D, Training, HRD hoặc chuẩn bị bước lên vị trí Lead/Manager, có lẽ đã đến lúc không chỉ nâng cấp nghiệp vụ đào tạo, mà phải nâng cấp tư duy lãnh đạo.
+
+🎯 TALKSHOW: BE THE TRUE LEADER – LEADER THÔNG THÁI THỜI ĐẠI MỚI
+📍 Online qua Zoom
+🎁 Miễn phí 100%
+✅ Thời gian: 19h-21h Thứ Năm
+
+👉 Để L&D không chỉ “đào tạo nhân sự”, mà thực sự trở thành người tạo ra năng lực và thay đổi cho tổ chức.
+
+Link đăng ký dưới comment.`
+  },
+  {
+    id: 'bm-fb-talkshow-qa',
+    platform: 'Facebook',
+    category: 'Bài Viết Facebook Chuyên Sâu',
+    title: 'Bài viết Facebook QA/QC / Tester - Talkshow Be The True Leader',
+    tags: ['Facebook', 'QA/QC', 'Tester', 'Talkshow'],
+    keyInsight: 'Dành cho dân kỹ thuật QA/QC muốn nâng cấp từ chuyên môn bắt lỗi lên kỹ năng lead và xử lý con người.',
+    content: `LÃNH ĐẠO QA/QC KHÔNG PHẢI LÀ NGƯỜI ĐI BẮT TỪNG LỖI
+MÀ LÀ NGƯỜI DẪN DẮT ĐỘI NGŨ GIẢI QUYẾT VẤN ĐỀ
+
+Sáng họp. Trưa xử lý NCR. Chiều đi hiện trường. Tối vẫn check mail.
+Làm QA/QC nhiều khi cứ như một “người chữa cháy đa năng” 🥲
+
+Nhưng khi AI ngày càng có thể hỗ trợ kiểm tra, phân tích dữ liệu, sinh test case, tổng hợp báo cáo..., giỏi chuyên môn thôi chưa chắc giúp bạn đi xa.
+
+Một QA/QC muốn lên Lead cần nhiều hơn thế:
+🧠 Tư duy phân tích: Không chỉ phát hiện lỗi, mà tìm được nguyên nhân và giải pháp từ gốc
+🤝 EQ & giao tiếp: Biết làm việc với các bên để giải quyết vấn đề thay vì chỉ “bắt lỗi” nhau
+🚀 Tư duy lãnh đạo: Chủ động dẫn dắt, ra quyết định và tạo ảnh hưởng cho đội ngũ
+⚡️ Quản trị bản thân: Giữ sự tỉnh táo và hiệu suất khi áp lực chất lượng, tiến độ liên tục đè lên vai
+
+Nếu bạn đang làm QA/QC, Tester hoặc chuẩn bị bước lên vị trí Lead/Manager, có lẽ đã đến lúc không chỉ nâng cấp chuyên môn, mà phải nâng cấp tư duy lãnh đạo.
+
+🎯 TALKSHOW: BE THE TRUE LEADER – LEADER THÔNG THÁI THỜI ĐẠI MỚI
+📍 Online qua Zoom
+🎁 Miễn phí 100%
+
+👉 Một buổi chia sẻ để nhìn lại: Điều gì thực sự giúp QA/QC phát triển bền vững trong thời đại AI?
+
+Link đăng ký dưới comment.`
+  },
+  {
+    id: 'bm-threads-1',
+    platform: 'Threads',
+    category: 'Bài Đăng Tự Sự',
+    title: 'Mẫu Threads: Nhìn lại hành trình áp lực tuổi 20-30',
+    tags: ['Threads', 'Storytelling', '20-30t', 'Tự sự'],
+    keyInsight: 'Ngắt dòng ngắn, tự nhiên, chạm vào cảm xúc FOMO và hoang mang nghề nghiệp.',
+    content: `Có những ngày tan làm lúc 7h tối, ngồi ở ngã tư kẹt xe tự nhiên thấy mình trống rỗng.
+Không phải vì công việc quá tệ, mà vì không biết 2 năm nữa mình sẽ ở đâu.
+Nhìn bạn bè cùng lứa ai cũng có vẻ thành công, tự dưng áp lực vô hình đè nặng.
+
+Nhưng sau này mình mới nhận ra: Chạy theo tốc độ của người khác chỉ làm mình kiệt sức.
+Hiểu rõ nhịp độ và thế mạnh cốt lõi của chính mình mới là cách bền vững nhất.
+
+Nếu bạn cũng đang loay hoay trong khoảng thời gian này, mình có 1 bài đánh giá định hướng 1-1 khá hay, bạn nào cần thì nhắn mình nhé.`
   }
 ];

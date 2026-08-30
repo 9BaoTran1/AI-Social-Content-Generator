@@ -5,12 +5,14 @@ import { Navbar } from './components/Navbar';
 import { GeneratorWorkbench } from './components/GeneratorWorkbench';
 import { ProgramManager } from './components/ProgramManager';
 import { AssistantView } from './components/AssistantView';
+import { BenchmarkLibrary } from './components/BenchmarkLibrary';
 import { AccessGuard } from './components/AccessGuard';
 
 export default function App() {
   const [programs, setPrograms] = useState<ProgramItem[]>(getSavedPrograms());
-  const [activeTab, setActiveTab] = useState<'workbench' | 'programs' | 'assistant'>('workbench');
+  const [activeTab, setActiveTab] = useState<'workbench' | 'benchmark' | 'programs' | 'assistant'>('workbench');
   const [selectedOrderType, setSelectedOrderType] = useState<OrderType>('order_1');
+  const [prefillContext, setPrefillContext] = useState<string>('');
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
 
   // Theme State (default: 'light' since user asked for light version, or stored preference)
@@ -31,6 +33,11 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('order_ai_theme', theme);
   }, [theme]);
+
+  const handleUseTemplate = (templateContent: string) => {
+    setPrefillContext(templateContent);
+    setActiveTab('workbench');
+  };
 
   // Program Handlers
   const handleAddProgram = (newProg: ProgramItem) => {
@@ -84,7 +91,15 @@ export default function App() {
             <GeneratorWorkbench
               programs={programs}
               initialOrderType={selectedOrderType}
+              initialContext={prefillContext}
               onNavigateToPrograms={() => setActiveTab('programs')}
+              theme={theme}
+            />
+          )}
+
+          {activeTab === 'benchmark' && (
+            <BenchmarkLibrary
+              onUseTemplate={handleUseTemplate}
               theme={theme}
             />
           )}
