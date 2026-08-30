@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check } from 'lucide-react';
+import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check, Share2, Lock } from 'lucide-react';
 import { ThemeMode } from '../types';
 import { getApiKey, setApiKey } from '../lib/aiService';
 
@@ -25,6 +25,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [showKeyModal, setShowKeyModal] = useState<boolean>(false);
   const [apiKeyInput, setApiKeyInput] = useState<string>(getApiKey());
   const [keySavedFeedback, setKeySavedFeedback] = useState<boolean>(false);
+  const [copiedLinkFeedback, setCopiedLinkFeedback] = useState<boolean>(false);
+
+  const handleCopyPrivateLink = () => {
+    const baseUrl = window.location.origin + window.location.pathname;
+    const privateUrl = `${baseUrl.replace(/\/$/, '')}/?key=ordersieunhan`;
+    navigator.clipboard.writeText(privateUrl);
+    setCopiedLinkFeedback(true);
+    setTimeout(() => setCopiedLinkFeedback(false), 2500);
+  };
 
   const handleSaveKey = () => {
     setApiKey(apiKeyInput.trim());
@@ -133,8 +142,31 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </nav>
 
-          {/* Actions: Theme Toggle & Add Button */}
+          {/* Actions: Theme Toggle, Private Link & Add Button */}
           <div className="flex items-center space-x-2">
+            {/* Private Link Copy Button */}
+            <button
+              onClick={handleCopyPrivateLink}
+              title="Sao chép link truy cập riêng tư có gắn mã bảo mật tự động"
+              className={`p-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                isDark
+                  ? 'bg-slate-900 hover:bg-slate-800 text-indigo-300 border-indigo-900/60'
+                  : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border-indigo-200 shadow-xs'
+              }`}
+            >
+              {copiedLinkFeedback ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-500" />
+                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">Đã chép link!</span>
+                </>
+              ) : (
+                <>
+                  <Lock className="w-3.5 h-3.5 text-indigo-500" />
+                  <span className="hidden sm:inline text-[11px] font-semibold">Link Bí Mật</span>
+                </>
+              )}
+            </button>
+
             {/* API Key Modal Button */}
             <button
               onClick={() => setShowKeyModal(true)}
