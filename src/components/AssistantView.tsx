@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { getSavedHistory, saveHistoryItem } from '../lib/storage';
 import { BENCHMARK_TEMPLATES } from '../data/defaultPrograms';
+import { generateOrderAI, chatAI } from '../lib/aiService';
 
 interface AssistantViewProps {
   programs: ProgramItem[];
@@ -99,83 +100,54 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
         const orderContext = orderMatch[2].trim();
         const orderKey = `order_${orderNum}` as OrderType;
 
-        const genRes = await fetch('/api/generate-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            orderType: orderKey,
-            context: orderContext,
-            programs,
-          }),
+        const generatedObj = await generateOrderAI({
+          orderType: orderKey,
+          context: orderContext,
+          programs,
         });
 
-        const genData = await genRes.json();
-        if (genData.success && genData.data) {
-          const generatedObj: GeneratedContent = {
-            id: `gen-${Date.now()}`,
-            orderId: orderKey,
-            orderTitle: `Order ${orderNum}`,
-            platform:
-              orderNum === 1
-                ? 'TikTok'
-                : orderNum <= 3
-                ? 'Facebook'
-                : orderNum <= 5
-                ? 'Threads'
-                : orderNum === 6
-                ? 'LinkedIn'
-                : 'Email',
-            programId: genData.data.selectedProgramId,
-            programTitle: genData.data.selectedProgramTitle,
-            programType: genData.data.selectedProgramType,
-            primaryContent: genData.data.primaryContent,
-            variations: genData.data.variations || [],
-            dmFollowUpScript: genData.data.dmFollowUpScript,
-            rationale: genData.data.rationale,
-            platformNotes: genData.data.platformNotes,
-            createdAt: new Date().toISOString(),
-          };
+        generatedObj.orderTitle = `Order ${orderNum}`;
+        generatedObj.platform =
+          orderNum === 1
+            ? 'TikTok'
+            : orderNum <= 3
+            ? 'Facebook'
+            : orderNum <= 5
+            ? 'Threads'
+            : orderNum === 6
+            ? 'LinkedIn'
+            : 'Email';
 
-          saveHistoryItem(generatedObj);
-          setHistoryItems(getSavedHistory());
+        saveHistoryItem(generatedObj);
+        setHistoryItems(getSavedHistory());
 
-          const assistantMsg: ChatMessage = {
-            id: `asst-${Date.now()}`,
-            role: 'assistant',
-            content: `Đã hoàn thành **Order ${orderNum}** cho bạn! Dự án được AI lựa chọn: **${generatedObj.programTitle}** (${
-              generatedObj.programType === 'ws' ? 'Workshop' : 'Chương trình'
-            }). Dưới đây là các phương án nội dung và kịch bản DM 1-1:`,
-            generatedResult: generatedObj,
-            timestamp: new Date().toISOString(),
-          };
+        const assistantMsg: ChatMessage = {
+          id: `asst-${Date.now()}`,
+          role: 'assistant',
+          content: `Đã hoàn thành **Order ${orderNum}** cho bạn! Dự án được AI lựa chọn: **${generatedObj.programTitle}** (${
+            generatedObj.programType === 'ws' ? 'Workshop' : 'Chương trình'
+          }). Dưới đây là các phương án nội dung và kịch bản DM 1-1:`,
+          generatedResult: generatedObj,
+          timestamp: new Date().toISOString(),
+        };
 
-          setMessages((prev) => [...prev, assistantMsg]);
-          setIsChatLoading(false);
-          return;
-        }
+        setMessages((prev) => [...prev, assistantMsg]);
+        setIsChatLoading(false);
+        return;
       }
 
-      // Normal chat request
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: query,
-          history: messages.map((m) => ({ role: m.role, content: m.content })),
-          programs,
-        }),
+      // Normal chat request via aiService
+      const chatRes = await chatAI({
+        message: query,
+        history: messages.map((m) => ({ role: m.role, content: m.content })),
+        programs,
       });
-
-      const data = await response.json();
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Không thể kết nối đến máy chủ.');
-      }
 
       const assistantMsg: ChatMessage = {
         id: `asst-${Date.now()}`,
         role: 'assistant',
-        content: data.reply,
-        suggestedActions: data.suggestedActions,
+        content: chatRes.reply,
+        suggestedActions: chatRes.suggestedActions,
         timestamp: new Date().toISOString(),
       };
 

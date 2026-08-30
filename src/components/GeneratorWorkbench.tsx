@@ -38,6 +38,7 @@ import {
   SendHorizontal
 } from 'lucide-react';
 import { saveHistoryItem } from '../lib/storage';
+import { generateOrderAI } from '../lib/aiService';
 
 interface GeneratorWorkbenchProps {
   programs: ProgramItem[];
@@ -175,45 +176,23 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
     const actualModel = overrideThinking ? 'gemini-3.7-flash-thinking' : modelSelection;
 
     try {
-      const response = await fetch('/api/generate-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          orderType: selectedOrderType,
-          context: context.trim(),
-          screenshotBase64,
-          selectedProgramId: selectedProgramId === 'auto' ? undefined : selectedProgramId,
-          programs: filteredPrograms,
-          options: {
-            modelSelection: actualModel,
-            tone: writingTone,
-            includeLink,
-            customAudience: customAudience.trim() || undefined,
-            lengthPreference,
-          },
-        }),
+      const result = await generateOrderAI({
+        orderType: selectedOrderType,
+        context: context.trim(),
+        screenshotBase64,
+        selectedProgramId: selectedProgramId === 'auto' ? undefined : selectedProgramId,
+        programs: filteredPrograms,
+        options: {
+          modelSelection: actualModel,
+          tone: writingTone,
+          includeLink,
+          customAudience: customAudience.trim() || undefined,
+          lengthPreference,
+        },
       });
 
-      const data = await response.json();
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Không thể tạo nội dung. Vui lòng thử lại.');
-      }
-
-      const result: GeneratedContent = {
-        id: `gen-${Date.now()}`,
-        orderId: selectedOrderType,
-        orderTitle: currentOrderMeta.title,
-        platform: currentOrderMeta.platform,
-        programId: data.data.selectedProgramId,
-        programTitle: data.data.selectedProgramTitle,
-        programType: data.data.selectedProgramType,
-        primaryContent: data.data.primaryContent,
-        variations: data.data.variations || [],
-        dmFollowUpScript: data.data.dmFollowUpScript,
-        rationale: data.data.rationale,
-        platformNotes: data.data.platformNotes,
-        createdAt: new Date().toISOString(),
-      };
+      result.orderTitle = currentOrderMeta.title;
+      result.platform = currentOrderMeta.platform;
 
       setGeneratedResult(result);
       setActiveVariationIndex(0);

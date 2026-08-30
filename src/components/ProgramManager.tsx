@@ -19,6 +19,7 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react';
+import { extractProgramAI } from '../lib/aiService';
 
 interface ProgramManagerProps {
   programs: ProgramItem[];
@@ -90,22 +91,12 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
     setExtractError(null);
 
     try {
-      const response = await fetch('/api/extract-program', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: inputUrl.trim() || undefined,
-          text: inputText.trim() || undefined,
-          imageBase64: inputImageBase64,
-        }),
+      const extracted = await extractProgramAI({
+        url: inputUrl.trim() || undefined,
+        text: inputText.trim() || undefined,
+        imageBase64: inputImageBase64,
       });
 
-      const resData = await response.json();
-      if (!response.ok || !resData.success) {
-        throw new Error(resData.error || 'Không thể bóc tách thông tin.');
-      }
-
-      const extracted = resData.data;
       setDraftProgram({
         id: `prog-${Date.now()}`,
         title: extracted.title || 'Chương trình mới',
