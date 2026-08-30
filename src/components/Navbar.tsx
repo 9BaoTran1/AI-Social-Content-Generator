@@ -1,6 +1,7 @@
-import React from 'react';
-import { Sparkles, BookOpen, Bot, Plus, Sun, Moon } from 'lucide-react';
+import React, { useState } from 'react';
+import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check } from 'lucide-react';
 import { ThemeMode } from '../types';
+import { getApiKey, setApiKey } from '../lib/aiService';
 
 interface NavbarProps {
   activeTab: 'workbench' | 'programs' | 'assistant';
@@ -20,6 +21,19 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleTheme,
 }) => {
   const isDark = theme === 'dark';
+
+  const [showKeyModal, setShowKeyModal] = useState<boolean>(false);
+  const [apiKeyInput, setApiKeyInput] = useState<string>(getApiKey());
+  const [keySavedFeedback, setKeySavedFeedback] = useState<boolean>(false);
+
+  const handleSaveKey = () => {
+    setApiKey(apiKeyInput.trim());
+    setKeySavedFeedback(true);
+    setTimeout(() => {
+      setKeySavedFeedback(false);
+      setShowKeyModal(false);
+    }, 1200);
+  };
 
   return (
     <header
@@ -121,6 +135,20 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Actions: Theme Toggle & Add Button */}
           <div className="flex items-center space-x-2">
+            {/* API Key Modal Button */}
+            <button
+              onClick={() => setShowKeyModal(true)}
+              title="Cài đặt Gemini API Key"
+              className={`p-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                isDark
+                  ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80'
+                  : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-xs'
+              }`}
+            >
+              <Key className="w-3.5 h-3.5 text-indigo-500" />
+              <span className="hidden md:inline text-[11px]">API Key</span>
+            </button>
+
             {/* Theme Toggle Button */}
             <button
               onClick={onToggleTheme}
@@ -159,6 +187,70 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
       </div>
+
+      {/* API Key Settings Modal */}
+      {showKeyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
+          <div
+            className={`w-full max-w-md rounded-2xl p-5 border shadow-xl space-y-4 ${
+              isDark ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
+            }`}
+          >
+            <div className="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-2">
+                <Key className="w-4 h-4 text-indigo-600" />
+                <h3 className="text-sm font-bold">Cài đặt Gemini API Key</h3>
+              </div>
+              <button
+                onClick={() => setShowKeyModal(false)}
+                className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-2 text-xs">
+              <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                Ứng dụng có thể chạy trực tiếp trên trình duyệt hoặc qua server. Nhập Gemini API Key của bạn để sử dụng độc lập mọi lúc mọi nơi:
+              </p>
+              <input
+                type="password"
+                value={apiKeyInput}
+                onChange={(e) => setApiKeyInput(e.target.value)}
+                placeholder="Nhập AIzaSy... hoặc khóa API của bạn"
+                className="w-full border rounded-xl p-2.5 text-xs font-mono bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              />
+              <p className="text-[10px] text-slate-400">
+                Khóa API được lưu an toàn trong trình duyệt của bạn (Local Storage) và không bị gửi ra ngoài.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowKeyModal(false)}
+                className="px-3 py-1.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveKey}
+                className="px-4 py-1.5 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-1.5 shadow-sm cursor-pointer"
+              >
+                {keySavedFeedback ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-white" />
+                    <span>Đã lưu!</span>
+                  </>
+                ) : (
+                  <span>Lưu Cài Đặt</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
