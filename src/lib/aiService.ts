@@ -162,7 +162,23 @@ Trả về JSON đúng cấu trúc:
 
       const jsonRes = await response.json();
       const rawText = jsonRes.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-      parsed = JSON.parse(rawText);
+      const cleanJsonText = rawText.replace(/```json\s*/i, '').replace(/```\s*$/, '').trim();
+      
+      try {
+        parsed = JSON.parse(cleanJsonText);
+      } catch (jsonErr) {
+        // If not valid JSON, treat raw text as primary content
+        parsed = {
+          primaryContent: cleanJsonText,
+          variations: [cleanJsonText],
+          rationale: 'Nội dung được tạo trực tiếp từ AI.',
+          dmFollowUpScript: {
+            step1_empathy: 'Chào bạn, mình thấy bạn quan tâm đến chủ đề này.',
+            step2_qualifyQuestion: 'Bạn có đang gặp khó khăn gì trong quá trình định vị bản thân không?',
+            step3_inviteLink: 'Mình gửi bạn link tham gia workshop miễn phí nhé: [Link]'
+          }
+        };
+      }
       break;
     } catch (e: any) {
       lastErrMessage = e.message || String(e);
@@ -173,6 +189,10 @@ Trả về JSON đúng cấu trúc:
     throw new Error(`Lỗi kết nối Gemini API: ${lastErrMessage}`);
   }
 
+  const variationsList = Array.isArray(parsed.variations) && parsed.variations.length > 0
+    ? parsed.variations
+    : [parsed.primaryContent || 'Nội dung đã được tạo thành công.'];
+
   return {
     id: `gen-${Date.now()}`,
     orderId: params.orderType,
@@ -181,8 +201,8 @@ Trả về JSON đúng cấu trúc:
     programId: parsed.selectedProgramId || '',
     programTitle: parsed.selectedProgramTitle || '',
     programType: (parsed.selectedProgramType as ProgramType) || 'ws',
-    primaryContent: parsed.primaryContent || '',
-    variations: parsed.variations || [],
+    primaryContent: parsed.primaryContent || variationsList[0] || '',
+    variations: variationsList,
     dmFollowUpScript: parsed.dmFollowUpScript || {
       step1_empathy: '',
       step2_qualifyQuestion: '',
