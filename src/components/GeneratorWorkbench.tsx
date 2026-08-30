@@ -89,7 +89,7 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
     }
   }, [initialContext]);
   const [selectedProgramId, setSelectedProgramId] = useState<string>('auto');
-  const [modelSelection, setModelSelection] = useState<AIModelOption>('gemini-3.7-flash');
+  const [modelSelection, setModelSelection] = useState<AIModelOption>('gemini-2.5-flash');
   const [writingTone, setWritingTone] = useState<WritingToneOption>('empathy_story');
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const [includeLink, setIncludeLink] = useState<boolean>(false);

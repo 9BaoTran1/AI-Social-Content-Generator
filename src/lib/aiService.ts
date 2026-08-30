@@ -118,28 +118,51 @@ Trả về JSON đúng cấu trúc:
   }
   parts.push({ text: promptText });
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts }],
-      systemInstruction: { parts: [{ text: systemInstruction }] },
-      generationConfig: {
-        responseMimeType: 'application/json',
-        temperature: 0.8,
-      },
-    }),
-  });
+  const modelsToTry = [
+    modelName,
+    'gemini-2.5-flash',
+    'gemini-flash-latest',
+    'gemini-2.0-flash',
+    'gemini-1.5-flash',
+  ].filter((v, i, a) => a.indexOf(v) === i);
 
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Lỗi kết nối Gemini API (${response.status}): ${errText}`);
+  let parsed: any = null;
+  let lastErrMessage = '';
+
+  for (const currentModel of modelsToTry) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${apiKey}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts }],
+          systemInstruction: { parts: [{ text: systemInstruction }] },
+          generationConfig: {
+            responseMimeType: 'application/json',
+            temperature: 0.8,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        lastErrMessage = `(${response.status}): ${errText}`;
+        continue;
+      }
+
+      const jsonRes = await response.json();
+      const rawText = jsonRes.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+      parsed = JSON.parse(rawText);
+      break;
+    } catch (e: any) {
+      lastErrMessage = e.message || String(e);
+    }
   }
 
-  const jsonRes = await response.json();
-  const rawText = jsonRes.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-  const parsed = JSON.parse(rawText);
+  if (!parsed) {
+    throw new Error(`Lỗi kết nối Gemini API: ${lastErrMessage}`);
+  }
 
   return {
     id: `gen-${Date.now()}`,
