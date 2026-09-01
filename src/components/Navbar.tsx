@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check, BookmarkCheck, Layers, BookMarked } from 'lucide-react';
 import { ThemeMode } from '../types';
 import { getApiKey, setApiKey } from '../lib/aiService';
-import { isCrtAdmin } from '../lib/storage';
 
 interface NavbarProps {
   activeTab: 'workbench' | 'orders' | 'benchmark' | 'programs' | 'assistant' | 'guide';
@@ -23,23 +22,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const isDark = theme === 'dark';
 
-  const [isAdmin, setIsAdmin] = useState<boolean>(() => isCrtAdmin());
   const [showKeyModal, setShowKeyModal] = useState<boolean>(false);
   const [apiKeyInput, setApiKeyInput] = useState<string>(getApiKey());
   const [keySavedFeedback, setKeySavedFeedback] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleAdminCheck = () => {
-      setIsAdmin(isCrtAdmin());
-    };
-    handleAdminCheck();
-    window.addEventListener('crt_admin_changed', handleAdminCheck);
-    window.addEventListener('storage', handleAdminCheck);
-    return () => {
-      window.removeEventListener('crt_admin_changed', handleAdminCheck);
-      window.removeEventListener('storage', handleAdminCheck);
-    };
-  }, []);
 
   const handleSaveKey = () => {
     setApiKey(apiKeyInput.trim());
@@ -86,11 +71,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   Social Conversion
                 </span>
-                {isAdmin && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 border border-amber-500/50 text-amber-700 dark:text-amber-300 font-bold text-[10px] shadow-xs animate-pulse">
-                    <span>👑 Admin CRT: Đã mở quyền Quản lý</span>
-                  </span>
-                )}
               </div>
               <p
                 className={`text-[10px] sm:text-[11px] hidden md:block ${

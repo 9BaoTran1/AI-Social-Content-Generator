@@ -135,21 +135,6 @@ export const AccessGuard: React.FC<AccessGuardProps> = ({ children, theme }) => 
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </form>
-
-        {/* Tip for Link Sharing */}
-        <div
-          className={`p-3 rounded-xl border text-[11px] space-y-1 leading-relaxed ${
-            isDark ? 'bg-slate-950/70 border-slate-800 text-slate-400' : 'bg-indigo-50/50 border-indigo-100 text-slate-600'
-          }`}
-        >
-          <div className="flex items-center gap-1.5 font-semibold text-indigo-600 dark:text-indigo-400">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Mẹo truy cập 1 chạm không cần nhập mật khẩu:</span>
-          </div>
-          <p>
-            Bạn có thể đính kèm đuôi <code className="font-mono bg-indigo-100 dark:bg-indigo-950 px-1 py-0.2 rounded">?key={DEFAULT_SECRET_KEY}</code> vào cuối link web để người nhận tự động vào thẳng ứng dụng.
-          </p>
-        </div>
       </div>
     </div>
   );
