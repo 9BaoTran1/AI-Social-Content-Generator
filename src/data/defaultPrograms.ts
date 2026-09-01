@@ -468,5 +468,43 @@ Kỳ nghỉ lễ 2/9 này là cơ hội tuyệt vời để dân sáng tạo mì
 Bên mình đang triển khai bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa theo bộ chỉ số Well-being (WHO-5). Link bài đánh giá mình để ngay dưới phần bình luận, anh em cứ làm thử để lắng nghe lại cảm xúc cá nhân xem sao nhé. Nếu kết quả phù hợp, bên mình sẽ hỗ trợ giải đáp chuyên sâu cùng sự tư vấn từ bác sĩ để giúp anh em tối ưu lại nhịp sinh hoạt và duy trì phong độ sáng tạo tốt nhất.
 
 Mn nào muốn tranh thủ đợt nghỉ này làm mới lại nguồn năng lượng sáng tạo thì ghé xuống bình luận trải nghiệm thử nhé!`
+  },
+  {
+    id: 'bm-linkedin-longform-thought-leadership',
+    platform: 'LinkedIn',
+    category: 'Bài Viết LinkedIn Long-Form (Thought Leadership)',
+    title: 'LinkedIn Long-Form: Nghịch Lý Giữ Chân Nhân Tài & Bẫy "Càng Kiểm Soát Càng Mất Người"',
+    tags: ['LinkedIn', 'Long-form', 'Thought Leadership', 'HRBP', 'Quản trị nhân sự', 'Leadership'],
+    keyInsight: 'Chuẩn bài viết LinkedIn Viral: 3 dòng đầu mở nút "...see more" -> Case study từ chức bất ngờ -> Phân tích 3 rào cản gốc rễ quản trị -> Framework 3 trụ cột People-First -> Câu hỏi mở kích hoạt tranh luận chuyên môn -> Link tài liệu ở First Comment.',
+    firstCommentSeed: `P/S: Với anh/chị Leader hoặc HRBP đang quan tâm đến bộ chỉ số đo lường sức khỏe tổ chức & khung đánh giá Well-being nhân sự, em xin phép để link tài liệu chi tiết tại đây nhé: https://tally.so/r/leadership-assessment (Hoàn toàn mở và có hỗ trợ trao đổi 1-1 cho các Case Study khó ạ).`,
+    content: `Nhân sự giỏi không rời bỏ công ty vì thiếu KPI.
+Họ rời đi khi nhận ra: Sự tận tâm của mình chỉ được đổi lại bằng những quy trình kiểm soát ngày càng nghẹt thở.
+
+Tuần trước, tôi nhận được tin nhắn từ một bạn Senior Lead 6 năm kinh nghiệm xin nghỉ việc đột ngột.
+Bạn ấy là người luôn đạt 120% hiệu suất, gánh team qua những đợt khủng hoảng lớn nhất.
+Khi sếp hỏi lý do: "Em thấy mệt và muốn nghỉ ngơi."
+
+Nhưng khi ngồi trò chuyện 1-on-1 riêng, sự thật hoàn toàn khác:
+"Anh ơi, em không sợ cực. Em chỉ sợ cảm giác mỗi ngày đi làm như một chiếc máy chấm công. Mọi ý kiến cải tiến đều bị gạt đi vì 'chưa có trong tiền lệ', và thời gian làm báo cáo giải trình còn nhiều hơn thời gian giải quyết vấn đề cho khách hàng."
+
+Trong thời đại AI và thị trường cạnh tranh khốc liệt ngày nay, rất nhiều nhà quản lý đang vô tình rơi vào chiếc bẫy: CÀNG LO LẮNG VỀ NĂNG SUẤT -> CÀNG XIẾT CHẶT KIỂM SOÁT -> NHÂN TÀI CÀNG CẠN KIỆT NĂNG LƯỢNG VÀ RỜI ĐI.
+
+Sau nhiều năm đồng hành và cố vấn cho các tổ chức, tôi đúc kết ra 3 nguyên tắc sống còn để giữ lửa cho đội ngũ:
+
+1. QUẢN TRỊ NĂNG LƯỢNG, ĐỪNG QUẢN TRỊ THỜI GIAN
+Một nhân viên ngồi 10 tiếng tại bàn làm việc với tinh thần kiệt quệ sẽ tạo ra kết quả tệ hơn một người làm việc 6 tiếng với sự tập trung cao độ và tâm trí thoải mái. Tổ chức thông thái đo lường giá trị tạo ra (Impact), không đếm giờ gõ phím.
+
+2. TẠO KHÔNG GIAN AN TOÀN TÂM LÝ (PSYCHOLOGICAL SAFETY)
+Đội ngũ chỉ dám sáng tạo và đột phá khi họ không sợ bị trừng phạt vì một lỗi sai thử nghiệm. Nếu mỗi lần đề xuất ý tưởng mới đều bị bắt bẻ từng lỗi nhỏ, người giỏi nhất sẽ chọn giải pháp an toàn nhất: Im lặng và làm đối phó.
+
+3. ĐỒNG HÀNH VÌ SỰ PHÁT TRIỂN DÀI HẠN CỦA CON NGƯỜI
+Thay vì chỉ hỏi "Tuần này em làm được bao nhiêu việc?", một người Leader thực thụ sẽ hỏi: "Dự án này có đang giúp em tiến gần hơn đến mục tiêu nghề nghiệp của mình không? Anh/chị có thể hỗ trợ gì để gỡ rào cản cho em?"
+
+Giữ chân nhân tài chưa bao giờ là bài toán về mức lương cao nhất, mà là tạo ra một môi trường nơi họ cảm thấy giá trị của mình được tôn trọng và tài năng được chắp cánh.
+
+Anh/chị Leader và các đồng nghiệp HRBP nghĩ sao về vấn đề này?
+Trong bối cảnh hiện tại, đâu là rào cản lớn nhất mà anh/chị đang gặp phải khi xây dựng văn hóa gắn kết cho đội ngũ?
+
+Rất mong được lắng nghe góc nhìn thực chiến từ mọi người ở phần bình luận bên dưới.`
   }
 ];

@@ -964,7 +964,9 @@ ${generatedResult.rationale}
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold flex items-center gap-1.5 text-amber-700 dark:text-amber-300">
                           <Pin className="w-3.5 h-3.5 text-amber-500" />
-                          Bình luận ghim mồi đặt link (Tránh bóp reach Facebook):
+                          {generatedResult.platform === 'LinkedIn'
+                            ? 'Bình luận ghim mồi đặt tài liệu / InMail (Tránh bóp reach LinkedIn):'
+                            : 'Bình luận ghim mồi đặt link (Tránh bóp reach Facebook):'}
                         </span>
                         <button
                           onClick={() => copyWithFeedback(generatedResult.firstCommentSeed!, 'cmt-seed')}
@@ -992,12 +994,19 @@ ${generatedResult.rationale}
                   {/* List of Variations */}
                   <div className="space-y-3">
                     {generatedResult.variations.map((variation, idx) => {
-                      const styleNames = [
-                        'Mẫu 1: Tự Sự & Đồng Cảm Sâu Sắc (Storytelling)',
-                        'Mẫu 2: Phản Biện & Góc Nhìn Mới Lạ (Reframe)',
-                        'Mẫu 3: Giá Trị Cộng Đồng - Trắc Nghiệm / Test 1-1',
-                        'Mẫu 4: Chuyên Gia Thực Chiến & Đúc Kết Kinh Nghiệm',
-                      ];
+                      const styleNames = generatedResult.platform === 'LinkedIn'
+                        ? [
+                            'Mẫu 1: Case Study Quản Trị & Lãnh Đạo Thực Chiến (Leadership)',
+                            'Mẫu 2: Phản Biện Góc Khuất Công Sở (Workplace Reframe)',
+                            'Mẫu 3: Framework Đo Lường & Sức Khỏe Tổ Chức (Well-being Index)',
+                            'Mẫu 4: Đúc Kết Từ Chuyên Gia / Thought Leadership',
+                          ]
+                        : [
+                            'Mẫu 1: Tự Sự & Đồng Cảm Sâu Sắc (Storytelling)',
+                            'Mẫu 2: Phản Biện & Góc Nhìn Mới Lạ (Reframe)',
+                            'Mẫu 3: Giá Trị Cộng Đồng - Trắc Nghiệm WHO-5 / Test 1-1',
+                            'Mẫu 4: Chuyên Gia Thực Chiến & Đúc Kết Kinh Nghiệm',
+                          ];
                       const styleTitle = styleNames[idx] || `Mẫu ${idx + 1}`;
                       const isSelectedForRefine = activeVariationIndex === idx;
 

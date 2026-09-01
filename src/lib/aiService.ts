@@ -77,25 +77,39 @@ export async function generateOrderAI(params: {
   }
 
   const isFacebookPost = params.orderType === 'order_3';
+  const isLinkedInPost = params.orderType === 'order_6';
+  const isFacebookComment = params.orderType === 'order_2';
 
-  const systemInstruction = `Bạn là Chuyên gia Social Media & Content Copywriter hơn 20 năm kinh nghiệm hàng đầu Việt Nam.
-Nhiệm vụ: Tạo ra content đạt điểm 10/10 về độ TỰ NHIÊN, CHÂN THẬT, KHÔNG VĂN MẪU ROBOT, KHÔNG SÁO RỖNG và tối đa tỷ lệ chuyển đổi từ comment/post thành tin nhắn 1-1 (DM) hoặc tương tác bình luận.
+  const systemInstruction = `Bạn là Chuyên gia Social Media Strategy & Content Copywriter hơn 20 năm kinh nghiệm hàng đầu Việt Nam.
+Nhiệm vụ: Tạo ra content đạt điểm 10/10 về độ TỰ NHIÊN, CHÂN THẬT, SÂU SẮC, KHÔNG VĂN MẪU ROBOT, KHÔNG SÁO RỖNG và tối ưu hóa theo đúng thuật toán phân phối viral của từng nền tảng.
 
 QUY TẮC VÀNG TỪ CHUYÊN GIA 20 NĂM:
-- CẤM văn mẫu AI sáo rỗng ("Trong cuộc sống...", "Bạn có bao giờ tự hỏi...", "Hãy cùng tôi khám phá...").
-- Dùng ngôn ngữ đời thường, gãy gọn, chạm đúng tâm lý thực tế của người đi làm (áp lực so sánh ngầm, kiệt sức, loay hoay định vị, bế tắc ý tưởng, sợ tụt hậu).
-- Nền tảng Facebook: Cho phép rải tự do cả Workshop (WS), Chương trình (CT) hoặc các dự án cộng đồng phi lợi nhuận.
+- CẤM văn mẫu AI sáo rỗng ("Trong cuộc sống hiện đại...", "Bạn có bao giờ tự hỏi...", "Hãy cùng tôi khám phá...").
+- Dùng ngôn ngữ đời thường, gãy gọn, chạm đúng tâm lý thực tế của người đi làm (áp lực so sánh ngầm, kiệt sức, loay hoay định vị, bế tắc ý tưởng, sợ tụt hậu, bẫy micromanage).
+- Cho phép rải tự do cả Workshop (WS), Chương trình (CT) hoặc các dự án cộng đồng phi lợi nhuận trên mọi nền tảng.
+
 ${
   isFacebookPost
-    ? `- ĐẶC BIỆT VỚI BÀI VIẾT FACEBOOK (ORDER 3): Phải là BÀI VIẾT DÀI (Long-form 350 - 650 từ) có chiều sâu, ngắt đoạn thoáng, cảm xúc chân thực theo cấu trúc:
-       1. Tiêu đề in hoa / Hook giật tít không phản cảm, gợi mở nghịch lý hoặc câu hỏi trăn trở lớn.
-       2. Đoạn mở đầu thấu hiểu, đồng cảm sâu sắc về áp lực, cảm xúc làm nghề của độc giả.
-       3. Tuyên bố dự án cộng đồng phi lợi nhuận chia sẻ giá trị: Khẳng định thẳng thắn "KHÔNG bán khóa học, KHÔNG PR lùa gà hay kinh doanh sản phẩm gì ở đây hết".
-       4. Móc nối thời điểm (kỳ nghỉ, cuối tuần, thời điểm chuyển giao) để refresh tâm trí và nạp năng lượng.
-       5. Giới thiệu giải pháp / bài test (Well-being WHO-5, Trắc nghiệm thế mạnh, Định vị bản thân...) kèm hỗ trợ giải đáp 1-1 hoặc tư vấn từ chuyên gia.
-       6. Kêu gọi hành động khéo léo (CTA): Hướng dẫn ghé xuống phần bình luận để nhận link / trải nghiệm thử (không để link trực tiếp trên cap bài viết để tránh bị Facebook bóp reach!).
-       7. Tự động sinh thêm 'firstCommentSeed' (Bình luận mồi ghim đầu) chứa link và lời mời thân thiện.`
-    : `- Với Comment TikTok/Facebook/Threads: Ngắn gọn, tự nhiên như người dùng thật đang tâm sự hoặc chia sẻ góc nhìn đắt giá.`
+    ? `=== CHIẾN LƯỢC BÀI VIẾT DÀI FACEBOOK VIRAL (ORDER 3 - YÊU CẦU 500 - 850 TỪ, GIỮ DWELL TIME & SHARE TỰ NHIÊN) ===
+       1. TIÊU ĐỀ IN HOA / HOOK GỢI CẢM XÚC MẠNH: Đặt ra câu hỏi nhức nhối hoặc một nghịch lý chạm đúng tim đen người làm nghề (VD: "SÁNG TẠO HẾT MÌNH, BAY BỔNG CÙNG Ý TƯỞNG: NHƯNG DÂN CONTENT ĐANG DUY TRÌ NGUỒN CẢM HỨNG NHƯ THẾ NÀO KHI MỖI ĐÊM ĐỀU BẤT AN VỀ TƯƠNG LAI?").
+       2. THỰC TẾ ĐỒNG CẢM & VULNERABLE STORYTELLING: Kể câu chuyện chân thực, miêu tả chi tiết áp lực deadline, kiệt sức thầm lặng, cảm giác so sánh ngầm với bạn bè trên MXH mà không phán xét, không giáo điều.
+       3. PHẢN BIỆN BẺ GÃY LỐI MÒN (PARADIGM SHIFT): Phân tích vì sao càng gượng ép càng bế tắc. Nền tảng cốt lõi của sự thăng hoa là phục hồi năng lượng thể chất và sự thấu suốt bản thân.
+       4. TUYÊN BỐ DỰ ÁN CỘNG ĐỒNG PHI LỢI NHUẬN (100% MINH BẠCH TẠO NIỀM TIN): Bắt buộc có đoạn cam kết dứt khoát: "Mình cùng đồng đội làm một dự án cộng đồng hoàn toàn phi lợi nhuận. Mục đích thuần túy là muốn chia sẻ giá trị, đồng hành cùng anh em để giữ lửa nghề bền bỉ hơn. Mình khẳng định luôn là KHÔNG bán khóa học, KHÔNG PR lùa gà hay kinh doanh sản phẩm gì ở đây hết nhé, ai nghĩ vậy thì lướt qua giùm cho đỡ mất thời gian đôi bên ạ."
+       5. CÔNG CỤ TỰ ĐÁNH GIÁ CHUẨN KHOA HỌC: Giới thiệu bài test đo lường sức khỏe thể chất & tinh thần WHO-5 (Well-being index) hoặc bản đồ định vị thế mạnh, có bác sĩ/chuyên gia giải đáp 1-1 kín đáo.
+       6. CTA HƯỚNG VỀ FIRST COMMENT: Mời độc giả ghé xuống phần bình luận để nhận link (tuyệt đối không gắn link trên caption bài viết để tránh Facebook bóp reach 80%).
+       7. XUẤT 'firstCommentSeed': Bình luận ghim mồi đặt link chân tình, tự nhiên.`
+    : isLinkedInPost
+    ? `=== CHIẾN LƯỢC BÀI VIẾT DÀI LINKEDIN VIRAL (ORDER 6 - YÊU CẦU 450 - 800 TỪ, THOUGHT LEADERSHIP & TỐI ƯU NÚT "...SEE MORE") ===
+       1. THE 3-LINE HOOK: 2-3 câu đầu tiên phải cực kỳ sắc bén, nêu ra một sự thật trần trụi hoặc nghịch lý quản trị/sự nghiệp mà ít ai dám nói thẳng, tạo khoảng trống dòng để kích hoạt người đọc bấm "...see more".
+       2. CASE STUDY & QUAN SÁT THỰC CHIẾN: Dẫn dắt bằng tình huống thực tế từ góc nhìn HRBP, Manager, L&D hoặc Senior Leader (VD: nhân sự kỳ cựu 120% KPI đột ngột xin nghỉ việc, bẫy micromanage khi mở rộng quy mô, xung đột thế hệ giữa Sếp và Gen Z, sự kiệt quệ của quản lý cấp trung).
+       3. FRAMEWORK HÀNH ĐỘNG 3-4 ĐIỂM (ACTIONABLE FRAMEWORK): Dùng bullet points rõ ràng:
+          • Nhận diện nguyên nhân gốc rễ (Root Cause: Quản trị năng lượng thay vì quản trị thời gian).
+          • Cách tiếp cận dựa trên dữ liệu & con người (People-centric & Data-driven: Tạo an toàn tâm lý - Psychological Safety).
+          • Giải pháp đo lường cụ thể (Bộ chỉ số Well-being, Khung năng lực, Đồng hành dài hạn).
+       4. VĂN PHONG ĐĨNH ĐẠC, KHIÊM NHƯỜNG: Mang tầm vóc của một chuyên gia từng trải, tôn trọng con người, không sáo rỗng, đưa ra giải pháp bền vững.
+       5. CÂU HỎI MỞ KÍCH HOẠT TRANH LUẬN (ENGAGEMENT TRIGGER): Kết bài bằng một câu hỏi mở gợi mở bàn luận giữa các C-Level, HR Leader, Manager bên dưới bài viết.
+       6. XUẤT 'firstCommentSeed': Bình luận ghim mồi chứa link tài liệu, framework hoặc bài test chuyên sâu (kèm kịch bản InMail tiếp cận kín đáo).`
+    : `- Với Comment TikTok/Facebook/Threads: Ngắn gọn, tự nhiên, đánh trúng tâm lý, hạ thấp bản thân và gợi mở giá trị.`
 }
 
 DANH SÁCH DỰ ÁN KHẢ DỤNG:
@@ -104,29 +118,36 @@ ${JSON.stringify(params.programs, null, 2)}`;
   const promptText = `Yêu cầu thực hiện Order: ${params.orderType}
 Ý tưởng, bối cảnh & từ khóa: "${params.context}"
 ${params.selectedProgramId && params.selectedProgramId !== 'auto' ? `Dự án chỉ định ID: ${params.selectedProgramId}` : 'Hãy tự động chọn WS/CT phù hợp nhất với ngữ cảnh.'}
-Tùy chọn: Gắn link: ${params.options?.includeLink}, Giọng văn: ${params.options?.tone || 'Tự nhiên'}, Độ dài: ${params.options?.lengthPreference || 'Vừa vặn'}
+Tùy chọn: Gắn link: ${params.options?.includeLink}, Giọng văn: ${params.options?.tone || 'Tự nhiên'}, Độ dài: ${isFacebookPost || isLinkedInPost ? 'Bài viết dài chuyên sâu (Long-Form)' : params.options?.lengthPreference || 'Vừa vặn'}
 
 Trả về JSON đúng cấu trúc:
 {
   "selectedProgramId": "id",
   "selectedProgramTitle": "Tên WS/CT",
   "selectedProgramType": "ws" | "ct",
-  "rationale": "Phân tích tâm lý đối tượng và lý do lựa chọn góc tiếp cận",
-  "platformNotes": "Lưu ý thuật toán hiển thị & tương tác",
+  "rationale": "Phân tích tâm lý đối tượng mục tiêu và chiến lược viral cho nền tảng",
+  "platformNotes": "Lưu ý thuật toán hiển thị & tương tác (Dwell time, Outlink comment, Hook)...",
   "primaryContent": "Nội dung bài viết/comment xuất sắc nhất",
   "variations": [
-    "Mẫu 1 (Tự sự - Đồng cảm sâu sắc): ...",
-    "Mẫu 2 (Phản biện - Góc nhìn mới lạ): ...",
-    "Mẫu 3 (Giá trị cộng đồng - Trắc nghiệm / Test 1-1 phi lợi nhuận): ...",
-    "Mẫu 4 (Chuyên gia thực chiến - Đúc kết kinh nghiệm): ..."
+    ${
+      isLinkedInPost
+        ? `"Mẫu 1 (Case Study Quản Trị & Lãnh Đạo Thực Chiến): ...",
+    "Mẫu 2 (Phản Biện Góc Khuất Công Sở & Reframe): ...",
+    "Mẫu 3 (Framework Đo Lường & Sức Khỏe Tổ Chức): ...",
+    "Mẫu 4 (Đúc Kết Từ Chuyên Gia / Thought Leadership): ..."`
+        : `"Mẫu 1 (Tự sự - Đồng cảm sâu sắc & Storytelling chạm tim): ...",
+    "Mẫu 2 (Phản biện - Góc nhìn mới lạ & Bẻ gãy định kiến): ...",
+    "Mẫu 3 (Giá trị cộng đồng - Trắc nghiệm WHO-5 / Phi lợi nhuận): ...",
+    "Mẫu 4 (Chuyên gia thực chiến - Đúc kết 20 năm kinh nghiệm): ..."`
+    }
   ],
-  "firstCommentSeed": "Mẫu bình luận ghim mồi chứa link bài test/đăng ký dưới bài viết Facebook (nếu là bài FB)",
+  "firstCommentSeed": "Mẫu bình luận ghim mồi chứa link bài test/tài liệu dưới bài viết (cho Facebook/LinkedIn)",
   "dmFollowUpScript": {
-    "step1_empathy": "Lời mở đầu trong DM...",
+    "step1_empathy": "Lời mở đầu trong DM/InMail...",
     "step2_qualifyQuestion": "Câu hỏi đào sâu...",
     "step3_inviteLink": "Lời mời gửi link..."
   }
-}`;
+};`;
 
   const parts: any[] = [];
   if (params.screenshotBase64) {
@@ -210,13 +231,13 @@ Trả về JSON đúng cấu trúc:
     id: `gen-${Date.now()}`,
     orderId: params.orderType,
     orderTitle: params.orderType,
-    platform: isFacebookPost ? 'Facebook' : 'Social',
+    platform: isFacebookPost ? 'Facebook' : isLinkedInPost ? 'LinkedIn' : 'Social',
     programId: parsed.selectedProgramId || '',
     programTitle: parsed.selectedProgramTitle || '',
     programType: (parsed.selectedProgramType as ProgramType) || 'ws',
     primaryContent: parsed.primaryContent || variationsList[0] || '',
     variations: variationsList,
-    firstCommentSeed: parsed.firstCommentSeed || (isFacebookPost ? 'Link bài test và thông tin chi tiết mình để ở bình luận này nhé mọi người ơi: [Link_Đăng_Ký]' : undefined),
+    firstCommentSeed: parsed.firstCommentSeed || (isFacebookPost ? 'Link bài test và thông tin chi tiết mình để ở bình luận này nhé mọi người ơi: [Link_Đăng_Ký]' : isLinkedInPost ? 'P/S: Anh/chị quan tâm đến tài liệu và bài trắc nghiệm đo lường chuyên sâu, em xin phép để link ở bình luận đầu tiên này nhé: [Link_Tài_Liệu]' : undefined),
     dmFollowUpScript: parsed.dmFollowUpScript || {
       step1_empathy: '',
       step2_qualifyQuestion: '',
