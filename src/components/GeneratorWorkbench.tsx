@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   ProgramItem,
   OrderType,
@@ -20,29 +20,25 @@ import {
   FileText,
   Layers,
   ChevronDown,
-  UserCheck,
   Sliders,
   Smartphone,
-  Share2,
-  Heart,
-  MessageCircle,
   Wand2,
   ExternalLink,
-  ChevronRight,
-  ShieldAlert,
   ShieldCheck,
-  Info,
-  Cpu,
   Brain,
-  Zap,
   Download,
-  SendHorizontal,
   Key,
   BookmarkPlus,
   Pin,
   Send,
   Loader2,
   MessageSquare,
+  Clock,
+  Gauge,
+  CheckCircle2,
+  HelpCircle,
+  Lightbulb,
+  Share2,
 } from 'lucide-react';
 import { saveHistoryItem, saveCustomBenchmarkTemplate } from '../lib/storage';
 import { generateOrderAI, getApiKey, setApiKey, refineContentAI } from '../lib/aiService';
@@ -83,6 +79,52 @@ const QUICK_IDEAS = [
   },
 ];
 
+const EXPERT_TIPS = [
+  {
+    title: 'Quy tắc 3 Dòng Đầu (Facebook Hook)',
+    content: '80% độc giả quyết định bấm "Xem thêm" dựa vào 3 dòng đầu tiên. Hãy bắt đầu bằng một sự thật trần trụi hoặc một cảm xúc giằng xé nội tâm.',
+  },
+  {
+    title: 'Chiến thuật Ghim Comment chống bóp Reach',
+    content: 'Thuật toán Facebook giảm 60-80% hiển thị nếu caption chứa link dẫn ra ngoài. Luôn đặt link ở bình luận đầu tiên và ghim lên vị trí nổi bật.',
+  },
+  {
+    title: 'Tâm lý học Độc giả Trẻ (TikTok & Threads)',
+    content: 'Người trẻ 20-39 tuổi rất dị ứng với việc bị "dạy đời" hay PR bán khóa học. Hãy chia sẻ như một người bạn đồng hành rồi gợi ý làm bài test 1-1.',
+  },
+  {
+    title: 'LinkedIn: Giá trị của Framework & Số liệu',
+    content: 'Cộng đồng LinkedIn chuộng bài viết có cấu trúc rõ ràng, case study thực tế và các framework giải quyết vấn đề nơi công sở.',
+  },
+  {
+    title: 'Kịch bản Inbox 1-1: Đồng cảm trước - Trao giải pháp sau',
+    content: 'Đừng vội gửi link form ngay câu chào đầu. Hãy hỏi 1-2 câu đào sâu để độc giả tự nhận ra nhu cầu, sau đó gửi link tham gia như một món quà.',
+  },
+];
+
+const PRODUCTION_STEPS = [
+  {
+    title: 'Nghiên cứu tâm lý độc giả & bóc tách nỗi đau',
+    desc: 'Phân tích đối tượng mục tiêu, thấu cảm tâm lý và giải tỏa rào cản phòng thủ.',
+  },
+  {
+    title: 'Đối chiếu triết lý Workshop & chọn góc tiếp cận',
+    desc: 'Kết nối nội dung với giá trị cốt lõi, cam kết phi lợi nhuận & không bán khóa học.',
+  },
+  {
+    title: 'Soạn thảo 4 phong cách viral chuyên biệt',
+    desc: 'Sản xuất 4 bản: Tự sự chạm tim, Bẻ khóa định kiến, Trắc nghiệm cộng đồng & Chuyên gia thực chiến.',
+  },
+  {
+    title: 'Tạo bình luận ghim mồi đặt link (chống bóp reach)',
+    desc: 'Soạn sẵn bình luận dẫn link tài liệu/test 1-1, tối ưu thuật toán phân phối tự nhiên.',
+  },
+  {
+    title: 'Hoàn thiện kịch bản inbox 1-1 chuyển đổi cao',
+    desc: 'Thiết lập 3 bước: Đồng cảm sâu → Câu hỏi đào sâu (Qualifying) → Mời gửi link 1-1.',
+  },
+];
+
 export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
   programs,
   initialOrderType = 'order_1',
@@ -99,8 +141,16 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
       setContext(initialContext);
     }
   }, [initialContext]);
+
+  useEffect(() => {
+    if (initialOrderType) {
+      setSelectedOrderType(initialOrderType);
+    }
+  }, [initialOrderType]);
+
   const [selectedProgramId, setSelectedProgramId] = useState<string>('auto');
   const [writingTone, setWritingTone] = useState<WritingToneOption>('empathy_story');
+  const [modelSelection, setModelSelection] = useState<AIModelOption>('gemini-3.6-flash');
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const [includeLink, setIncludeLink] = useState<boolean>(false);
   const [customAudience, setCustomAudience] = useState<string>('');
@@ -122,7 +172,7 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [inlineApiKey, setInlineApiKey] = useState<string>('');
 
-  // Interactive Refinement state (Chat tiếp để chỉnh sửa theo ý muốn)
+  // Interactive Refinement state
   const [refineInstruction, setRefineInstruction] = useState<string>('');
   const [isRefining, setIsRefining] = useState<boolean>(false);
   const [refineExplanation, setRefineExplanation] = useState<string | null>(null);
@@ -130,19 +180,174 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
   // Save to Benchmark status
   const [savedBenchmarkIdx, setSavedBenchmarkIdx] = useState<number | null>(null);
 
+  // Progress Pipeline state during loading
+  const [progressPercent, setProgressPercent] = useState<number>(0);
+  const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
+  const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
+  const [tipIndex, setTipIndex] = useState<number>(0);
+
+  const progressIntervalRef = useRef<any>(null);
+  const timerIntervalRef = useRef<any>(null);
+  const tipIntervalRef = useRef<any>(null);
+
+  // Start animated progress when loading begins
+  useEffect(() => {
+    if (isLoading) {
+      setProgressPercent(8);
+      setActiveStepIndex(0);
+      setElapsedSeconds(0);
+      setTipIndex(0);
+
+      // Incremental realistic progress
+      progressIntervalRef.current = setInterval(() => {
+        setProgressPercent((prev) => {
+          if (prev < 25) {
+            setActiveStepIndex(0);
+            return prev + 2.5;
+          }
+          if (prev < 50) {
+            setActiveStepIndex(1);
+            return prev + 1.8;
+          }
+          if (prev < 75) {
+            setActiveStepIndex(2);
+            return prev + 1.2;
+          }
+          if (prev < 90) {
+            setActiveStepIndex(3);
+            return prev + 0.8;
+          }
+          if (prev < 98) {
+            setActiveStepIndex(4);
+            return prev + 0.4;
+          }
+          return 98;
+        });
+      }, 150);
+
+      // Timer in seconds
+      timerIntervalRef.current = setInterval(() => {
+        setElapsedSeconds((prev) => prev + 1);
+      }, 1000);
+
+      // Rotate tips every 3.5s
+      tipIntervalRef.current = setInterval(() => {
+        setTipIndex((prev) => (prev + 1) % EXPERT_TIPS.length);
+      }, 3500);
+    } else {
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+      if (tipIntervalRef.current) clearInterval(tipIntervalRef.current);
+    }
+
+    return () => {
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+      if (tipIntervalRef.current) clearInterval(tipIntervalRef.current);
+    };
+  }, [isLoading]);
+
   const copyWithFeedback = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 2200);
+  };
+
+  const copyComboWithFeedback = (variationText: string, commentSeed: string | undefined, id: string) => {
+    let combined = variationText;
+    if (commentSeed) {
+      combined += `\n\n---\n[BÌNH LUẬN GHIM MỒI ĐẶT LINK (Đăng ngay sau bài viết)]:\n${commentSeed}`;
+    }
+    copyWithFeedback(combined, id);
   };
 
   const currentOrderMeta: OrderMeta =
     ORDERS_METADATA.find((o) => o.id === selectedOrderType) || ORDERS_METADATA[0];
 
   const isFacebook = currentOrderMeta.platform === 'Facebook';
-
-  // Allow ALL active programs freely on Facebook & other platforms (No restriction)
   const filteredPrograms = programs.filter((p) => p.isActive !== false);
+
+  // Helper to calculate word count, char count, reading time & platform standard badge
+  const getWordCountMetrics = (text: string, platform: string) => {
+    const clean = text.trim();
+    const words = clean ? clean.split(/\s+/).filter(Boolean).length : 0;
+    const chars = clean.length;
+    const readingSeconds = Math.max(5, Math.round((words / 200) * 60));
+    const readingTimeStr = readingSeconds < 60 ? `~${readingSeconds} giây đọc` : `~${Math.ceil(readingSeconds / 60)} phút đọc`;
+
+    let badgeText = `${words} từ • ${readingTimeStr}`;
+    let badgeClass = isDark
+      ? 'bg-indigo-950/60 text-indigo-300 border-indigo-800/60'
+      : 'bg-indigo-50 text-indigo-700 border-indigo-200';
+    let recommendation = 'Độ dài tiêu chuẩn';
+    let isOptimal = true;
+
+    if (platform === 'Facebook') {
+      if (words >= 350 && words <= 850) {
+        badgeText = `✨ Chuẩn Vàng Storytelling (${words} từ • ${readingTimeStr})`;
+        badgeClass = isDark
+          ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60'
+          : 'bg-emerald-50 text-emerald-800 border-emerald-200';
+        recommendation = 'Độ dài lý tưởng để thuật toán Facebook giữ chân độc giả (dwell time) cao nhất.';
+      } else if (words < 200) {
+        badgeText = `⚡ Bài ngắn tương tác nhanh (${words} từ • ${readingTimeStr})`;
+        badgeClass = isDark
+          ? 'bg-blue-950/60 text-blue-300 border-blue-800/60'
+          : 'bg-blue-50 text-blue-800 border-blue-200';
+        recommendation = 'Phù hợp bài trắc nghiệm mini hoặc tương tác lướt.';
+        isOptimal = false;
+      } else if (words >= 200 && words < 350) {
+        badgeText = `👍 Độ dài vừa phải (${words} từ • ${readingTimeStr})`;
+        badgeClass = isDark
+          ? 'bg-indigo-950/60 text-indigo-300 border-indigo-800/60'
+          : 'bg-indigo-50 text-indigo-700 border-indigo-200';
+        recommendation = 'Dễ đọc lướt trên điện thoại, phù hợp giờ nghỉ trưa.';
+      } else {
+        badgeText = `📖 Bài chuyên sâu Deep-dive (${words} từ • ${readingTimeStr})`;
+        badgeClass = isDark
+          ? 'bg-amber-950/60 text-amber-300 border-amber-800/60'
+          : 'bg-amber-50 text-amber-800 border-amber-200';
+        recommendation = 'Dành cho độc giả quan tâm sâu sắc, chất lượng tri thức cao.';
+      }
+    } else if (platform === 'LinkedIn') {
+      if (words >= 150 && words <= 350) {
+        badgeText = `✨ Chuẩn Vàng Thuật Toán LinkedIn (${words} từ • ${readingTimeStr})`;
+        badgeClass = isDark
+          ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60'
+          : 'bg-emerald-50 text-emerald-800 border-emerald-200';
+        recommendation = 'Tỷ lệ xem hết và kết nối InMail đạt tối đa trên LinkedIn Feed.';
+      } else if (words < 150) {
+        badgeText = `⚡ Post ngắn gọn / Khảo sát (${words} từ • ${readingTimeStr})`;
+        badgeClass = isDark
+          ? 'bg-blue-950/60 text-blue-300 border-blue-800/60'
+          : 'bg-blue-50 text-blue-800 border-blue-200';
+        recommendation = 'Khuyến khích bình luận thảo luận nhanh.';
+        isOptimal = false;
+      } else {
+        badgeText = `📚 Case Study Lãnh Đạo Chuyên Sâu (${words} từ • ${readingTimeStr})`;
+        badgeClass = isDark
+          ? 'bg-indigo-950/60 text-indigo-300 border-indigo-800/60'
+          : 'bg-indigo-50 text-indigo-700 border-indigo-200';
+        recommendation = 'Xây dựng thương hiệu chuyên gia uy tín (Thought Leadership).';
+      }
+    } else if (platform === 'Threads' || platform === 'Tiktok') {
+      if (words <= 120) {
+        badgeText = `✨ Chuẩn Giật Hook Comment (${words} từ • ${readingTimeStr})`;
+        badgeClass = isDark
+          ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60'
+          : 'bg-emerald-50 text-emerald-800 border-emerald-200';
+        recommendation = 'Ngắn, súc tích, đánh trúng tâm lý độc giả trẻ.';
+      } else {
+        badgeText = `💬 Bình luận phân tích chi tiết (${words} từ • ${readingTimeStr})`;
+        badgeClass = isDark
+          ? 'bg-indigo-950/60 text-indigo-300 border-indigo-800/60'
+          : 'bg-indigo-50 text-indigo-700 border-indigo-200';
+        recommendation = 'Phân tích đa chiều, thu hút người quan tâm sâu vào inbox.';
+      }
+    }
+
+    return { words, chars, readingTimeStr, badgeText, badgeClass, recommendation, isOptimal };
+  };
 
   const handleSaveToBenchmark = (variationText: string, idx: number) => {
     if (!generatedResult) return;
@@ -257,13 +462,17 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
       result.orderTitle = currentOrderMeta.title;
       result.platform = currentOrderMeta.platform;
 
-      setGeneratedResult(result);
-      setActiveVariationIndex(0);
-      setResultTab('variations');
-      saveHistoryItem(result);
+      // Finish progress animation smoothly
+      setProgressPercent(100);
+      setTimeout(() => {
+        setGeneratedResult(result);
+        setActiveVariationIndex(0);
+        setResultTab('variations');
+        saveHistoryItem(result);
+        setIsLoading(false);
+      }, 400);
     } catch (err: any) {
       setError(err.message || 'Lỗi xử lý. Vui lòng thử lại.');
-    } finally {
       setIsLoading(false);
     }
   };
@@ -275,10 +484,14 @@ Lệnh: Order ${currentOrderMeta.orderNumber} - ${generatedResult.orderTitle} ($
 Dự án: ${generatedResult.programTitle}
 Thời gian tạo: ${new Date(generatedResult.createdAt).toLocaleString('vi-VN')}
 
---- 3 PHƯƠNG ÁN NỘI DUNG ---
+--- 4 PHƯƠNG ÁN NỘI DUNG ---
 ${generatedResult.variations.map((v, i) => `\n[PHƯƠNG ÁN ${i + 1}]:\n${v}\n`).join('\n')}
 
---- KỊCH BẢN DM 1-1 CHUYỂN ĐỔI ---
+${
+  generatedResult.firstCommentSeed
+    ? `--- BÌNH LUẬN GHIM MỒI ĐẶT LINK (Đăng ngay sau khi post) ---\n${generatedResult.firstCommentSeed}\n\n`
+    : ''
+}--- KỊCH BẢN DM 1-1 CHUYỂN ĐỔI ---
 1. Đồng cảm:
 "${generatedResult.dmFollowUpScript.step1_empathy}"
 
@@ -305,10 +518,8 @@ ${generatedResult.rationale}
     <div className="space-y-6">
       {/* 1. Clear Order Selector (Single Focused Bar) */}
       <div
-        className={`rounded-2xl p-4 shadow-sm border transition-colors ${
-          isDark
-            ? 'bg-slate-900/90 border-slate-800/90'
-            : 'bg-white border-slate-200'
+        className={`rounded-2xl p-4 shadow-xs border transition-colors ${
+          isDark ? 'bg-slate-900/90 border-slate-800/90' : 'bg-white border-slate-200'
         }`}
       >
         <div className="flex items-center justify-between mb-3">
@@ -323,11 +534,13 @@ ${generatedResult.rationale}
           {isFacebook && (
             <span
               className={`text-[11px] font-medium flex items-center gap-1 px-2.5 py-0.5 rounded-lg ${
-                isDark ? 'text-emerald-300/90 bg-emerald-950/40 border border-emerald-800/60' : 'text-emerald-800 bg-emerald-50 border border-emerald-200'
+                isDark
+                  ? 'text-emerald-300/90 bg-emerald-950/40 border border-emerald-800/60'
+                  : 'text-emerald-800 bg-emerald-50 border border-emerald-200'
               }`}
             >
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Facebook không bị hạn chế: Rải tự do Workshop & Chương trình</span>
+              <span>Facebook không giới hạn: Rải tự do Workshop & Chương trình</span>
             </span>
           )}
         </div>
@@ -345,7 +558,7 @@ ${generatedResult.rationale}
                 }}
                 className={`text-left p-2.5 rounded-xl border transition-all flex flex-col justify-between cursor-pointer ${
                   isSelected
-                    ? 'bg-indigo-600 text-white border-indigo-500 shadow-sm'
+                    ? 'bg-indigo-600 text-white border-indigo-500 shadow-xs'
                     : isDark
                     ? 'bg-slate-950/70 text-slate-300 border-slate-800 hover:border-slate-700 hover:bg-slate-850'
                     : 'bg-slate-50/90 text-slate-700 border-slate-200/90 hover:border-slate-300 hover:bg-white'
@@ -389,18 +602,14 @@ ${generatedResult.rationale}
         {/* Left Column: Form Inputs (5 Cols) */}
         <div className="lg:col-span-5 space-y-4">
           <div
-            className={`border rounded-2xl p-5 space-y-4 shadow-sm transition-colors ${
-              isDark
-                ? 'bg-slate-900/90 border-slate-800/90'
-                : 'bg-white border-slate-200'
+            className={`border rounded-2xl p-5 space-y-4 shadow-xs transition-colors ${
+              isDark ? 'bg-slate-900/90 border-slate-800/90' : 'bg-white border-slate-200'
             }`}
           >
             {/* Active Order Summary Note */}
             <div
               className={`border rounded-xl p-3 text-xs space-y-1 ${
-                isDark
-                  ? 'bg-slate-950/80 border-slate-800/80'
-                  : 'bg-indigo-50/50 border-indigo-100/80'
+                isDark ? 'bg-slate-950/80 border-slate-800/80' : 'bg-indigo-50/50 border-indigo-100/80'
               }`}
             >
               <div
@@ -408,7 +617,9 @@ ${generatedResult.rationale}
                   isDark ? 'text-slate-300' : 'text-indigo-950'
                 }`}
               >
-                <span>Mục tiêu Order {currentOrderMeta.orderNumber}: {currentOrderMeta.title}</span>
+                <span>
+                  Mục tiêu Order {currentOrderMeta.orderNumber}: {currentOrderMeta.title}
+                </span>
                 <span className="text-[10px] text-indigo-600 font-semibold">{currentOrderMeta.platform}</span>
               </div>
               <p className={`text-[11px] leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
@@ -485,9 +696,7 @@ ${generatedResult.rationale}
                 value={writingTone}
                 onChange={(e) => setWritingTone(e.target.value as WritingToneOption)}
                 className={`w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer ${
-                  isDark
-                    ? 'bg-slate-900 border-slate-800 text-slate-200'
-                    : 'bg-white border-slate-300 text-slate-800'
+                  isDark ? 'bg-slate-900 border-slate-800 text-slate-200' : 'bg-white border-slate-300 text-slate-800'
                 }`}
               >
                 <option value="empathy_story">💬 Tự sự & Đồng cảm sâu sắc (Storytelling chạm tim)</option>
@@ -497,10 +706,14 @@ ${generatedResult.rationale}
               </select>
             </div>
 
-            {/* Hộp Ý Tưởng, Từ Khóa & Bối Cảnh Toàn Năng (Unified Smart Composer) */}
+            {/* Hộp Ý Tưởng, Từ Khóa & Bối Cảnh Toàn Năng */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className={`text-xs font-bold flex items-center gap-1.5 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                <label
+                  className={`text-xs font-bold flex items-center gap-1.5 ${
+                    isDark ? 'text-slate-200' : 'text-slate-800'
+                  }`}
+                >
                   <span>Hộp Ý Tưởng, Từ Khóa & Bối Cảnh Toàn Năng</span>
                   <span className="text-rose-500">*</span>
                 </label>
@@ -529,7 +742,7 @@ ${generatedResult.rationale}
                 }`}
               />
 
-              {/* Quick Idea & Keyword Helper Chips */}
+              {/* Quick Idea Chips */}
               <div className="flex items-center gap-1.5 overflow-x-auto pt-0.5 no-scrollbar">
                 <span className={`text-[10px] font-semibold whitespace-nowrap ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
                   Gợi ý nhanh:
@@ -554,7 +767,7 @@ ${generatedResult.rationale}
               </div>
             </div>
 
-            {/* Collapsible Advanced Settings (Keeps UI clean!) */}
+            {/* Collapsible Advanced Settings */}
             <div className={`border-t pt-3 ${isDark ? 'border-slate-800/80' : 'border-slate-200'}`}>
               <button
                 type="button"
@@ -568,18 +781,14 @@ ${generatedResult.rationale}
                   Tùy chọn nâng cao (Ảnh chụp, Độ dài, Link)
                 </span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 transform transition-transform ${
-                    showAdvanced ? 'rotate-180' : ''
-                  }`}
+                  className={`w-3.5 h-3.5 transform transition-transform ${showAdvanced ? 'rotate-180' : ''}`}
                 />
               </button>
 
               {showAdvanced && (
                 <div
                   className={`mt-3 space-y-3 p-3 rounded-xl border ${
-                    isDark
-                      ? 'bg-slate-950/60 border-slate-800/80'
-                      : 'bg-slate-50 border-slate-200'
+                    isDark ? 'bg-slate-950/60 border-slate-800/80' : 'bg-slate-50 border-slate-200'
                   }`}
                 >
                   {/* Image Upload */}
@@ -737,7 +946,6 @@ ${generatedResult.rationale}
                   </div>
                 </div>
 
-                {/* Inline API Key Input when needed */}
                 {(error.includes('API_KEY') || error.includes('403') || error.includes('unregistered')) ? (
                   <div className="space-y-2 pt-1">
                     <div className="flex gap-2">
@@ -791,11 +999,11 @@ ${generatedResult.rationale}
               </div>
             )}
 
-            {/* Primary Action Button (The Clear Focal Point!) */}
+            {/* Primary Action Button */}
             <button
-              onClick={handleGenerate}
+              onClick={() => handleGenerate()}
               disabled={isLoading}
-              className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md transition-all flex items-center justify-center space-x-2 disabled:opacity-50 cursor-pointer"
+              className="w-full py-3.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md transition-all flex items-center justify-center space-x-2 disabled:opacity-60 cursor-pointer"
             >
               {isLoading ? (
                 <>
@@ -804,8 +1012,8 @@ ${generatedResult.rationale}
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-4 h-4" />
-                  <span>Tạo 4 Phong Cách & Kịch Bản DM</span>
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  <span>Tạo 4 Phong Cách & Kịch Bản DM 1-1</span>
                 </>
               )}
             </button>
@@ -814,12 +1022,137 @@ ${generatedResult.rationale}
 
         {/* Right Column: Output Workbench (7 Cols) */}
         <div className="lg:col-span-7 space-y-4">
-          {generatedResult ? (
+          {/* A. DYNAMIC LOADING PIPELINE DASHBOARD */}
+          {isLoading ? (
             <div
-              className={`border rounded-2xl p-5 space-y-4 shadow-sm transition-colors ${
+              className={`border rounded-2xl p-6 shadow-md transition-all space-y-6 ${
                 isDark
-                  ? 'bg-slate-900/90 border-slate-800/90'
-                  : 'bg-white border-slate-200'
+                  ? 'bg-slate-900/95 border-indigo-500/30 ring-1 ring-indigo-500/20'
+                  : 'bg-white border-indigo-200 ring-1 ring-indigo-100'
+              }`}
+            >
+              {/* Header: Progress & Timer */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-2xl bg-indigo-600/10 border border-indigo-500/30 flex items-center justify-center text-indigo-600 animate-pulse">
+                    <Sparkles className="w-5 h-5 text-amber-500" />
+                  </div>
+                  <div>
+                    <h3 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      AI Social Studio 2.0 Đang Xử Lý...
+                    </h3>
+                    <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Đang sản xuất Order {currentOrderMeta.orderNumber} ({currentOrderMeta.platform})
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>00:{elapsedSeconds < 10 ? `0${elapsedSeconds}` : elapsedSeconds}s</span>
+                  </div>
+                  <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                    {Math.round(progressPercent)}%
+                  </span>
+                </div>
+              </div>
+
+              {/* Glowing Animated Progress Bar */}
+              <div className="space-y-1.5">
+                <div
+                  className={`h-2.5 w-full rounded-full overflow-hidden p-0.5 border ${
+                    isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-100 border-slate-200'
+                  }`}
+                >
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-indigo-600 to-emerald-400 transition-all duration-300 relative overflow-hidden"
+                    style={{ width: `${progressPercent}%` }}
+                  >
+                    <div className="absolute inset-0 bg-white/20 animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                  </div>
+                </div>
+                <div className="flex justify-between text-[11px] text-slate-400">
+                  <span>Khởi động phân tích</span>
+                  <span>Đồng cảm & Viết bài</span>
+                  <span>Hoàn tất đóng gói</span>
+                </div>
+              </div>
+
+              {/* 5 Production Steps Checklist */}
+              <div className="space-y-2.5 pt-1">
+                {PRODUCTION_STEPS.map((step, idx) => {
+                  const isDone = idx < activeStepIndex;
+                  const isCurrent = idx === activeStepIndex;
+                  return (
+                    <div
+                      key={idx}
+                      className={`p-3 rounded-xl border transition-all flex items-start gap-3 ${
+                        isDone
+                          ? isDark
+                            ? 'bg-emerald-950/20 border-emerald-800/40 text-slate-300'
+                            : 'bg-emerald-50/60 border-emerald-200 text-slate-700'
+                          : isCurrent
+                          ? isDark
+                            ? 'bg-indigo-950/40 border-indigo-500/60 text-white ring-1 ring-indigo-500/30'
+                            : 'bg-indigo-50 border-indigo-300 text-slate-900 ring-1 ring-indigo-200'
+                          : isDark
+                          ? 'bg-slate-950/40 border-slate-800/50 text-slate-500'
+                          : 'bg-slate-50/60 border-slate-200/80 text-slate-400'
+                      }`}
+                    >
+                      <div className="shrink-0 mt-0.5">
+                        {isDone ? (
+                          <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+                            <Check className="w-3 h-3 stroke-[3]" />
+                          </div>
+                        ) : isCurrent ? (
+                          <div className="w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-white">
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                          </div>
+                        ) : (
+                          <div
+                            className={`w-5 h-5 rounded-full border flex items-center justify-center text-[10px] font-bold ${
+                              isDark ? 'border-slate-800 text-slate-600' : 'border-slate-300 text-slate-400'
+                            }`}
+                          >
+                            {idx + 1}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="space-y-0.5">
+                        <h4 className="text-xs font-bold leading-snug">{step.title}</h4>
+                        <p className="text-[11px] opacity-80 leading-relaxed">{step.desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Rotating Expert Copywriting Tips */}
+              <div
+                className={`p-3.5 rounded-xl border space-y-1.5 transition-colors ${
+                  isDark ? 'bg-amber-950/20 border-amber-900/40 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-900'
+                }`}
+              >
+                <div className="flex items-center justify-between text-[11px] font-bold">
+                  <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
+                    <Lightbulb className="w-3.5 h-3.5" />
+                    <span>Mẹo thực chiến: {EXPERT_TIPS[tipIndex].title}</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400">Tự động xoay mẹo</span>
+                </div>
+                <p className="text-xs leading-relaxed italic opacity-95">
+                  "{EXPERT_TIPS[tipIndex].content}"
+                </p>
+              </div>
+            </div>
+          ) : generatedResult ? (
+            /* B. GENERATED OUTPUT WORKBENCH */
+            <div
+              className={`border rounded-2xl p-5 space-y-4 shadow-xs transition-colors ${
+                isDark ? 'bg-slate-900/90 border-slate-800/90' : 'bg-white border-slate-200'
               }`}
             >
               {/* Header: Result Info & Tabs */}
@@ -842,7 +1175,10 @@ ${generatedResult.rationale}
                     </span>
                   </div>
                   <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                    Mục tiêu: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>{generatedResult.programTitle}</strong>
+                    Mục tiêu:{' '}
+                    <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>
+                      {generatedResult.programTitle}
+                    </strong>
                   </p>
                 </div>
 
@@ -856,7 +1192,7 @@ ${generatedResult.rationale}
                     onClick={() => setResultTab('variations')}
                     className={`px-3 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
                       resultTab === 'variations'
-                        ? 'bg-indigo-600 text-white shadow-sm'
+                        ? 'bg-indigo-600 text-white shadow-xs'
                         : isDark
                         ? 'text-slate-400 hover:text-slate-200'
                         : 'text-slate-600 hover:text-slate-900'
@@ -868,7 +1204,7 @@ ${generatedResult.rationale}
                     onClick={() => setResultTab('dm_script')}
                     className={`px-3 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
                       resultTab === 'dm_script'
-                        ? 'bg-indigo-600 text-white shadow-sm'
+                        ? 'bg-indigo-600 text-white shadow-xs'
                         : isDark
                         ? 'text-slate-400 hover:text-slate-200'
                         : 'text-slate-600 hover:text-slate-900'
@@ -880,7 +1216,7 @@ ${generatedResult.rationale}
                     onClick={() => setResultTab('preview')}
                     className={`px-3 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
                       resultTab === 'preview'
-                        ? 'bg-indigo-600 text-white shadow-sm'
+                        ? 'bg-indigo-600 text-white shadow-xs'
                         : isDark
                         ? 'text-slate-400 hover:text-slate-200'
                         : 'text-slate-600 hover:text-slate-900'
@@ -891,24 +1227,32 @@ ${generatedResult.rationale}
                 </div>
               </div>
 
-              {/* Utility Quick Actions Bar */}
+              {/* Utility Action Bar */}
               <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-                <div className="flex items-center gap-1.5">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {/* Master Combo Copy Button */}
                   <button
                     type="button"
-                    onClick={() => handleGenerate(true)}
-                    disabled={isLoading}
-                    title="Gọi AI đổi góc nhìn và tạo lại các phương án mới"
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
-                      isDark
-                        ? 'bg-slate-950 hover:bg-slate-800 text-amber-300 border-amber-800/60'
-                        : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200'
-                    }`}
+                    onClick={() => {
+                      const curVar = generatedResult.variations[activeVariationIndex] || generatedResult.primaryContent;
+                      copyComboWithFeedback(curVar, generatedResult.firstCommentSeed, 'copy-combo-master');
+                    }}
+                    className="px-3 py-1.5 text-xs font-bold rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
                   >
-                    <Brain className="w-3.5 h-3.5 text-amber-500" />
-                    <span>Đổi góc nhìn (Remix Thinking)</span>
+                    {copiedId === 'copy-combo-master' ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-white" />
+                        <span>Đã copy Bài + Cmt ghim!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-amber-300" />
+                        <span>Copy Bài + Cmt Ghim Mồi</span>
+                      </>
+                    )}
                   </button>
 
+                  {/* Copy All Variations Button */}
                   <button
                     type="button"
                     onClick={() => {
@@ -917,7 +1261,7 @@ ${generatedResult.rationale}
                         .join('\n\n');
                       copyWithFeedback(allVariations, 'copy-all-vars');
                     }}
-                    className={`px-2.5 py-1 text-xs font-medium rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+                    className={`px-2.5 py-1.5 text-xs font-medium rounded-xl border transition-all flex items-center gap-1.5 cursor-pointer ${
                       isDark
                         ? 'bg-slate-950 hover:bg-slate-800 text-slate-300 border-slate-800'
                         : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
@@ -926,7 +1270,7 @@ ${generatedResult.rationale}
                     {copiedId === 'copy-all-vars' ? (
                       <>
                         <Check className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="text-emerald-600 font-semibold">Đã chép tất cả mẫu</span>
+                        <span className="text-emerald-600 font-semibold">Đã chép tất cả 4 mẫu</span>
                       </>
                     ) : (
                       <>
@@ -935,30 +1279,48 @@ ${generatedResult.rationale}
                       </>
                     )}
                   </button>
+
+                  {/* Remix Thinking Button */}
+                  <button
+                    type="button"
+                    onClick={() => handleGenerate(true)}
+                    disabled={isLoading}
+                    title="Gọi AI đổi góc nhìn và tạo lại 4 phong cách mới"
+                    className={`px-2.5 py-1.5 text-xs font-semibold rounded-xl border transition-all flex items-center gap-1.5 cursor-pointer ${
+                      isDark
+                        ? 'bg-slate-950 hover:bg-slate-800 text-amber-300 border-amber-800/60'
+                        : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200'
+                    }`}
+                  >
+                    <Brain className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Đổi góc nhìn (Remix)</span>
+                  </button>
                 </div>
 
                 <button
                   type="button"
                   onClick={handleExportText}
-                  className={`px-2.5 py-1 text-xs font-medium rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-2.5 py-1.5 text-xs font-medium rounded-xl border transition-all flex items-center gap-1.5 cursor-pointer ${
                     isDark
                       ? 'bg-slate-950 hover:bg-slate-800 text-indigo-300 border-indigo-900/60'
                       : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border-indigo-200'
                   }`}
                 >
                   <Download className="w-3.5 h-3.5" />
-                  <span>Tải file .TXT</span>
+                  <span>Xuất .TXT</span>
                 </button>
               </div>
 
               {/* TAB 1: 4 Content Variations */}
               {resultTab === 'variations' && (
                 <div className="space-y-4">
-                  {/* First Comment Seed Highlight (Facebook Posts) */}
+                  {/* First Comment Seed Highlight (For Facebook/LinkedIn Posts) */}
                   {generatedResult.firstCommentSeed && (
                     <div
                       className={`p-3.5 rounded-xl border space-y-1.5 ${
-                        isDark ? 'bg-amber-950/25 border-amber-900/40 text-amber-200' : 'bg-amber-50/80 border-amber-200 text-amber-900'
+                        isDark
+                          ? 'bg-amber-950/25 border-amber-900/40 text-amber-200'
+                          : 'bg-amber-50/80 border-amber-200 text-amber-900'
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -975,12 +1337,12 @@ ${generatedResult.rationale}
                           {copiedId === 'cmt-seed' ? (
                             <>
                               <Check className="w-3 h-3" />
-                              <span>Đã chép cmt</span>
+                              <span>Đã chép cmt!</span>
                             </>
                           ) : (
                             <>
                               <Copy className="w-3 h-3" />
-                              <span>Sao chép cmt</span>
+                              <span>Sao chép cmt ghim</span>
                             </>
                           )}
                         </button>
@@ -991,69 +1353,146 @@ ${generatedResult.rationale}
                     </div>
                   )}
 
-                  {/* List of Variations */}
-                  <div className="space-y-3">
+                  {/* List of 4 Variations */}
+                  <div className="space-y-3.5">
                     {generatedResult.variations.map((variation, idx) => {
-                      const styleNames = generatedResult.platform === 'LinkedIn'
-                        ? [
-                            'Mẫu 1: Case Study Quản Trị & Lãnh Đạo Thực Chiến (Leadership)',
-                            'Mẫu 2: Phản Biện Góc Khuất Công Sở (Workplace Reframe)',
-                            'Mẫu 3: Framework Đo Lường & Sức Khỏe Tổ Chức (Well-being Index)',
-                            'Mẫu 4: Đúc Kết Từ Chuyên Gia / Thought Leadership',
-                          ]
-                        : [
-                            'Mẫu 1: Tự Sự & Đồng Cảm Sâu Sắc (Storytelling)',
-                            'Mẫu 2: Phản Biện & Góc Nhìn Mới Lạ (Reframe)',
-                            'Mẫu 3: Giá Trị Cộng Đồng - Trắc Nghiệm WHO-5 / Test 1-1',
-                            'Mẫu 4: Chuyên Gia Thực Chiến & Đúc Kết Kinh Nghiệm',
-                          ];
+                      const getOrderStyleNames = () => {
+                        switch (generatedResult.orderId) {
+                          case 'order_1':
+                            return [
+                              'Mẫu 1: Tự Sự & Đồng Cảm Sâu Sắc Từ Clip',
+                              'Mẫu 2: Phản Biện Reframe - Bẻ Khóa Tâm Lý',
+                              'Mẫu 3: Trắc Nghiệm Soi Chiếu - Test 1-1 Kín Đáo',
+                              'Mẫu 4: Đúc Kết Khiêm Nhường Từ Tiền Bối',
+                            ];
+                          case 'order_2':
+                            return [
+                              'Mẫu 1: Phân Tích Đa Chiều Cho Cả Đôi Bên',
+                              'Mẫu 2: Bóc Tách Nguyên Nhân Gốc Rễ Công Sở',
+                              'Mẫu 3: Trải Nghiệm Thực Tế & Hạ Mình Chia Sẻ',
+                              'Mẫu 4: Đặt Câu Hỏi Gợi Mở & Đổi Lăng Kính',
+                            ];
+                          case 'order_3':
+                            return [
+                              'Mẫu 1: Tự Sự - Nỗi Đau Kiệt Sức & Well-being (Long-Form)',
+                              'Mẫu 2: Phản Biện - Nghịch Lý Nghề Nghiệp & Thấu Suốt Bản Thân',
+                              'Mẫu 3: Dự Án Cộng Đồng Phi Lợi Nhuận & Khảo Sát WHO-5',
+                              'Mẫu 4: Chuyên Gia Thực Chiến - Đúc Kết Chuyển Hóa & Sức Bền',
+                            ];
+                          case 'order_4':
+                            return [
+                              'Mẫu 1: Lời Tự Sự Đêm Muộn (Tâm Sự Thấu Cảm)',
+                              'Mẫu 2: Lát Cắt Công Sở Chân Thực',
+                              'Mẫu 3: Lời Động Viên Ấm Áp & Soi Chiếu Bản Thân',
+                              'Mẫu 4: Bẻ Khóa Cảm Xúc Giấu Kín',
+                            ];
+                          case 'order_5':
+                            return [
+                              'Mẫu 1: Nghịch Lý Tuổi 20-30 (Nhịp Độ Cá Nhân)',
+                              'Mẫu 2: Bẫy "Chăm Chỉ Mù Quáng" & Bản Sắc Riêng',
+                              'Mẫu 3: Chữa Lành Bề Nổi vs Thấu Hiểu Bản Chất',
+                              'Mẫu 4: Sức Bền Thời Đại Số & Sự Kiên Định',
+                            ];
+                          case 'order_6':
+                            return [
+                              'Mẫu 1: Case Study Quản Trị & Lãnh Đạo Thực Chiến (Thought Leadership)',
+                              'Mẫu 2: Phản Biện Góc Khuất Quản Trị Cấp Trung (Workplace Reframe)',
+                              'Mẫu 3: Framework Đo Lường Sức Khỏe Tổ Chức & Well-being',
+                              'Mẫu 4: Thought Leadership Kỷ Nguyên AI',
+                            ];
+                          case 'order_7':
+                            return [
+                              'Mẫu 1: Email Storytelling Từ Người Bạn Đồng Hành',
+                              'Mẫu 2: Email Phản Biện Bẻ Gãy Bận Rộn Mù Quáng',
+                              'Mẫu 3: Email Trao Giá Trị - Bài Test & Khảo Sát Well-being',
+                              'Mẫu 4: Email Quyết Định Bước Ngoặt Chuyển Hóa',
+                            ];
+                          default:
+                            return [
+                              'Mẫu 1: Tự Sự & Đồng Cảm Sâu Sắc',
+                              'Mẫu 2: Phản Biện & Góc Nhìn Mới Lạ',
+                              'Mẫu 3: Giá Trị Cộng Đồng - Khảo Sát Test 1-1',
+                              'Mẫu 4: Chuyên Gia Thực Chiến & Đúc Kết Kinh Nghiệm',
+                            ];
+                        }
+                      };
+                      const styleNames = getOrderStyleNames();
                       const styleTitle = styleNames[idx] || `Mẫu ${idx + 1}`;
                       const isSelectedForRefine = activeVariationIndex === idx;
+                      const metrics = getWordCountMetrics(variation, generatedResult.platform);
 
                       return (
                         <div
                           key={idx}
                           onClick={() => setActiveVariationIndex(idx)}
-                          className={`border rounded-xl p-4 space-y-2.5 transition-all cursor-pointer ${
+                          className={`border rounded-2xl p-4 space-y-3 transition-all cursor-pointer ${
                             isSelectedForRefine
                               ? isDark
-                                ? 'bg-slate-950 border-indigo-500/80 ring-1 ring-indigo-500/50'
-                                : 'bg-indigo-50/30 border-indigo-400 ring-1 ring-indigo-200'
+                                ? 'bg-slate-950 border-indigo-500/80 ring-1 ring-indigo-500/50 shadow-indigo-500/5'
+                                : 'bg-indigo-50/30 border-indigo-400 ring-1 ring-indigo-200 shadow-indigo-500/5'
                               : isDark
                               ? 'bg-slate-950/70 border-slate-800/90 hover:border-slate-700'
                               : 'bg-slate-50/80 border-slate-200 hover:border-slate-300'
                           }`}
                         >
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
-                                {styleTitle}
-                              </span>
-                              {isSelectedForRefine && (
-                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-600 text-white font-semibold">
-                                  Đang chọn chỉnh sửa
+                          {/* Card Header: Style Title + Word Count Badge + Action Buttons */}
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                            <div className="space-y-1">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                                  {styleTitle}
                                 </span>
-                              )}
+                                {isSelectedForRefine && (
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-600 text-white font-semibold">
+                                    Đang chọn
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Word Count Badge & Reading Gauge */}
+                              <div className="flex flex-wrap items-center gap-1.5">
+                                <span
+                                  className={`text-[11px] font-semibold px-2 py-0.5 rounded-md border flex items-center gap-1 ${metrics.badgeClass}`}
+                                >
+                                  <Gauge className="w-3 h-3" />
+                                  <span>{metrics.badgeText}</span>
+                                </span>
+                                <span className="text-[10px] text-slate-400 hidden md:inline">
+                                  ({metrics.recommendation})
+                                </span>
+                              </div>
                             </div>
 
-                            <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                              {/* Save to Benchmark Library */}
-                              <button
-                                onClick={() => handleSaveToBenchmark(variation, idx)}
-                                title="Lưu bài viết này vào Kho Mẫu Chuển để dùng lại"
-                                className={`px-2 py-1 rounded-lg text-[11px] font-semibold border transition-all flex items-center gap-1 cursor-pointer ${
-                                  savedBenchmarkIdx === idx
-                                    ? 'bg-amber-500 text-white border-amber-500'
-                                    : isDark
-                                    ? 'bg-slate-900 hover:bg-slate-800 text-amber-400 border-amber-900/60'
-                                    : 'bg-white hover:bg-amber-50 text-amber-700 border-amber-200'
-                                }`}
-                              >
-                                <BookmarkPlus className="w-3 h-3 text-amber-500" />
-                                <span>{savedBenchmarkIdx === idx ? 'Đã lưu kho!' : 'Lưu vào Kho Mẫu'}</span>
-                              </button>
+                            {/* Action Buttons for this card */}
+                            <div className="flex items-center gap-1.5 self-start sm:self-auto" onClick={(e) => e.stopPropagation()}>
+                              {/* Combo Button */}
+                              {generatedResult.firstCommentSeed && (
+                                <button
+                                  onClick={() =>
+                                    copyComboWithFeedback(
+                                      variation,
+                                      generatedResult.firstCommentSeed,
+                                      `combo-${idx}`
+                                    )
+                                  }
+                                  title="Sao chép bài viết kèm comment ghim mồi để đăng ngay"
+                                  className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-1 cursor-pointer transition-all shadow-2xs"
+                                >
+                                  {copiedId === `combo-${idx}` ? (
+                                    <>
+                                      <Check className="w-3 h-3" />
+                                      <span>Đã chép combo!</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Copy className="w-3 h-3" />
+                                      <span>Copy Bài + Cmt</span>
+                                    </>
+                                  )}
+                                </button>
+                              )}
 
-                              {/* Copy Button */}
+                              {/* Fast Copy Individual Variation */}
                               <button
                                 onClick={() => copyWithFeedback(variation, `var-${idx}`)}
                                 className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all flex items-center gap-1 cursor-pointer ${
@@ -1065,18 +1504,34 @@ ${generatedResult.rationale}
                                 {copiedId === `var-${idx}` ? (
                                   <>
                                     <Check className="w-3.5 h-3.5 text-emerald-600" />
-                                    <span className="text-emerald-600 font-semibold">Đã sao chép</span>
+                                    <span className="text-emerald-600 font-semibold">Đã chép</span>
                                   </>
                                 ) : (
                                   <>
                                     <Copy className="w-3.5 h-3.5 text-slate-400" />
-                                    <span>Sao chép</span>
+                                    <span>Chép bài</span>
                                   </>
                                 )}
+                              </button>
+
+                              {/* Save to Benchmark Library */}
+                              <button
+                                onClick={() => handleSaveToBenchmark(variation, idx)}
+                                title="Lưu bài viết này vào Kho Mẫu Chuẩn"
+                                className={`p-1.5 rounded-lg border transition-all flex items-center gap-1 cursor-pointer ${
+                                  savedBenchmarkIdx === idx
+                                    ? 'bg-amber-500 text-white border-amber-500'
+                                    : isDark
+                                    ? 'bg-slate-900 hover:bg-slate-800 text-amber-400 border-amber-900/60'
+                                    : 'bg-white hover:bg-amber-50 text-amber-700 border-amber-200 shadow-2xs'
+                                }`}
+                              >
+                                <BookmarkPlus className="w-3.5 h-3.5" />
                               </button>
                             </div>
                           </div>
 
+                          {/* Variation Text */}
                           <p
                             className={`text-xs leading-relaxed whitespace-pre-line font-sans select-all ${
                               isDark ? 'text-slate-200' : 'text-slate-800'
@@ -1085,22 +1540,31 @@ ${generatedResult.rationale}
                             {variation}
                           </p>
 
+                          {/* Footer Metrics */}
                           <div
                             className={`text-[10px] pt-2 flex items-center justify-between border-t ${
                               isDark ? 'text-slate-500 border-slate-900' : 'text-slate-400 border-slate-200'
                             }`}
                           >
-                            <span>{variation.length} ký tự</span>
-                            <span className="italic text-indigo-500">Bấm vào bài viết để chọn tinh chỉnh qua Chat</span>
+                            <span className="flex items-center gap-2">
+                              <span>{metrics.words} từ</span>
+                              <span>•</span>
+                              <span>{metrics.chars} ký tự</span>
+                              <span>•</span>
+                              <span>{metrics.readingTimeStr}</span>
+                            </span>
+                            <span className="italic text-indigo-600 dark:text-indigo-400 font-medium">
+                              Bấm vào thẻ để chọn tinh chỉnh qua Chat ↓
+                            </span>
                           </div>
                         </div>
                       );
                     })}
                   </div>
 
-                  {/* Interactive Refinement Chat (Chat tiếp để chỉnh theo ý muốn) */}
+                  {/* Interactive Refinement Chat */}
                   <div
-                    className={`border rounded-xl p-4 space-y-3 ${
+                    className={`border rounded-2xl p-4 space-y-3 ${
                       isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-indigo-50/40 border-indigo-100'
                     }`}
                   >
@@ -1119,7 +1583,7 @@ ${generatedResult.rationale}
                     </div>
 
                     {refineExplanation && (
-                      <div className="p-2 rounded-lg text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                      <div className="p-2.5 rounded-xl text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                         <Check className="w-3.5 h-3.5 shrink-0" />
                         <span>{refineExplanation}</span>
                       </div>
@@ -1132,7 +1596,7 @@ ${generatedResult.rationale}
                         onChange={(e) => setRefineInstruction(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && !isRefining && handleRefine()}
                         placeholder="Ví dụ: Viết dài hơn, thêm cam kết không bán khóa học mạnh hơn, đổi tone hài hước..."
-                        className={`flex-1 border rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 ${
+                        className={`flex-1 border rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 ${
                           isDark
                             ? 'bg-slate-900 border-slate-800 text-slate-200 placeholder-slate-500'
                             : 'bg-white border-slate-300 text-slate-900 placeholder-slate-400 shadow-2xs'
@@ -1147,7 +1611,7 @@ ${generatedResult.rationale}
                         {isRefining ? (
                           <>
                             <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            <span>Đang tinh chỉnh...</span>
+                            <span>Đang sửa...</span>
                           </>
                         ) : (
                           <>
@@ -1163,28 +1627,26 @@ ${generatedResult.rationale}
 
               {/* TAB 2: DM 1-1 Inbound Script */}
               {resultTab === 'dm_script' && (
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                   <div
-                    className={`flex items-center justify-between p-3 rounded-xl border ${
-                      isDark
-                        ? 'bg-slate-950/60 border-slate-800'
-                        : 'bg-indigo-50/50 border-indigo-100'
+                    className={`flex items-center justify-between p-3.5 rounded-xl border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-indigo-50/50 border-indigo-100'
                     }`}
                   >
                     <span className={`text-xs ${isDark ? 'text-slate-300' : 'text-indigo-950 font-medium'}`}>
-                      Quy trình 3 bước xử lý khi khách hàng comment hoặc inbox xin link/test
+                      Quy trình 3 bước xử lý khi độc giả comment hoặc inbox xin link test
                     </span>
                     <button
                       onClick={() => {
                         const fullScript = `BƯỚC 1 (Đồng cảm):\n${generatedResult.dmFollowUpScript.step1_empathy}\n\nBƯỚC 2 (Câu hỏi đào sâu):\n${generatedResult.dmFollowUpScript.step2_qualifyQuestion}\n\nBƯỚC 3 (Gửi link test & mời tham gia):\n${generatedResult.dmFollowUpScript.step3_inviteLink}`;
                         copyWithFeedback(fullScript, 'full-dm');
                       }}
-                      className="px-3 py-1 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
                     >
                       {copiedId === 'full-dm' ? (
                         <>
                           <Check className="w-3.5 h-3.5 text-white" />
-                          <span>Đã chép toàn bộ</span>
+                          <span>Đã chép toàn bộ!</span>
                         </>
                       ) : (
                         <>
@@ -1197,7 +1659,7 @@ ${generatedResult.rationale}
 
                   {/* Step 1 */}
                   <div
-                    className={`border rounded-xl p-3.5 space-y-1.5 ${
+                    className={`border rounded-2xl p-4 space-y-2 ${
                       isDark ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-200'
                     }`}
                   >
@@ -1207,20 +1669,27 @@ ${generatedResult.rationale}
                       </span>
                       <button
                         onClick={() =>
-                          copyWithFeedback(
-                            generatedResult.dmFollowUpScript.step1_empathy,
-                            'step-1'
-                          )
+                          copyWithFeedback(generatedResult.dmFollowUpScript.step1_empathy, 'step-1')
                         }
-                        className={`text-[11px] cursor-pointer ${
-                          isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-800'
+                        className={`text-[11px] font-semibold flex items-center gap-1 cursor-pointer ${
+                          isDark ? 'text-indigo-400 hover:text-indigo-300' : 'text-indigo-600 hover:text-indigo-700'
                         }`}
                       >
-                        {copiedId === 'step-1' ? '✓ Đã chép' : 'Sao chép'}
+                        {copiedId === 'step-1' ? (
+                          <>
+                            <Check className="w-3 h-3 text-emerald-500" />
+                            <span className="text-emerald-500">Đã chép</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3 h-3" />
+                            <span>Sao chép</span>
+                          </>
+                        )}
                       </button>
                     </div>
                     <p
-                      className={`text-xs leading-relaxed italic p-2.5 rounded-lg border select-all ${
+                      className={`text-xs leading-relaxed italic p-3 rounded-xl border select-all ${
                         isDark
                           ? 'text-slate-300 bg-slate-900/80 border-slate-800/80'
                           : 'text-slate-700 bg-slate-50 border-slate-200'
@@ -1232,7 +1701,7 @@ ${generatedResult.rationale}
 
                   {/* Step 2 */}
                   <div
-                    className={`border rounded-xl p-3.5 space-y-1.5 ${
+                    className={`border rounded-2xl p-4 space-y-2 ${
                       isDark ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-200'
                     }`}
                   >
@@ -1242,20 +1711,27 @@ ${generatedResult.rationale}
                       </span>
                       <button
                         onClick={() =>
-                          copyWithFeedback(
-                            generatedResult.dmFollowUpScript.step2_qualifyQuestion,
-                            'step-2'
-                          )
+                          copyWithFeedback(generatedResult.dmFollowUpScript.step2_qualifyQuestion, 'step-2')
                         }
-                        className={`text-[11px] cursor-pointer ${
-                          isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-800'
+                        className={`text-[11px] font-semibold flex items-center gap-1 cursor-pointer ${
+                          isDark ? 'text-indigo-400 hover:text-indigo-300' : 'text-indigo-600 hover:text-indigo-700'
                         }`}
                       >
-                        {copiedId === 'step-2' ? '✓ Đã chép' : 'Sao chép'}
+                        {copiedId === 'step-2' ? (
+                          <>
+                            <Check className="w-3 h-3 text-emerald-500" />
+                            <span className="text-emerald-500">Đã chép</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3 h-3" />
+                            <span>Sao chép</span>
+                          </>
+                        )}
                       </button>
                     </div>
                     <p
-                      className={`text-xs leading-relaxed italic p-2.5 rounded-lg border select-all ${
+                      className={`text-xs leading-relaxed italic p-3 rounded-xl border select-all ${
                         isDark
                           ? 'text-slate-300 bg-slate-900/80 border-slate-800/80'
                           : 'text-slate-700 bg-slate-50 border-slate-200'
@@ -1267,7 +1743,7 @@ ${generatedResult.rationale}
 
                   {/* Step 3 */}
                   <div
-                    className={`border rounded-xl p-3.5 space-y-1.5 ${
+                    className={`border rounded-2xl p-4 space-y-2 ${
                       isDark ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-200'
                     }`}
                   >
@@ -1277,20 +1753,27 @@ ${generatedResult.rationale}
                       </span>
                       <button
                         onClick={() =>
-                          copyWithFeedback(
-                            generatedResult.dmFollowUpScript.step3_inviteLink,
-                            'step-3'
-                          )
+                          copyWithFeedback(generatedResult.dmFollowUpScript.step3_inviteLink, 'step-3')
                         }
-                        className={`text-[11px] cursor-pointer ${
-                          isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-800'
+                        className={`text-[11px] font-semibold flex items-center gap-1 cursor-pointer ${
+                          isDark ? 'text-indigo-400 hover:text-indigo-300' : 'text-indigo-600 hover:text-indigo-700'
                         }`}
                       >
-                        {copiedId === 'step-3' ? '✓ Đã chép' : 'Sao chép'}
+                        {copiedId === 'step-3' ? (
+                          <>
+                            <Check className="w-3 h-3 text-emerald-500" />
+                            <span className="text-emerald-500">Đã chép</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3 h-3" />
+                            <span>Sao chép</span>
+                          </>
+                        )}
                       </button>
                     </div>
                     <p
-                      className={`text-xs leading-relaxed italic p-2.5 rounded-lg border select-all ${
+                      className={`text-xs leading-relaxed italic p-3 rounded-xl border select-all ${
                         isDark
                           ? 'text-slate-300 bg-slate-900/80 border-slate-800/80'
                           : 'text-slate-700 bg-slate-50 border-slate-200'
@@ -1329,7 +1812,7 @@ ${generatedResult.rationale}
                   </div>
 
                   <div
-                    className={`rounded-xl border p-4 max-w-lg mx-auto space-y-3 shadow-sm ${
+                    className={`rounded-2xl border p-4 max-w-lg mx-auto space-y-3 shadow-sm ${
                       isDark ? 'border-slate-800 bg-slate-950' : 'border-slate-200 bg-white'
                     }`}
                   >
@@ -1354,7 +1837,7 @@ ${generatedResult.rationale}
                     </div>
 
                     <p
-                      className={`text-xs leading-relaxed whitespace-pre-line select-all p-3 rounded-lg border ${
+                      className={`text-xs leading-relaxed whitespace-pre-line select-all p-3 rounded-xl border ${
                         isDark
                           ? 'text-slate-200 bg-slate-900/60 border-slate-800/80'
                           : 'text-slate-800 bg-slate-50 border-slate-200'
@@ -1386,29 +1869,25 @@ ${generatedResult.rationale}
               )}
             </div>
           ) : (
-            /* Clean Empty State */
+            /* C. CLEAN EMPTY STATE */
             <div
-              className={`h-full min-h-[380px] rounded-2xl border p-8 flex flex-col items-center justify-center text-center space-y-3 transition-colors ${
-                isDark
-                  ? 'border-slate-800/80 bg-slate-900/40'
-                  : 'border-slate-200 bg-white shadow-2xs'
+              className={`h-full min-h-[420px] rounded-2xl border p-8 flex flex-col items-center justify-center text-center space-y-4 transition-colors ${
+                isDark ? 'border-slate-800/80 bg-slate-900/40' : 'border-slate-200 bg-white shadow-xs'
               }`}
             >
               <div
-                className={`w-12 h-12 rounded-xl border flex items-center justify-center ${
-                  isDark
-                    ? 'bg-slate-850 border-slate-800 text-indigo-400'
-                    : 'bg-indigo-50 border-indigo-100 text-indigo-600'
+                className={`w-14 h-14 rounded-2xl border flex items-center justify-center ${
+                  isDark ? 'bg-slate-850 border-slate-800 text-indigo-400' : 'bg-indigo-50 border-indigo-100 text-indigo-600'
                 }`}
               >
-                <Sparkles className="w-5 h-5" />
+                <Sparkles className="w-6 h-6" />
               </div>
-              <div className="max-w-sm space-y-1">
-                <h3 className={`text-sm font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+              <div className="max-w-sm space-y-1.5">
+                <h3 className={`text-base font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
                   Sẵn sàng tạo nội dung chuyển đổi
                 </h3>
                 <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Nhập ý tưởng bài đăng ở cột bên trái và bấm <strong>"Tạo 3 Phương Án & Kịch Bản DM"</strong> để nhận ngay kết quả.
+                  Nhập ý tưởng bài đăng ở cột bên trái và bấm <strong>"Tạo 4 Phong Cách & Kịch Bản DM 1-1"</strong>. AI sẽ tự động phân tích tâm lý, bóc tách nỗi đau và đề xuất 4 phương án độc bản.
                 </p>
               </div>
             </div>

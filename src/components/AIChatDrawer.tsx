@@ -40,7 +40,7 @@ export const AIChatDrawer: React.FC<AIChatDrawerProps> = ({
         { label: '🎬 Order 1: Comment TikTok', action: 'Order 1', orderType: 'order_1' },
         { label: '💬 Order 2: Comment Facebook', action: 'Order 2', orderType: 'order_2' },
         { label: '🧵 Order 4: Comment Threads', action: 'Order 4', orderType: 'order_4' },
-        { label: '💼 Order 6: Tin nhắn LinkedIn', action: 'Order 6', orderType: 'order_6' },
+        { label: '💼 Order 6: Bài viết & InMail LinkedIn', action: 'Order 6', orderType: 'order_6' },
       ],
     },
   ]);

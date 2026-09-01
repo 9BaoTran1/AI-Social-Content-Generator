@@ -240,13 +240,13 @@ export const ORDERS_METADATA: OrderMeta[] = [
   {
     id: 'order_6',
     orderNumber: 6,
-    title: 'Tiếp cận qua tin nhắn LinkedIn',
+    title: 'Bài viết & InMail LinkedIn (Long-Form)',
     platform: 'LinkedIn',
-    category: 'message',
+    category: 'post',
     allowedTypes: ['ws', 'ct'],
-    description: 'Mẫu tin nhắn InMail / DM kết nối chuyên nghiệp dưới góc nhìn HRBP/L&D, nói về nghiên cứu năng lượng, MBTI và tham vấn 1:1 miễn phí.',
-    toneGuideline: 'Chuyên nghiệp, lịch sự, có căn cứ khoa học, ấm áp và tôn trọng thời gian của đối phương.',
-    defaultPrompt: 'Soạn tin nhắn LinkedIn tiếp cận cá nhân hóa theo phong cách HRBP/L&D.'
+    description: 'Bài viết LinkedIn Long-Form chuẩn Thought Leadership (3-line hook mở "...see more", case study quản trị thực chiến, framework 3-4 điểm, câu hỏi mở, firstCommentSeed) kèm kịch bản InMail tiếp cận chuyên nghiệp 1:1.',
+    toneGuideline: 'Đĩnh đạc, khiêm nhường, am hiểu sâu sắc góc nhìn HRBP/Senior Leader, có căn cứ khoa học và tôn trọng đối phương.',
+    defaultPrompt: 'Viết bài LinkedIn Long-Form chuyên sâu và soạn kịch bản InMail tiếp cận cá nhân hóa.'
   },
   {
     id: 'order_7',

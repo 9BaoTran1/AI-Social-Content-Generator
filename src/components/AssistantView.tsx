@@ -276,7 +276,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
                         }`}
                       >
                         <span className={`text-[11px] font-bold block ${isDark ? 'text-indigo-300' : 'text-indigo-900'}`}>
-                          3 Phương án đề xuất:
+                          4 Phương án đề xuất:
                         </span>
                         {msg.generatedResult.variations.map((v, i) => (
                           <div

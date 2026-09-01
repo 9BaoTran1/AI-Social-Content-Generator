@@ -3,6 +3,7 @@ import { ProgramItem, OrderType, ThemeMode } from './types';
 import { getSavedPrograms, savePrograms } from './lib/storage';
 import { Navbar } from './components/Navbar';
 import { GeneratorWorkbench } from './components/GeneratorWorkbench';
+import { OrderGrid } from './components/OrderGrid';
 import { ProgramManager } from './components/ProgramManager';
 import { AssistantView } from './components/AssistantView';
 import { BenchmarkLibrary } from './components/BenchmarkLibrary';
@@ -10,12 +11,12 @@ import { AccessGuard } from './components/AccessGuard';
 
 export default function App() {
   const [programs, setPrograms] = useState<ProgramItem[]>(getSavedPrograms());
-  const [activeTab, setActiveTab] = useState<'workbench' | 'benchmark' | 'programs' | 'assistant'>('workbench');
+  const [activeTab, setActiveTab] = useState<'workbench' | 'orders' | 'benchmark' | 'programs' | 'assistant'>('workbench');
   const [selectedOrderType, setSelectedOrderType] = useState<OrderType>('order_1');
   const [prefillContext, setPrefillContext] = useState<string>('');
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
 
-  // Theme State (default: 'light' since user asked for light version, or stored preference)
+  // Theme State (stored preference or default 'light')
   const [theme, setTheme] = useState<ThemeMode>(() => {
     const saved = localStorage.getItem('order_ai_theme');
     if (saved === 'light' || saved === 'dark') return saved;
@@ -36,6 +37,11 @@ export default function App() {
 
   const handleUseTemplate = (templateContent: string) => {
     setPrefillContext(templateContent);
+    setActiveTab('workbench');
+  };
+
+  const handleSelectOrderFromGrid = (orderType: OrderType) => {
+    setSelectedOrderType(orderType);
     setActiveTab('workbench');
   };
 
@@ -97,6 +103,13 @@ export default function App() {
             />
           )}
 
+          {activeTab === 'orders' && (
+            <OrderGrid
+              onSelectOrder={handleSelectOrderFromGrid}
+              theme={theme}
+            />
+          )}
+
           {activeTab === 'benchmark' && (
             <BenchmarkLibrary
               onUseTemplate={handleUseTemplate}
@@ -136,9 +149,15 @@ export default function App() {
               : 'border-slate-200 bg-white text-slate-500'
           }`}
         >
-          <p>
-            AI Social Content Specialist • Chuyển đổi Comment thành Inbox • Tuân thủ chuẩn TikTok, Facebook, Threads, LinkedIn
-          </p>
+          <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p className="flex items-center gap-1.5 font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              PROMPT ORDER AI • Hệ thống 7 Order Chuyển Đổi Comment Thành Inbox
+            </p>
+            <p className="text-[11px] text-slate-400">
+              Định dạng chuẩn TikTok, Facebook Long-form, Threads, LinkedIn & Email
+            </p>
+          </div>
         </footer>
       </div>
     </AccessGuard>

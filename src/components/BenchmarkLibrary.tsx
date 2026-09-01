@@ -22,6 +22,8 @@ import {
   X,
   Sparkles,
   Pin,
+  Gauge,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface BenchmarkLibraryProps {
@@ -75,6 +77,23 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
     navigator.clipboard.writeText(text);
     setCopiedCmtId(id);
     setTimeout(() => setCopiedCmtId(null), 2000);
+  };
+
+  const copyCombo = (content: string, cmt: string | undefined, id: string) => {
+    let combined = content;
+    if (cmt) {
+      combined += `\n\n---\n[BÌNH LUẬN GHIM MỒI ĐẶT LINK]:\n${cmt}`;
+    }
+    copyText(combined, id);
+  };
+
+  const getTemplateMetrics = (text: string) => {
+    const clean = text.trim();
+    const words = clean ? clean.split(/\s+/).filter(Boolean).length : 0;
+    const chars = clean.length;
+    const readingSeconds = Math.max(5, Math.round((words / 200) * 60));
+    const readingTimeStr = readingSeconds < 60 ? `~${readingSeconds}s đọc` : `~${Math.ceil(readingSeconds / 60)} phút đọc`;
+    return { words, chars, readingTimeStr };
   };
 
   const handleSaveNewTemplate = (e: React.FormEvent) => {
@@ -137,39 +156,48 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
     <div className="space-y-6">
       {/* Header Banner */}
       <div
-        className={`p-6 rounded-2xl border shadow-xs transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+        className={`p-6 sm:p-8 rounded-3xl border shadow-xs transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 ${
+          isDark
+            ? 'bg-gradient-to-br from-slate-900 via-indigo-950/20 to-slate-900 border-slate-800'
+            : 'bg-gradient-to-br from-white via-indigo-50/40 to-slate-50 border-slate-200 shadow-xs'
         }`}
       >
-        <div className="space-y-1.5 max-w-2xl">
-          <div className="flex items-center space-x-2">
-            <span className="px-2.5 py-0.5 text-[11px] font-bold uppercase rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-              Benchmark Thực Chiến 20+ Năm
-            </span>
-            <h2 className="text-lg font-bold tracking-tight flex items-center gap-2">
-              <BookmarkCheck className="w-5 h-5 text-indigo-600" />
-              <span>Kho Mẫu Comment & Post Chuyển Đổi Cao</span>
-            </h2>
+        <div className="space-y-2 max-w-2xl">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span>Benchmark Thực Chiến 20+ Năm Kinh Nghiệm</span>
           </div>
-          <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-            Tuyển tập các khung mẫu content Facebook Long-Form (Dự án cộng đồng, Talkshow HR/L&D/QA), TikTok, Threads và LinkedIn. Bạn cũng có thể lưu bất kỳ bài viết/comment nào từ Studio vào kho này!
+          <h2
+            className={`text-xl sm:text-2xl font-bold tracking-tight flex items-center gap-2 ${
+              isDark ? 'text-white' : 'text-slate-900'
+            }`}
+          >
+            <BookmarkCheck className="w-6 h-6 text-indigo-600" />
+            <span>Kho Mẫu Bài Viết & Comment Chuyển Đổi Cao</span>
+          </h2>
+          <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+            Tuyển tập các khung mẫu content chuẩn Facebook Long-Form (Dự án cộng đồng phi lợi nhuận, Talkshow HR/L&D/QA, khám sức khỏe WHO-5), TikTok, Threads và LinkedIn. Bạn cũng có thể lưu trực tiếp bất kỳ kết quả nào từ Studio vào kho này!
           </p>
         </div>
 
         {/* Action Button: Add New Template */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            <span>Thêm Mẫu Vào Kho</span>
+            <span>Thêm Mẫu Mới</span>
           </button>
         </div>
       </div>
 
       {/* Filter & Search Toolbar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div
+        className={`flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 rounded-2xl border shadow-xs transition-colors ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
+        }`}
+      >
         {/* Search Box */}
         <div className="relative flex-1 sm:max-w-xs">
           <input
@@ -177,18 +205,26 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Tìm theo ngành, từ khóa, tag..."
-            className={`w-full border rounded-xl pl-8 pr-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 ${
+            className={`w-full border rounded-xl pl-9 pr-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors ${
               isDark
-                ? 'bg-slate-900 border-slate-800 text-slate-200 placeholder-slate-500'
-                : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 shadow-2xs'
+                ? 'bg-slate-950 border-slate-800 text-slate-200 placeholder-slate-500'
+                : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600'
             }`}
           />
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-3" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              className="text-[10px] text-slate-400 hover:text-indigo-600 absolute right-3 top-2.5 font-semibold cursor-pointer"
+            >
+              Xóa
+            </button>
+          )}
         </div>
 
         {/* Platform Filters */}
         <div
-          className={`flex p-1 rounded-xl border text-xs overflow-x-auto ${
+          className={`flex p-1 rounded-xl border text-xs overflow-x-auto no-scrollbar ${
             isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-100 border-slate-200'
           }`}
         >
@@ -196,7 +232,7 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
             <button
               key={plat}
               onClick={() => setFilterPlatform(plat)}
-              className={`px-3 py-1 rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 filterPlatform === plat
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
@@ -212,140 +248,198 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
 
       {/* Templates Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filtered.map((item: SampleTemplate) => (
-          <div
-            key={item.id}
-            className={`rounded-2xl p-5 border shadow-xs flex flex-col justify-between space-y-4 transition-all hover:border-indigo-500/50 ${
-              isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
-            }`}
-          >
-            <div className="space-y-3">
-              {/* Header tags */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className={`p-1.5 rounded-lg border ${isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
-                    {getPlatformIcon(item.platform)}
-                  </div>
-                  <span className="text-xs font-bold">
-                    {item.platform} • <span className="opacity-80">{item.category}</span>
-                  </span>
-                  {item.isCustom && (
-                    <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
-                      Mẫu của bạn
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex items-center space-x-1.5">
-                  {item.isCustom && (
-                    <button
-                      onClick={() => handleDelete(item.id)}
-                      title="Xóa mẫu này"
-                      className="p-1 rounded-lg text-slate-400 hover:text-rose-500 transition-colors cursor-pointer"
+        {filtered.map((item: SampleTemplate) => {
+          const metrics = getTemplateMetrics(item.content);
+          return (
+            <div
+              key={item.id}
+              className={`rounded-2xl p-5 border shadow-xs flex flex-col justify-between space-y-4 transition-all hover:border-indigo-500/50 ${
+                isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
+              }`}
+            >
+              <div className="space-y-3">
+                {/* Header tags & Word Count Badge */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div
+                      className={`p-1.5 rounded-lg border ${
+                        isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                      }`}
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  )}
+                      {getPlatformIcon(item.platform)}
+                    </div>
+                    <span className="text-xs font-bold">
+                      {item.platform} • <span className="opacity-80">{item.category}</span>
+                    </span>
+                    {item.isCustom && (
+                      <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+                        Mẫu của bạn
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center space-x-1.5">
+                    {/* Word Count Badge */}
+                    <span
+                      className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border flex items-center gap-1 ${
+                        isDark
+                          ? 'bg-slate-950 text-slate-300 border-slate-800'
+                          : 'bg-slate-100 text-slate-700 border-slate-200'
+                      }`}
+                    >
+                      <Gauge className="w-3 h-3 text-indigo-500" />
+                      <span>{metrics.words} từ</span>
+                      <span>•</span>
+                      <span>{metrics.readingTimeStr}</span>
+                    </span>
+
+                    {item.isCustom && (
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        title="Xóa mẫu này"
+                        className="p-1 rounded-lg text-slate-400 hover:text-rose-500 transition-colors cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {/* Title */}
-              <h3 className="font-bold text-sm tracking-tight text-indigo-600 dark:text-indigo-400">
-                {item.title}
-              </h3>
+                {/* Title */}
+                <h3 className="font-bold text-sm tracking-tight text-indigo-600 dark:text-indigo-400">
+                  {item.title}
+                </h3>
 
-              {/* Tags */}
-              <div className="flex items-center gap-1 flex-wrap">
-                {item.tags.map((t, idx) => (
-                  <span
-                    key={idx}
-                    className={`px-2 py-0.5 rounded text-[10px] font-medium border ${
-                      isDark ? 'bg-slate-950 text-slate-400 border-slate-800' : 'bg-slate-100 text-slate-600 border-slate-200'
-                    }`}
-                  >
-                    #{t}
-                  </span>
-                ))}
-              </div>
+                {/* Tags */}
+                <div className="flex items-center gap-1 flex-wrap">
+                  {item.tags.map((t, idx) => (
+                    <span
+                      key={idx}
+                      className={`px-2 py-0.5 rounded text-[10px] font-medium border ${
+                        isDark
+                          ? 'bg-slate-950 text-slate-400 border-slate-800'
+                          : 'bg-slate-100 text-slate-600 border-slate-200'
+                      }`}
+                    >
+                      #{t}
+                    </span>
+                  ))}
+                </div>
 
-              {/* Insight */}
-              <p className={`text-xs italic p-2.5 rounded-xl border ${
-                isDark ? 'bg-indigo-950/20 text-indigo-300 border-indigo-900/40' : 'bg-indigo-50/60 text-indigo-900 border-indigo-100'
-              }`}>
-                💡 <strong>Góc nhìn chuyên gia:</strong> {item.keyInsight}
-              </p>
-
-              {/* Content box */}
-              <div
-                className={`p-3.5 rounded-xl border font-sans text-xs leading-relaxed whitespace-pre-line select-all max-h-72 overflow-y-auto ${
-                  isDark ? 'bg-slate-950/80 border-slate-800/80 text-slate-200' : 'bg-slate-50/80 border-slate-200 text-slate-800'
-                }`}
-              >
-                {item.content}
-              </div>
-
-              {/* First Comment Seed if available */}
-              {item.firstCommentSeed && (
-                <div
-                  className={`p-3 rounded-xl border space-y-1.5 ${
-                    isDark ? 'bg-amber-950/20 border-amber-900/40 text-amber-300' : 'bg-amber-50 border-amber-200 text-amber-900'
+                {/* Insight */}
+                <p
+                  className={`text-xs italic p-2.5 rounded-xl border ${
+                    isDark
+                      ? 'bg-indigo-950/20 text-indigo-300 border-indigo-900/40'
+                      : 'bg-indigo-50/60 text-indigo-900 border-indigo-100'
                   }`}
                 >
-                  <div className="flex items-center justify-between text-[11px] font-bold">
-                    <span className="flex items-center gap-1">
-                      <Pin className="w-3 h-3 text-amber-500" />
-                      Bình luận ghim mồi đặt link (Tránh bóp reach):
-                    </span>
-                    <button
-                      onClick={() => copyCmt(item.firstCommentSeed!, item.id)}
-                      className="hover:underline cursor-pointer flex items-center gap-1"
-                    >
-                      {copiedCmtId === item.id ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                      <span>{copiedCmtId === item.id ? 'Đã copy cmt' : 'Copy cmt'}</span>
-                    </button>
-                  </div>
-                  <p className="text-xs font-mono select-all whitespace-pre-line opacity-90">
-                    {item.firstCommentSeed}
-                  </p>
+                  💡 <strong>Góc nhìn chuyên gia:</strong> {item.keyInsight}
+                </p>
+
+                {/* Content box */}
+                <div
+                  className={`p-3.5 rounded-xl border font-sans text-xs leading-relaxed whitespace-pre-line select-all max-h-72 overflow-y-auto ${
+                    isDark
+                      ? 'bg-slate-950/80 border-slate-800/80 text-slate-200'
+                      : 'bg-slate-50/80 border-slate-200 text-slate-800'
+                  }`}
+                >
+                  {item.content}
                 </div>
-              )}
-            </div>
 
-            {/* Bottom Actions */}
-            <div className={`pt-3 border-t flex items-center justify-between ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
-              <button
-                onClick={() => onUseTemplate(item.content)}
-                className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
-              >
-                <span>Dùng mẫu này trong Studio</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+                {/* First Comment Seed if available */}
+                {item.firstCommentSeed && (
+                  <div
+                    className={`p-3 rounded-xl border space-y-1.5 ${
+                      isDark
+                        ? 'bg-amber-950/20 border-amber-900/40 text-amber-300'
+                        : 'bg-amber-50 border-amber-200 text-amber-900'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between text-[11px] font-bold">
+                      <span className="flex items-center gap-1">
+                        <Pin className="w-3 h-3 text-amber-500" />
+                        Bình luận ghim mồi đặt link (Tránh bóp reach):
+                      </span>
+                      <button
+                        onClick={() => copyCmt(item.firstCommentSeed!, item.id)}
+                        className="hover:underline cursor-pointer flex items-center gap-1 font-semibold"
+                      >
+                        {copiedCmtId === item.id ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                        <span>{copiedCmtId === item.id ? 'Đã chép cmt' : 'Copy cmt'}</span>
+                      </button>
+                    </div>
+                    <p className="text-xs font-mono select-all whitespace-pre-line opacity-90">
+                      {item.firstCommentSeed}
+                    </p>
+                  </div>
+                )}
+              </div>
 
-              <button
-                onClick={() => copyText(item.content, item.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 cursor-pointer ${
-                  copiedId === item.id
-                    ? 'bg-emerald-600 text-white border-emerald-500'
-                    : isDark
-                    ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
-                    : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-xs'
+              {/* Bottom Actions */}
+              <div
+                className={`pt-3 border-t flex flex-wrap items-center justify-between gap-2 ${
+                  isDark ? 'border-slate-800' : 'border-slate-100'
                 }`}
               >
-                {copiedId === item.id ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-white" />
-                    <span>Đã copy!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>Copy bài viết</span>
-                  </>
-                )}
-              </button>
+                <button
+                  onClick={() => onUseTemplate(item.content)}
+                  className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
+                >
+                  <span>Dùng mẫu này trong Studio</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+
+                <div className="flex items-center gap-1.5">
+                  {/* Combo Copy Button */}
+                  {item.firstCommentSeed && (
+                    <button
+                      onClick={() => copyCombo(item.content, item.firstCommentSeed, `bm-combo-${item.id}`)}
+                      className="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-1 cursor-pointer shadow-2xs transition-all"
+                    >
+                      {copiedId === `bm-combo-${item.id}` ? (
+                        <>
+                          <Check className="w-3 h-3 text-white" />
+                          <span>Đã chép combo!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3 text-amber-300" />
+                          <span>Copy Bài + Cmt</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+
+                  {/* Copy Content Only Button */}
+                  <button
+                    onClick={() => copyText(item.content, item.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 cursor-pointer ${
+                      copiedId === item.id
+                        ? 'bg-emerald-600 text-white border-emerald-500'
+                        : isDark
+                        ? 'bg-slate-850 hover:bg-slate-800 text-slate-200 border-slate-700'
+                        : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-2xs'
+                    }`}
+                  >
+                    {copiedId === item.id ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-white" />
+                        <span>Đã copy!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-slate-400" />
+                        <span>Copy bài</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Modal: Thêm Mẫu Mới Vào Kho */}
@@ -363,7 +457,7 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
               </div>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -473,13 +567,13 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border text-xs font-semibold"
+                  className="px-4 py-2 rounded-xl border text-xs font-semibold cursor-pointer"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs"
+                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs cursor-pointer shadow-xs"
                 >
                   Lưu Vào Kho Mẫu
                 </button>

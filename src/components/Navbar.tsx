@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check, Share2, Lock, BookmarkCheck } from 'lucide-react';
+import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check, Lock, BookmarkCheck, Layers } from 'lucide-react';
 import { ThemeMode } from '../types';
 import { getApiKey, setApiKey } from '../lib/aiService';
 
 interface NavbarProps {
-  activeTab: 'workbench' | 'benchmark' | 'programs' | 'assistant';
-  setActiveTab: (tab: 'workbench' | 'benchmark' | 'programs' | 'assistant') => void;
+  activeTab: 'workbench' | 'orders' | 'benchmark' | 'programs' | 'assistant';
+  setActiveTab: (tab: 'workbench' | 'orders' | 'benchmark' | 'programs' | 'assistant') => void;
   onOpenAddProgram: () => void;
   programCount: { ws: number; ct: number };
   theme: ThemeMode;
@@ -53,26 +53,26 @@ export const Navbar: React.FC<NavbarProps> = ({
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 gap-2">
           {/* Logo & Clean Title */}
           <div
-            className="flex items-center space-x-3 cursor-pointer group"
+            className="flex items-center space-x-3 cursor-pointer group shrink-0"
             onClick={() => setActiveTab('workbench')}
           >
-            <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-sm group-hover:bg-indigo-500 transition-colors">
+            <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-500 transition-colors">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
                 <span
-                  className={`font-bold text-base tracking-tight font-sans ${
+                  className={`font-bold text-sm sm:text-base tracking-tight font-sans ${
                     isDark ? 'text-white' : 'text-slate-900'
                   }`}
                 >
                   PROMPT ORDER AI
                 </span>
                 <span
-                  className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
+                  className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border hidden sm:inline-block ${
                     isDark
                       ? 'bg-slate-800 text-slate-300 border-slate-700/60'
                       : 'bg-slate-100 text-slate-700 border-slate-200'
@@ -82,18 +82,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
               </div>
               <p
-                className={`text-[11px] hidden sm:block ${
+                className={`text-[10px] sm:text-[11px] hidden md:block ${
                   isDark ? 'text-slate-400' : 'text-slate-500'
                 }`}
               >
-                Hệ thống 7 Order chuyển đổi Comment thành Inbox
+                Hệ thống 7 Order chuyển đổi Comment thành Inbox & Đăng ký
               </p>
             </div>
           </div>
 
-          {/* Clean 3 Main Tabs */}
+          {/* Navigation Tabs (Scrollable on small screens) */}
           <nav
-            className={`flex items-center space-x-1 p-1 rounded-xl border ${
+            className={`flex items-center space-x-1 p-1 rounded-xl border overflow-x-auto no-scrollbar max-w-[50vw] sm:max-w-none ${
               isDark
                 ? 'bg-slate-900/90 border-slate-800/80'
                 : 'bg-slate-100 border-slate-200'
@@ -101,63 +101,78 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <button
               onClick={() => setActiveTab('workbench')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all cursor-pointer ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === 'workbench'
-                  ? 'bg-indigo-600 text-white shadow-sm'
+                  ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
                   ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white'
               }`}
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Studio Tạo Content</span>
+              <Sparkles className="w-3.5 h-3.5 shrink-0" />
+              <span>Studio Tạo Bài</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('orders')}
+              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === 'orders'
+                  ? 'bg-indigo-600 text-white shadow-xs'
+                  : isDark
+                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5 shrink-0" />
+              <span>7 Lệnh Order</span>
             </button>
 
             <button
               onClick={() => setActiveTab('benchmark')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all cursor-pointer ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === 'benchmark'
-                  ? 'bg-indigo-600 text-white shadow-sm'
+                  ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
                   ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white'
               }`}
             >
-              <BookmarkCheck className="w-3.5 h-3.5" />
+              <BookmarkCheck className="w-3.5 h-3.5 shrink-0" />
               <span>Kho Mẫu Chuẩn</span>
             </button>
 
             <button
               onClick={() => setActiveTab('programs')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all cursor-pointer ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === 'programs'
-                  ? 'bg-indigo-600 text-white shadow-sm'
+                  ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
                   ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white'
               }`}
             >
-              <BookOpen className="w-3.5 h-3.5" />
+              <BookOpen className="w-3.5 h-3.5 shrink-0" />
               <span>Kho WS/CT ({programCount.ws + programCount.ct})</span>
             </button>
 
             <button
               onClick={() => setActiveTab('assistant')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all cursor-pointer ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === 'assistant'
-                  ? 'bg-indigo-600 text-white shadow-sm'
+                  ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
                   ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white'
               }`}
             >
-              <Bot className="w-3.5 h-3.5" />
-              <span>Trợ Lý & Lịch Sử</span>
+              <Bot className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline">Trợ Lý & Lịch Sử</span>
+              <span className="sm:hidden">Trợ Lý</span>
             </button>
           </nav>
 
           {/* Actions: Theme Toggle, Private Link & Add Button */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
             {/* Private Link Copy Button */}
             <button
               onClick={handleCopyPrivateLink}
@@ -165,7 +180,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`p-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 isDark
                   ? 'bg-slate-900 hover:bg-slate-800 text-indigo-300 border-indigo-900/60'
-                  : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border-indigo-200 shadow-xs'
+                  : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border-indigo-200 shadow-2xs'
               }`}
             >
               {copiedLinkFeedback ? (
@@ -176,7 +191,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               ) : (
                 <>
                   <Lock className="w-3.5 h-3.5 text-indigo-500" />
-                  <span className="hidden sm:inline text-[11px] font-semibold">Link Bí Mật</span>
+                  <span className="hidden lg:inline text-[11px] font-semibold">Link Bí Mật</span>
                 </>
               )}
             </button>
@@ -188,11 +203,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`p-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 isDark
                   ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80'
-                  : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-xs'
+                  : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-2xs'
               }`}
             >
               <Key className="w-3.5 h-3.5 text-indigo-500" />
-              <span className="hidden md:inline text-[11px]">API Key</span>
+              <span className="hidden xl:inline text-[11px]">API Key</span>
             </button>
 
             {/* Theme Toggle Button */}
@@ -202,18 +217,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`p-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 isDark
                   ? 'bg-slate-900 hover:bg-slate-800 text-amber-300 border-slate-700/80'
-                  : 'bg-white hover:bg-slate-50 text-indigo-600 border-slate-200 shadow-xs'
+                  : 'bg-white hover:bg-slate-50 text-indigo-600 border-slate-200 shadow-2xs'
               }`}
             >
               {isDark ? (
                 <>
                   <Sun className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="hidden sm:inline text-[11px] text-slate-300">Bản sáng</span>
+                  <span className="hidden lg:inline text-[11px] text-slate-300">Bản sáng</span>
                 </>
               ) : (
                 <>
                   <Moon className="w-3.5 h-3.5 text-indigo-600" />
-                  <span className="hidden sm:inline text-[11px] text-slate-700 font-semibold">Bản tối</span>
+                  <span className="hidden lg:inline text-[11px] text-slate-700 font-semibold">Bản tối</span>
                 </>
               )}
             </button>
@@ -221,10 +236,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Add Program Button */}
             <button
               onClick={onOpenAddProgram}
-              className={`px-3.5 py-1.5 text-xs font-semibold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer ${
                 isDark
                   ? 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80'
-                  : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-xs'
+                  : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-2xs'
               }`}
             >
               <Plus className="w-3.5 h-3.5 text-indigo-600" />

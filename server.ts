@@ -48,10 +48,11 @@ async function generateContentWithRetry(
   const modelsToTry = [
     primaryModel,
     'gemini-3.6-flash',
-    'gemini-3.7-flash',
     'gemini-3.5-flash',
-    'gemini-flash-latest',
     'gemini-3.1-flash-lite',
+    'gemini-2.5-flash',
+    'gemini-flash-latest',
+    'gemini-3.7-flash',
   ].filter((v, i, a) => a.indexOf(v) === i); // unique
 
   let lastError: any = null;
@@ -232,85 +233,142 @@ app.post('/api/generate-order', async (req: Request, res: Response) => {
       options = {},
     } = req.body;
 
-    const chosenModelOption = options.modelSelection || 'gemini-3.7-flash';
+    const chosenModelOption = options.modelSelection || 'gemini-3.6-flash';
     const isThinkingRequested = chosenModelOption === 'gemini-3.7-flash-thinking';
-    const targetModel = chosenModelOption.startsWith('gemini-2.5')
+    const targetModel = chosenModelOption.includes('3.6')
+      ? 'gemini-3.6-flash'
+      : chosenModelOption.includes('3.5')
+      ? 'gemini-3.5-flash'
+      : chosenModelOption.includes('3.1')
+      ? 'gemini-3.1-flash-lite'
+      : chosenModelOption.includes('2.5')
       ? 'gemini-2.5-flash'
-      : 'gemini-3.7-flash';
+      : chosenModelOption.includes('3.7')
+      ? 'gemini-3.7-flash'
+      : 'gemini-3.6-flash';
 
     // Map order definitions and strict rules
     const orderRules: Record<string, { platform: string; allowedTypes: string[]; rules: string }> = {
       order_1: {
         platform: 'TikTok',
         allowedTypes: ['ws', 'ct'],
-        rules: `ORDER 1: COMMENT QUA CLIP TIKTOK (THU HÚT INBOX TỰ NHIÊN)
-- Mục tiêu: Chuyển đổi người xem đang đồng cảm với clip thành người chủ động inbox nhận bài test/lời khuyên 1-1, tuyệt đối không lộ mùi bán hàng/quảng cáo lộ liễu.
-- Tone & Mood: Ấm áp, thấu cảm sâu sắc, nói chuyện như một người bạn/tiền bối đi trước 1-2 năm trải lòng chân thành.
-- Độ tuổi mục tiêu: 20-39 tuổi (người trẻ đi làm đang tự ti so sánh, sợ dậm chân tại chỗ, kiệt sức vì overthinking hoặc chưa rõ điểm mạnh).
-- Tiêu chuẩn 3 biến thể (Variations):
-  * Mẫu 1 (Story & Đồng Cảm): Nhắc trực tiếp đến 1 chi tiết/câu nói đắt giá trong clip, chia sẻ sự đồng cảm cá nhân và gieo góc nhìn giải phóng tâm lý.
-  * Mẫu 2 (Phản Biện Reframe): Bẻ khóa tư duy (ví dụ: "Thật ra không phải do bạn kém, mà do bạn đang ép mình vào một cái khuôn không thuộc về điểm mạnh của bạn...").
-  * Mẫu 3 (Trắc Nghiệm Tự Vấn): Khơi gợi tò mò về bài test định vị bản thân/năng lượng 1-1 có giải đáp chi tiết, mời inbox nhận free một cách khiêm tốn.`,
+        rules: `ORDER 1: COMMENT QUA CLIP TIKTOK (THU HÚT INBOX TỰ NHIÊN, 20-39T)
+- Văn phong: Tự sự, ấm áp, thủ thỉ, chân thành, hạ thấp bản thân như người anh/chị/bạn bè từng đi qua giai đoạn khủng hoảng trải lòng.
+- Không phán xét, không giáo điều: Đồng cảm từ một chi tiết sâu sắc trong clip -> Giải phóng tâm lý tự trách -> Giới thiệu bài test/template đánh giá tính cách, con người thật hoặc sức bền tinh thần 1-1 kín đáo.
+- Lời mời inbox: Nhẹ nhàng, chân tình, tặng miễn phí 100% ("bạn nào đang cần người lắng nghe/soi chiếu thì nhắn mình gửi tặng free nhé ạ").
+- Tiêu chuẩn 4 biến thể (Variations):
+  * Mẫu 1 (Tự sự - Đồng cảm sâu sắc từ chi tiết clip): Bắt trúng cảm xúc trong clip, kể lại trải nghiệm bản thân, gỡ bỏ mặc cảm so sánh ngầm tuổi 20-39.
+  * Mẫu 2 (Phản biện Reframe - Bẻ khóa tư duy): Chỉ ra sự thật "không phải bạn dở hay lười, mà do đang gượng ép mình vào hệ quy chiếu không thuộc về điểm mạnh".
+  * Mẫu 3 (Trắc nghiệm Soi chiếu - Test 1-1 kín đáo): Khơi gợi điểm mù tư duy và tặng bài test trưởng thành/sức bền tinh thần có chuyên gia giải đáp 1-1.
+  * Mẫu 4 (Đúc kết khiêm nhường từ tiền bối): Chia sẻ bài học thực chiến của người đi làm nhiều năm, tặng template/bản đồ định vị bản sắc cá nhân free qua inbox.`,
       },
       order_2: {
         platform: 'Facebook',
-        allowedTypes: ['ws'], // STRICTLY WS ONLY!
-        rules: `ORDER 2: COMMENT QUA POST FACEBOOK
-*** QUY TẮC SỐNG CÒN TRÊN FACEBOOK ***:
-- TUYỆT ĐỐI KHÔNG RẢI CHƯƠNG TRÌNH (CT). CHỈ ĐƯỢC PHÉP ĐỀ XUẤT WORKSHOP (WS).
-- Tone & Mood: KHÁCH QUAN, TRUNG LẬP, PHÂN TÍCH ĐA CHIỀU CHO CẢ ĐÔI BÊN (nhân viên vs quản lý, áp lực thực tế vs kỳ vọng phát triển).
-- TUYỆT ĐỐI CẤM các câu áp đặt ra lệnh như: "Thay vì than thở hãy...", "Việc bạn bất mãn chứng tỏ bạn..." (nghe rất phản cảm và giáo điều).
-- HẠ THẤP BẢN THÂN, dùng câu từ khiêm nhường: "Tình trạng này ở các team mình thấy khá phổ biến...", "Nếu bạn muốn nhìn lại một cách khách quan có thể tham khảo WS..."`,
+        allowedTypes: ['ws', 'ct'], // Chạy tự do cả WS & CT
+        rules: `ORDER 2: COMMENT QUA POST FACEBOOK (ĐA CHIỀU, KHÔNG GIỚI HẠN WS/CT)
+- Nguyên tắc vàng: TRUNG LẬP, KHÁCH QUAN, PHÂN TÍCH ĐA CHIỀU CHO CẢ ĐÔI BÊN (nhân viên vs quản lý, áp lực doanh số vận hành vs khó khăn tâm lý cá nhân).
+- Văn phong: Điềm đạm, hạ thấp bản thân ("Ở góc độ người từng trải qua cả hai vị trí...", "Tình trạng này ở các team mình thấy khá phổ biến...").
+- TUYỆT ĐỐI CẤM áp đặt ra lệnh ("Thay vì than thở hãy...", "Bất mãn chứng tỏ bạn kém...").
+- Đề xuất giải pháp: Giới thiệu Workshop (WS) hoặc Chương trình (CT) một cách khiêm tốn, coi đó là một không gian soi chiếu và tháo gỡ điểm nghẽn.
+- Tiêu chuẩn 4 biến thể (Variations):
+  * Mẫu 1 (Phân tích đa chiều đôi bên): Đứng ở góc nhìn trung lập, thấu cảm áp lực của cả cấp trên và cấp dưới, đề xuất WS/CT giải tỏa nút thắt.
+  * Mẫu 2 (Bóc tách nguyên nhân gốc rễ): Mổ xẻ logic vận hành công sở và điểm nghẽn năng lượng, chỉ ra vì sao xử lý bề nổi không giải quyết được vấn đề.
+  * Mẫu 3 (Trải nghiệm thực tế & Hạ mình chia sẻ): Kể bài học đắt giá bản thân từng gặp phải và cách Workshop/Chương trình giúp tái cấu trúc góc nhìn.
+  * Mẫu 4 (Đặt câu hỏi gợi mở & Đổi lăng kính): Đặt câu hỏi kích thích suy ngẫm sâu sắc, gợi ý tham gia WS/CT như một trạm dừng chân làm mới tư duy.`,
       },
       order_3: {
         platform: 'Facebook',
-        allowedTypes: ['ws'], // STRICTLY WS ONLY!
-        rules: `ORDER 3: BÀI VIẾT FACEBOOK (POST CHUYÊN SÂU)
-*** QUY TẮC SỐNG CÒN TRÊN FACEBOOK ***:
-- TUYỆT ĐỐI CHỈ VIẾT VỀ WORKSHOP (WS), KHÔNG VIẾT CHƯƠNG TRÌNH (CT).
-- Format: Bài viết có cấu trúc rõ ràng, ngắt đoạn thoáng, dẫn dắt từ một lát cắt thực tế công sở -> mổ xẻ nguyên nhân tâm lý/vận hành -> đề xuất giải pháp khiêm tốn qua Workshop.
-- Tone: Trưởng thành, đa chiều, có chiều sâu trải nghiệm, không rao giảng đạo đức.`,
+        allowedTypes: ['ws', 'ct'], // Chạy tự do cả WS & CT
+        rules: `ORDER 3: BÀI VIẾT FACEBOOK LONG-FORM (500 - 850 TỪ, GIỮ DWELL TIME & VIRAL)
+1. TIÊU ĐỀ IN HOA / HOOK GỢI CẢM XÚC MẠNH: Câu hỏi nhức nhối hoặc một nghịch lý trần trụi chạm đúng tim đen người làm nghề.
+2. THỰC TẾ ĐỒNG CẢM & VULNERABLE STORYTELLING: Kể câu chuyện chân thực, miêu tả chi tiết áp lực deadline, kiệt sức thầm lặng, cảm giác so sánh ngầm với bạn bè trên MXH mà không phán xét, không giáo điều.
+3. PHẢN BIỆN BẺ GÃY LỐI MÒN (PARADIGM SHIFT): Phân tích vì sao càng gượng ép càng bế tắc. Nền tảng cốt lõi của sự thăng hoa là phục hồi năng lượng thể chất và sự thấu suốt bản thân.
+4. TUYÊN BỐ DỰ ÁN CỘNG ĐỒNG PHI LỢI NHUẬN (100% MINH BẠCH TẠO NIỀM TIN): Bắt buộc có đoạn cam kết dứt khoát:
+   "Mình cùng đồng đội làm một dự án cộng đồng hoàn toàn phi lợi nhuận. Mục đích thuần túy là muốn chia sẻ giá trị, đồng hành cùng anh em để giữ lửa nghề bền bỉ hơn. Mình khẳng định luôn là KHÔNG bán khóa học, KHÔNG PR lùa gà hay kinh doanh sản phẩm gì ở đây hết nhé, ai nghĩ vậy thì lướt qua giùm cho đỡ mất thời gian đôi bên ạ."
+5. CÔNG CỤ TỰ ĐÁNH GIÁ CHUẨN KHOA HỌC: Giới thiệu bài test đo lường sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 (Well-being index) hoặc bản đồ định vị thế mạnh, có bác sĩ/chuyên gia giải đáp 1-1 kín đáo.
+6. CTA HƯỚNG VỀ FIRST COMMENT: Mời độc giả ghé xuống phần bình luận để nhận link (tuyệt đối không gắn link trên caption bài viết để tránh Facebook bóp reach 80%).
+7. XUẤT 'firstCommentSeed': Bình luận ghim mồi đặt link bài test chân tình, tự nhiên.
+- Tiêu chuẩn 4 biến thể (Variations - Mỗi bài 500-850 từ):
+  * Mẫu 1 (Tự sự - Nỗi đau kiệt sức & Well-being)
+  * Mẫu 2 (Phản biện - Nghịch lý nghề nghiệp & Thấu suốt con người thật)
+  * Mẫu 3 (Dự án cộng đồng phi lợi nhuận & Khảo sát WHO-5)
+  * Mẫu 4 (Chuyên gia thực chiến - Đúc kết chuyển hóa & Sức bền)`,
       },
       order_4: {
         platform: 'Threads',
         allowedTypes: ['ws', 'ct'],
-        rules: `ORDER 4: COMMENT THREADS (CHẠM VÀO TÂM SỰ NỘI TÂM)
-- Format: Ngắn gọn (3-5 dòng), ngắt dòng nhịp nhàng chuẩn văn hóa Threads.
-- Tone: Tự sự, thật thà (vulnerable), gỡ bỏ phòng thủ của người đọc, như một lời thì thầm đồng cảm giữa đêm muộn.
-- Chuyển đổi: Gợi ý về một bảng câu hỏi tự soi chiếu hoặc bài test 1-1 miễn phí giúp sáng tỏ vấn đề.`,
+        rules: `ORDER 4: COMMENT THREADS (STORYTELLING CHÂN THẬT, CHẠM VÀO TÂM SỰ NỘI TÂM)
+- Format: Ngắn gọn (3-5 dòng), ngắt dòng nhịp nhàng chuẩn văn hóa Threads, không hashtag, không màu mè.
+- Tone: Tự sự, thổ lộ chân thật (vulnerable confession), như một lời thì thầm đêm muộn gỡ bỏ hoàn toàn sự phòng thủ của người đọc.
+- Chuyển đổi: Gợi ý bài test/template tự soi chiếu 1-1 miễn phí giúp sáng tỏ hướng đi, mời chủ động nhắn tin.
+- Tiêu chuẩn 4 biến thể (Variations):
+  * Mẫu 1 (Lời tự sự đêm muộn): Chạm vào nỗi cô đơn, lạc lõng giữa thành phố sau giờ tan sở.
+  * Mẫu 2 (Lát cắt công sở chân thực): Áp lực deadline và nỗi sợ bị tụt lại phía sau dù đã nỗ lực hết sức.
+  * Mẫu 3 (Lời động viên ấm áp & Soi chiếu): Nhẹ nhàng gỡ bỏ áp lực so sánh với người khác, tặng test 1-1.
+  * Mẫu 4 (Bẻ khóa cảm xúc giấu kín): Nói hộ tiếng lòng về sự trống rỗng bên trong dù bề ngoài vẫn ổn.`,
       },
       order_5: {
         platform: 'Threads',
         allowedTypes: ['ws', 'ct'],
-        rules: `ORDER 5: BÀI VIẾT THREADS (VIRAL INSIGHT THREAD)
-- Format: Chuỗi các câu ngắn (1-2 câu mỗi đoạn), cách dòng rộng rãi, cực kỳ bắt mắt trên mobile feed.
-- Hook mở đầu: Đánh thẳng vào một nghịch lý tâm lý hoặc cảm xúc giấu kín của người đi làm.
-- Đoạn kết: Mở rộng thảo luận và mời nhắn tin riêng để nhận bộ tài liệu/template định vị 1-1.`,
+        rules: `ORDER 5: BÀI VIẾT THREADS (NGẮN GỌN, CUỐN HÚT, VIRAL INSIGHT)
+- Format: Chuỗi câu ngắn (1-2 câu mỗi đoạn), ngắt dòng rộng rãi, cực kỳ bắt mắt trên mobile feed.
+- Hook mở đầu: Đánh thẳng vào một nghịch lý tâm lý hoặc cảm xúc giấu kín của người đi làm tuổi 20-35.
+- Nội dung: Gãy gọn, nhịp điệu nhanh, sắc sảo, không hoa mỹ, câu trước kéo câu sau.
+- Kết bài: CTA tự nhiên mời thảo luận và nhắn tin riêng để nhận link bài test / template định vị 1-1.
+- Tiêu chuẩn 4 biến thể (Variations):
+  * Mẫu 1 (Nghịch lý tuổi 20-30): Chạy theo tốc độ của người khác vs Tìm ra nhịp độ của chính mình.
+  * Mẫu 2 (Bẫy chăm chỉ mù quáng): Làm việc cật lực nhưng vẫn tự ti và trống rỗng vì thiếu bản sắc riêng.
+  * Mẫu 3 (Chữa lành vs Thấu hiểu bản chất): Vượt qua trào lưu chữa lành bề nổi để chạm đến năng lực cốt lõi.
+  * Mẫu 4 (Sức bền thời đại số): Rèn luyện cơ bắp não bộ và sự kiên định giữa nhịp sống vội vã.`,
       },
       order_6: {
         platform: 'LinkedIn',
         allowedTypes: ['ws', 'ct'],
-        rules: `ORDER 6: TIẾP CẬN QUA TIN NHẮN LINKEDIN (INMAIL / DM)
-- Tone & Mood: Lịch thiệp, ấm áp, chuyên nghiệp, định vị là HRBP hoặc người làm People & Culture tâm huyết.
-- Nhắc đến cơ sở khoa học (MBTI, quản trị năng lượng, định vị thế mạnh nội tại), nhấn mạnh tính phi lợi nhuận và tham vấn 1:1 miễn phí.`,
+        rules: `ORDER 6: BÀI VIẾT LINKEDIN LONG-FORM & INMAIL (THOUGHT LEADERSHIP DÀI 450 - 800 TỪ)
+1. THE 3-LINE HOOK: 2-3 câu đầu tiên phải cực kỳ sắc bén, nêu ra một sự thật trần trụi hoặc nghịch lý quản trị/sự nghiệp kích hoạt người đọc bấm "...see more".
+2. CASE STUDY & QUAN SÁT THỰC CHIẾN: Dẫn dắt bằng tình huống thực tế từ góc nhìn HRBP, Manager, L&D hoặc Senior Leader (nhân sự 120% KPI đột ngột xin nghỉ, bẫy micromanage, sự kiệt quệ của quản lý cấp trung, xung đột thế hệ).
+3. FRAMEWORK HÀNH ĐỘNG 3-4 ĐIỂM (ACTIONABLE FRAMEWORK): Dùng bullet points rõ ràng:
+   • Quản trị năng lượng thay vì quản trị thời gian.
+   • Xây dựng an toàn tâm lý (Psychological Safety) cho đội ngũ.
+   • Đo lường sức khỏe tổ chức và chỉ số Well-being.
+   • Đồng hành vì sự phát triển dài hạn của con người.
+4. VĂN PHONG ĐĨNH ĐẠC, KHIÊM NHƯỜNG: Tầm vóc chuyên gia từng trải, tôn trọng con người, không sáo rỗng.
+5. CÂU HỎI MỞ KÍCH HOẠT TRANH LUẬN: Gợi mở bàn luận giữa các C-Level, HR Leader, Manager bên dưới bài viết.
+6. XUẤT 'firstCommentSeed': Bình luận ghim mồi chứa link tài liệu, framework hoặc bài test chuyên sâu (tránh LinkedIn bóp reach outlink).
+7. KÈM KỊCH BẢN INMAIL 3 BƯỚC: Lời mở đầu HRBP ấm áp -> Câu hỏi đào sâu -> Lời mời tham vấn 1-1 miễn phí.
+- Tiêu chuẩn 4 biến thể (Variations - Mỗi bài 450-800 từ):
+  * Mẫu 1 (Case Study Quản Trị & Nghịch Lý Giữ Chân Nhân Tài)
+  * Mẫu 2 (Phản Biện Góc Khuất Quản Trị Cấp Trung)
+  * Mẫu 3 (Framework Đo Lường Sức Khỏe Tổ Chức & Well-being)
+  * Mẫu 4 (Thought Leadership Kỷ Nguyên AI)`,
       },
       order_7: {
         platform: 'Email',
         allowedTypes: ['ws', 'ct'],
-        rules: `ORDER 7: VIẾT CONTENT EMAIL (TỶ LỆ MỞ VÀ PHẢN HỒI CAO)
-- Cung cấp: 3 phương án tiêu đề (Subject Line) kích thích tò mò + Nội dung thư ấm áp, có cốt truyện và câu hỏi tự vấn sâu sắc + CTA hành động rõ ràng.`,
+        rules: `ORDER 7: VIẾT CONTENT EMAIL (NURTURING & CHUYỂN ĐỔI CAO)
+1. BỘ 3 TIÊU ĐỀ EMAIL (SUBJECT LINES): Bắt buộc đề xuất 3 phương án có tỷ lệ mở cao nhất (>45%):
+   - Phương án 1 (Gây tò mò / Curiosity-driven)
+   - Phương án 2 (Chạm nỗi đau trăn trở / Pain-point driven)
+   - Phương án 3 (Lợi ích thẳng thắn & Ấm áp / Benefit-driven)
+2. MỞ ĐẦU THÂN MẬT NHƯ NGƯỜI BẠN ĐỒNG HÀNH: Bắt đầu bằng một câu chuyện ngắn, một quan sát đời thường hoặc một sự đồng cảm ấm áp.
+3. CÂU HỎI SOI CHIẾU TRÚNG TIM ĐEN: Đặt 2-3 câu hỏi gợi mở sâu sắc giúp người nhận tự nhìn nhận lại năng lượng, mục tiêu và điểm nghẽn của mình.
+4. GIỚI THIỆU GIẢI PHÁP / WORKSHOP / CHƯƠNG TRÌNH: Dẫn dắt nhẹ nhàng, khi manh, nhấn mạnh tính đồng hành và giá trị chuyển hóa bên trong.
+5. KÊU GỌI HÀNH ĐỘNG (CTA) KHÔNG ÁP LỰC: Mời bấm link đăng ký hoặc reply trực tiếp email này để chia sẻ câu chuyện và nhận tham vấn 1-1.
+6. TÁI BÚT (P.S.): Đòn bẩy tâm lý cuối cùng, nhắc lại quà tặng/suất tham vấn miễn phí hoặc một lời chúc chân thành.
+- Tiêu chuẩn 4 biến thể (Variations):
+  * Mẫu 1 (Email Storytelling từ người bạn đồng hành - kèm 3 Subject Lines & P.S.)
+  * Mẫu 2 (Email Phản biện bẻ gãy bận rộn mù quáng - kèm 3 Subject Lines & P.S.)
+  * Mẫu 3 (Email Trao giá trị bài test & Khảo sát Well-being - kèm 3 Subject Lines & P.S.)
+  * Mẫu 4 (Email Quyết định bước ngoặt chuyển hóa - kèm 3 Subject Lines & P.S.)`,
       },
     };
 
     const currentOrder = orderRules[orderType] || orderRules.order_1;
 
-    // Filter available programs based on platform restrictions
-    let availablePrograms = (programs || []).filter((p: any) => p.isActive !== false);
-    if (currentOrder.allowedTypes.length === 1 && currentOrder.allowedTypes[0] === 'ws') {
-      availablePrograms = availablePrograms.filter((p: any) => p.type === 'ws');
-    }
+    // Filter available programs (Allowing both WS & CT)
+    const availablePrograms = (programs || []).filter((p: any) => p.isActive !== false);
 
-    const systemPrompt = `Bạn là một Content Master & Social Copywriting Specialist 10 năm kinh nghiệm hàng đầu Việt Nam.
+    const systemPrompt = `Bạn là Senior Content Quality & Viral Strategy Auditor kiêm Content Copywriter hơn 20 năm kinh nghiệm hàng đầu Việt Nam.
 Sứ mệnh của bạn: Tạo ra content đạt điểm 10/10 về độ TỰ NHIÊN, SÂU SẮC, KHÔNG VĂN MẪU ROBOT, và TỐI ĐA HÓA TỶ LỆ CHUYỂN ĐỔI TỪ COMMENT/BÀI VIẾT THÀNH INBOX (1-1 DM LEAD).
 
 QUY TẮC "ANTI-AI FLUFF" BẮT BUỘC (CỰC KỲ QUAN TRỌNG):
@@ -320,14 +378,10 @@ QUY TẮC "ANTI-AI FLUFF" BẮT BUỘC (CỰC KỲ QUAN TRỌNG):
 2. DÙNG NGÔN TỪ ĐỜI THƯỜNG & CHẠM TÂM LÝ NGƯỜI ĐI LÀM VIỆT NAM (20-39 tuổi):
    - Diễn đạt trúng cảm giác: loay hoay tuổi 25, hội chứng kẻ giả mạo (impostor syndrome), làm việc chăm chỉ nhưng không tự tin, sợ tụt hậu, áp lực so sánh ngầm, kiệt sức vì cố làm hài lòng mọi người.
 3. QUY TẮC NỀN TẢNG:
-   - Trên Facebook: TUYỆT ĐỐI CHỈ DÙNG WORKSHOP (WS), CẤM RẢI CHƯƠNG TRÌNH (CT). Tone Facebook phải khách quan, trung lập, hạ thấp bản thân.
+   - Cho phép đề xuất cả Workshop (WS) và Chương trình (CT) trên mọi nền tảng khi phù hợp.
    - Không hướng nghiệp kiếm tiền nhanh; tập trung thấu hiểu bản thân, năng lực giải quyết vấn đề, sức bền tinh thần.
-4. NGUYÊN TẮC 3 BIẾN THỂ (VARIATIONS):
-   - Mẫu 1: Góc nhìn Đồng cảm & Storytelling (Chân thật, kể chuyện, tạo sự kết nối tức thì).
-   - Mẫu 2: Góc nhìn Phản biện & Logic người đi làm (Reframe góc nhìn, đa chiều, sâu sắc).
-   - Mẫu 3: Góc nhìn Trắc nghiệm & Tham vấn 1-1 (Khơi gợi điểm mù bản thân, mời nhận test free).
-5. KỊCH BẢN DM 1-1 (FOLLOW-UP):
-   - Phải tự nhiên như một người bạn biết lắng nghe, qua 3 bước: Đồng cảm -> Câu hỏi mở đào sâu -> Mời gửi link bài test 1-1.
+4. QUY TẮC RIÊNG CỦA LỆNH ĐANG XỬ LÝ:
+${currentOrder.rules}
 
 DANH SÁCH DỰ ÁN WORKSHOP / CHƯƠNG TRÌNH:
 ${JSON.stringify(availablePrograms, null, 2)}`;
@@ -340,7 +394,7 @@ ${selectedProgramId && selectedProgramId !== 'auto' ? `- Dự án WS/CT được
 - Tùy chọn nâng cao:
   * Gắn link trực tiếp: ${options.includeLink ? 'Có gắn link trong nội dung' : 'Không gắn link trực tiếp (hướng dẫn inbox nhận)'}
   * Giọng văn mong muốn: ${options.tone || 'Tự nhiên, sâu sắc, đúng chuẩn nền tảng'}
-  * Độ dài mong muốn: ${options.lengthPreference || 'Vừa vặn, súc tích'}
+  * Độ dài mong muốn: ${orderType === 'order_3' || orderType === 'order_6' ? 'Bài viết dài chuyên sâu (Long-Form)' : options.lengthPreference || 'Vừa vặn, súc tích'}
   * Đối tượng cụ thể: ${options.customAudience || 'Người đi làm 20-39 tuổi'}
 
 Hãy trả về kết quả định dạng JSON chính xác:
@@ -352,10 +406,12 @@ Hãy trả về kết quả định dạng JSON chính xác:
   "platformNotes": "Chiến lược câu chữ và lưu ý tone & mood theo nền tảng",
   "primaryContent": "Phương án nội dung xuất sắc nhất",
   "variations": [
-    "Mẫu 1 (Đồng cảm & Storytelling): ...",
-    "Mẫu 2 (Phản biện & Reframe đa chiều): ...",
-    "Mẫu 3 (Trắc nghiệm & Test 1-1 miễn phí): ..."
+    "Mẫu 1: ...",
+    "Mẫu 2: ...",
+    "Mẫu 3: ...",
+    "Mẫu 4: ..."
   ],
+  "firstCommentSeed": "Mẫu bình luận ghim mồi chứa link bài test/tài liệu (cho Facebook/LinkedIn)",
   "dmFollowUpScript": {
     "step1_empathy": "Lời chào và đồng cảm khi khách inbox...",
     "step2_qualifyQuestion": "Câu hỏi mở đào sâu trúng tâm lý...",
@@ -400,6 +456,7 @@ Hãy trả về kết quả định dạng JSON chính xác:
                 type: Type.ARRAY,
                 items: { type: Type.STRING },
               },
+              firstCommentSeed: { type: Type.STRING },
               dmFollowUpScript: {
                 type: Type.OBJECT,
                 properties: {
@@ -430,6 +487,13 @@ Hãy trả về kết quả định dạng JSON chính xác:
 
     const parsed = JSON.parse(response.text || '{}');
 
+    // Ensure firstCommentSeed default if missing for FB/LinkedIn
+    if (orderType === 'order_3' && !parsed.firstCommentSeed) {
+      parsed.firstCommentSeed = 'Link bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 ở đây nhé anh em: https://tally.so/r/wellbeing-test (Hoàn toàn miễn phí, làm xong có bác sĩ hỗ trợ giải đáp 1-1 nha mọi người ơi ❤️)';
+    } else if (orderType === 'order_6' && !parsed.firstCommentSeed) {
+      parsed.firstCommentSeed = 'P/S: Với anh/chị Leader hoặc HRBP đang quan tâm đến bộ chỉ số đo lường sức khỏe tổ chức & khung đánh giá Well-being nhân sự, em xin phép để link tài liệu chi tiết tại bình luận này nhé: [Link_Tài_Liệu] (Hoàn toàn mở và có hỗ trợ trao đổi 1-1 ạ).';
+    }
+
     res.json({
       success: true,
       data: parsed,
@@ -440,7 +504,57 @@ Hãy trả về kết quả định dạng JSON chính xác:
   }
 });
 
-// 3. Automated Order Chat Assistant
+// 3. Interactive Content Refinement
+app.post('/api/refine-content', async (req: Request, res: Response) => {
+  try {
+    const { currentContent, instruction, orderTitle, programTitle } = req.body;
+    if (!currentContent || !instruction) {
+      return res.status(400).json({ error: 'Thiếu nội dung hoặc chỉ dẫn tinh chỉnh.' });
+    }
+
+    const systemPrompt = `Bạn là Senior Content Quality & Viral Strategy Auditor kiêm Content Copywriter hơn 20 năm kinh nghiệm hàng đầu Việt Nam.
+Nhiệm vụ: Nhận nội dung hiện tại và chỉ dẫn điều chỉnh từ người dùng, tinh chỉnh lại bài viết/comment sao cho tự nhiên, chân thật, sâu sắc, thực hiện chính xác chỉ dẫn của người dùng mà vẫn bảo toàn tỷ lệ chuyển đổi cao và chuẩn mực nền tảng.
+QUY TẮC BẮT BUỘC TỪ CHUYÊN GIA 20 NĂM:
+- CẤM dùng văn mẫu AI sáo rỗng ("Trong cuộc sống hiện đại...", "Bạn có bao giờ tự hỏi...", "Hãy cùng tôi khám phá...").
+- Thực hiện chính xác yêu cầu (viết sâu sắc hơn, tăng cảm xúc tự sự, rút gọn súc tích, bổ sung cam kết phi lợi nhuận 100% không bán khóa học/lùa gà, đổi ngôi xưng hô, thêm số liệu/framework, v.v.).
+- Nếu là bài viết Facebook Long-Form (Order 3) hoặc LinkedIn (Order 6), duy trì độ dài và cấu trúc chuyên sâu tương ứng.`;
+
+    const promptText = `Nội dung hiện tại:
+"""
+${currentContent}
+"""
+
+Yêu cầu điều chỉnh từ người dùng:
+"${instruction}"
+${orderTitle ? `Thể loại: ${orderTitle}` : ''}
+${programTitle ? `Dự án liên quan: ${programTitle}` : ''}`;
+
+    const response = await generateContentWithRetry({
+      contents: { parts: [{ text: promptText }] },
+      config: {
+        systemInstruction: systemPrompt,
+        temperature: 0.7,
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            refinedContent: { type: Type.STRING },
+            explanation: { type: Type.STRING },
+          },
+          required: ['refinedContent', 'explanation'],
+        },
+      },
+    });
+
+    const parsed = JSON.parse(response.text || '{}');
+    res.json({ success: true, data: parsed });
+  } catch (error: any) {
+    console.error('Error refining content:', error);
+    res.status(500).json({ error: error.message || 'Lỗi khi tinh chỉnh nội dung.' });
+  }
+});
+
+// 4. Automated Order Chat Assistant
 app.post('/api/chat', async (req: Request, res: Response) => {
   try {
     const { message, history, programs } = req.body;
@@ -448,18 +562,18 @@ app.post('/api/chat', async (req: Request, res: Response) => {
 
     // Special trigger: If message is "hi" or greeting, immediately return the automated Order menu
     if (lowerMessage === 'hi' || lowerMessage === 'hello' || lowerMessage === 'xin chào' || lowerMessage === 'chào') {
-      const orderMenuText = `Xin chào bạn! Mình là Trợ lý AI Content & Social Media Manager (10 năm kinh nghiệm). Mình đã sẵn sàng hỗ trợ bạn sản xuất content chuyển đổi và dẫn dắt 1-1 theo chuẩn từng nền tảng.
+      const orderMenuText = `Xin chào bạn! Mình là Trợ lý AI Content & Social Media Manager (hơn 20 năm kinh nghiệm). Mình đã sẵn sàng hỗ trợ bạn sản xuất content chuyển đổi và kịch bản 1-1 theo chuẩn từng nền tảng.
 
-Dưới đây là danh sách các Order tự động, bạn chỉ cần gõ **Order [số]** kèm thông tin/mô tả clip/post hoặc gửi ảnh màn hình nhé:
+Dưới đây là danh sách 7 Order tự động, bạn chỉ cần gõ **Order [số]** kèm thông tin/mô tả clip/post hoặc gửi ảnh màn hình nhé:
 
-📋 **DANH SÁCH ORDER TỰ ĐỘNG:**
-- **Order 1**: Comment qua clip TikTok (Đồng cảm tuổi 20-39, tặng bài test 1-1)
-- **Order 2**: Comment qua post Facebook (*Chỉ Workshop (WS), tone trung lập phân tích hai chiều)
-- **Order 3**: Viết bài Facebook (*Chỉ Workshop (WS), phân tích sâu sắc, hỏi link)
-- **Order 4**: Comment Threads (Tự sự, chân thật, chạm nỗi đau nội tâm)
-- **Order 5**: Viết bài Threads (Ngắn gọn, hook bắt tai, ngắt dòng nhịp nhàng)
-- **Order 6**: Viết bài tiếp cận qua tin nhắn LinkedIn (Góc nhìn HRBP/L&D, MBTI & năng lượng)
-- **Order 7**: Viết content Email (Tiêu đề tò mò, câu chuyện kết nối, câu hỏi tự vấn)
+📋 **DANH SÁCH 7 ORDER TỰ ĐỘNG:**
+- **Order 1**: Comment qua clip TikTok (Tự sự, thấu cảm tuổi 20-39, tặng bài test 1-1)
+- **Order 2**: Comment qua post Facebook (Góc nhìn đa chiều, khách quan, tự do WS/CT)
+- **Order 3**: Viết bài Facebook Long-Form (500-850 từ, cam kết phi lợi nhuận 100%, test WHO-5, link ghim mồi)
+- **Order 4**: Comment Threads (Storytelling chân thật, tâm sự đêm muộn 3-5 dòng)
+- **Order 5**: Viết bài Threads (Ngắn gọn, cuốn hút, hook nghịch lý/FOMO, ngắt dòng nhịp nhàng)
+- **Order 6**: Bài viết & InMail LinkedIn Long-Form (Thought leadership, 3-line hook, case study quản trị, framework 3-4 điểm)
+- **Order 7**: Viết content Email (3 Subject Lines, chuyện kể kết nối, câu hỏi soi chiếu, CTA chuyển đổi)
 
 👉 *Bạn muốn thực hiện Order nào ngay bây giờ? Hãy gõ ví dụ: "Order 1 [mô tả clip]" hoặc bấm nút Order bên dưới.*`;
 
@@ -472,19 +586,19 @@ Dưới đây là danh sách các Order tự động, bạn chỉ cần gõ **Or
           { label: '📝 Order 3: Bài viết Facebook', action: 'Order 3', orderType: 'order_3' },
           { label: '🧵 Order 4: Comment Threads', action: 'Order 4', orderType: 'order_4' },
           { label: '✍️ Order 5: Bài viết Threads', action: 'Order 5', orderType: 'order_5' },
-          { label: '💼 Order 6: Tin nhắn LinkedIn', action: 'Order 6', orderType: 'order_6' },
+          { label: '💼 Order 6: Bài viết & InMail LinkedIn', action: 'Order 6', orderType: 'order_6' },
           { label: '📧 Order 7: Content Email', action: 'Order 7', orderType: 'order_7' },
         ],
       });
     }
 
-    const systemPrompt = `Bạn là Content Master 10 năm kinh nghiệm, Social Media Manager chuyên sâu 4 nền tảng (TikTok, Facebook, Threads, LinkedIn, Email).
-Nhiệm vụ của bạn là hỗ trợ người dùng sản xuất content chuyển đổi comment thành inbox và kịch bản chat 1-1.
+    const systemPrompt = `Bạn là Senior Content Quality & Viral Strategy Auditor kiêm Content Copywriter hơn 20 năm kinh nghiệm, chuyên sâu 5 nền tảng (TikTok, Facebook, Threads, LinkedIn, Email).
+Nhiệm vụ của bạn là hỗ trợ người dùng sản xuất content chuyển đổi và kịch bản chat 1-1 đạt chất lượng đỉnh cao.
 
 QUY TẮC BẮT BUỘC:
-- Nếu người dùng yêu cầu Order 1-7, hãy kiểm tra quy tắc: Facebook TUYỆT ĐỐI chỉ rải Workshop (WS), KHÔNG rải Chương trình (CT). Tone Facebook phải trung lập, phân tích đa chiều cho cả hai bên, hạ thấp bản thân, không dùng câu khẳng định áp đặt.
-- Các chương trình không dạy kỹ năng kiếm tiền/hướng nghiệp bề nổi mà tập trung thấu hiểu bản thân, sức bền tinh thần, giải quyết vấn đề.
-- Luôn đưa ra gợi ý kịch bản trả lời tin nhắn 1-1 (DM) khi có người quan tâm.
+- Cho phép phân phối tự do cả Workshop (WS) và Chương trình (CT) trên mọi nền tảng.
+- Không dạy kiếm tiền bề nổi; tập trung thấu hiểu bản thân, sức bền tinh thần, giải quyết vấn đề và cân bằng năng lượng.
+- Luôn giữ văn phong tự nhiên, không văn mẫu AI sáo rỗng.
 
 DANH SÁCH WS/CT HIỆN CÓ:
 ${JSON.stringify(programs || [], null, 2)}`;
