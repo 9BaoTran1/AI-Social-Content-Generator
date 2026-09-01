@@ -105,12 +105,11 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder }) => {
             </p>
           </div>
 
-          <div className="flex flex-col gap-2 min-w-[240px]">
             <div className="p-3 rounded-xl bg-blue-950/70 text-blue-200 border border-blue-800/60 text-xs flex items-start gap-2 shadow-inner">
-              <ShieldAlert className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
               <div>
-                <strong className="text-blue-300 block font-semibold">Quy tắc Facebook:</strong>
-                Chỉ chạy Workshop (WS), không chạy CT. Tone trung lập, phân tích đa chiều cho cả 2 phía.
+                <strong className="text-blue-300 block font-semibold">Tự do trên Facebook:</strong>
+                Chạy tự do cả Workshop (WS) & Chương trình (CT). Đa dạng phong cách từ bài viết dài, trắc nghiệm đến comment tự sự.
               </div>
             </div>
             <div className="p-3 rounded-xl bg-rose-950/60 text-rose-200 border border-rose-800/50 text-xs flex items-start gap-2 shadow-inner">
@@ -202,13 +201,13 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder }) => {
                   {order.description}
                 </p>
 
-                {/* Strict Tag Notice if Facebook */}
+                {/* Notice if Facebook */}
                 {isFacebook && (
                   <div className="mb-3.5 p-2.5 rounded-xl bg-blue-950/40 border border-blue-800/40 text-[11px] text-blue-200/90 leading-tight flex items-start gap-1.5">
-                    <AlertCircle className="w-3.5 h-3.5 text-blue-400 flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-blue-300 font-semibold block">⚠️ Quy tắc Facebook:</strong>
-                      Chỉ chạy Workshop (WS). Tone trung lập & phân tích đa chiều cho cả 2 bên.
+                      <strong className="text-blue-300 font-semibold block">✨ Không giới hạn Facebook:</strong>
+                      Rải tự do cả Workshop (WS) & Chương trình (CT), đa dạng phong cách bài viết & comment.
                     </div>
                   </div>
                 )}

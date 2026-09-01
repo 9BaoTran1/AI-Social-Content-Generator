@@ -21,8 +21,8 @@ export interface ProgramItem {
 
 export type OrderType =
   | 'order_1' // Comment qua clip Tiktok
-  | 'order_2' // Comment qua post Facebook (Strictly WS only, neutral tone)
-  | 'order_3' // Viết bài Facebook (Strictly WS only, ask link/intro)
+  | 'order_2' // Comment qua post Facebook (Không giới hạn, chạy tự do WS & CT)
+  | 'order_3' // Viết bài Facebook Long-Form (Không giới hạn, chạy tự do WS & CT)
   | 'order_4' // Comment Threads
   | 'order_5' // Viết bài Threads
   | 'order_6' // Viết bài tiếp cận qua tin nhắn LinkedIn

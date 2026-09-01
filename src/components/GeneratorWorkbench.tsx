@@ -30,6 +30,7 @@ import {
   ExternalLink,
   ChevronRight,
   ShieldAlert,
+  ShieldCheck,
   Info,
   Cpu,
   Brain,
@@ -321,12 +322,12 @@ ${generatedResult.rationale}
           </div>
           {isFacebook && (
             <span
-              className={`text-[11px] font-medium flex items-center gap-1 px-2 py-0.5 rounded-lg ${
-                isDark ? 'text-amber-300/90 bg-amber-950/40' : 'text-amber-800 bg-amber-50 border border-amber-200'
+              className={`text-[11px] font-medium flex items-center gap-1 px-2.5 py-0.5 rounded-lg ${
+                isDark ? 'text-emerald-300/90 bg-emerald-950/40 border border-emerald-800/60' : 'text-emerald-800 bg-emerald-50 border border-emerald-200'
               }`}
             >
-              <ShieldAlert className="w-3.5 h-3.5 text-amber-500" />
-              <span>Facebook chỉ chạy Workshop (WS) & tone trung lập</span>
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Facebook không bị hạn chế: Rải tự do Workshop & Chương trình</span>
             </span>
           )}
         </div>

@@ -199,21 +199,21 @@ export const ORDERS_METADATA: OrderMeta[] = [
     title: 'Comment qua post Facebook',
     platform: 'Facebook',
     category: 'comment',
-    allowedTypes: ['ws'], // Strictly WS only!
-    description: 'Comment trung lập, phân tích đa chiều cho cả hai bên, hạ thấp bản thân, gợi ý Workshop nhẹ nhàng. TUYỆT ĐỐI CHỈ RẢI WORKSHOP (WS), KHÔNG RẢI CHƯƠNG TRÌNH (CT).',
-    toneGuideline: 'Khách quan, trung lập, phân tích thực tế, không áp đặt, không khẳng định 1 chiều. Dùng cấu trúc: "Bạn có thể thử tham gia WS này để..."',
-    defaultPrompt: 'Tạo comment Facebook phân tích trung lập, khách quan và đề xuất Workshop phù hợp.'
+    allowedTypes: ['ws', 'ct'], // Chạy tự do cả WS & CT
+    description: 'Comment đa chiều, đồng cảm thực tế cho các bên, hạ thấp bản thân, gợi ý Workshop hoặc Chương trình nhẹ nhàng, tinh tế. Không giới hạn WS/CT.',
+    toneGuideline: 'Tự nhiên, đa chiều, khách quan, không áp đặt hay giáo điều. Đề xuất WS hoặc CT một cách tinh tế.',
+    defaultPrompt: 'Tạo comment Facebook tự nhiên, góc nhìn đa chiều và đề xuất Workshop/Chương trình phù hợp.'
   },
   {
     id: 'order_3',
     orderNumber: 3,
-    title: 'Viết bài Facebook',
+    title: 'Viết bài Facebook (Long-Form)',
     platform: 'Facebook',
     category: 'post',
-    allowedTypes: ['ws'], // Strictly WS only!
-    description: 'Bài viết Facebook sâu sắc, phân tích góc nhìn thực tế công việc/cuộc sống, khiêm tốn, dẫn dắt tự nhiên vào Workshop.',
-    toneGuideline: 'Trung lập, đĩnh đạc, phân tích hai chiều. Hỏi rõ xem có cần gắn link đăng ký hay giới thiệu Workshop ở cuối bài không.',
-    defaultPrompt: 'Viết bài Facebook phân tích chuyên sâu về vấn đề này và dẫn dắt vào Workshop.'
+    allowedTypes: ['ws', 'ct'], // Chạy tự do cả WS & CT
+    description: 'Bài viết Facebook dài (Long-Form) có chiều sâu, hook giật tít chạm trăn trở nghề nghiệp, khẳng định dự án cộng đồng phi lợi nhuận không bán khóa học/PR lùa gà, kèm bình luận ghim mồi đặt link.',
+    toneGuideline: 'Đồng cảm sâu sắc, chân thực, cuốn hút, cam kết phi lợi nhuận minh bạch. Kết bài bằng lời kêu gọi xem bình luận ghim để nhận link bài test/đăng ký.',
+    defaultPrompt: 'Viết bài Facebook dài (Long-form) có chiều sâu, kèm bình luận ghim mồi đặt link.'
   },
   {
     id: 'order_4',
@@ -327,8 +327,8 @@ Chúc bạn một ngày tích cực và hiệu quả ạ. ❤️`
     id: 'bm-fb-1',
     platform: 'Facebook',
     category: 'Comment Phân Tích Đa Chiều',
-    title: 'Mẫu comment Facebook: Trung lập, đồng cảm thực tế cho cả đôi bên',
-    tags: ['Facebook', 'WS Only', 'Trung lập', 'Phân tích'],
+    title: 'Mẫu comment Facebook: Đa chiều, đồng cảm thực tế cho cả đôi bên',
+    tags: ['Facebook', 'WS & CT', 'Đa chiều', 'Phân tích'],
     keyInsight: 'Không áp đặt 1 chiều, đồng cảm khách quan với áp lực công sở và giới thiệu WS nhẹ nhàng.',
     content: `Tình trạng này không phải một mình bạn, manager hiện còn bị đè lương dưới 18m trong khi vừa tái cấu trúc duy trì vận hành vừa phải đào tạo 6 newbie (trong đó có cháu sếp). Khi bản thân có thực lực nhưng chưa định vị rõ ràng bản sắc và thế mạnh riêng, rất dễ rơi vào trạng thái quá tải và mất phương hướng. Bạn có thể thử tham gia WS này để nhìn nhận lại điểm mạnh và có chiến lược phù hợp hơn cho giai đoạn tới nhé.`
   },
