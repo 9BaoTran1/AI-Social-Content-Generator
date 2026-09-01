@@ -54,6 +54,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
   const [adminPasscode, setAdminPasscode] = useState<string>('');
   const [adminError, setAdminError] = useState<string | null>(null);
   const [pendingAdminAction, setPendingAdminAction] = useState<(() => void) | null>(null);
+  const [copiedAdminLink, setCopiedAdminLink] = useState<boolean>(false);
 
   // Sync admin state live with URL param or session storage
   React.useEffect(() => {
@@ -230,10 +231,34 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
 
           <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
             {isAdmin ? (
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 flex-wrap">
                 <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 border border-amber-500/40 text-amber-700 dark:text-amber-300 flex items-center gap-1.5 text-xs font-bold shadow-2xs">
                   <span>👑 Admin CRT: Đã mở quyền Quản lý</span>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const baseUrl = window.location.origin + window.location.pathname;
+                    const adminUrl = `${baseUrl.replace(/\/$/, '')}/?key=ordersieunhan&admin_key=admincrt2026`;
+                    navigator.clipboard.writeText(adminUrl);
+                    setCopiedAdminLink(true);
+                    setTimeout(() => setCopiedAdminLink(false), 2200);
+                  }}
+                  className="px-2.5 py-1.5 text-xs font-medium rounded-xl border text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-800/80 bg-amber-50/80 dark:bg-amber-950/40 hover:bg-amber-100 flex items-center gap-1 cursor-pointer transition-all"
+                  title="Sao chép link truy cập Admin để gửi cho người cùng quản trị"
+                >
+                  {copiedAdminLink ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <span className="font-bold text-emerald-600 dark:text-emerald-400">Đã chép link Admin!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Key className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                      <span>Copy Link Admin</span>
+                    </>
+                  )}
+                </button>
                 <button
                   type="button"
                   onClick={handleLogoutAdmin}

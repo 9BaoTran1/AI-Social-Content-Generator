@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check, Lock, BookmarkCheck, Layers, ShieldCheck, BookMarked } from 'lucide-react';
+import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check, BookmarkCheck, Layers, BookMarked } from 'lucide-react';
 import { ThemeMode } from '../types';
 import { getApiKey, setApiKey } from '../lib/aiService';
 import { isCrtAdmin } from '../lib/storage';
@@ -27,8 +27,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [showKeyModal, setShowKeyModal] = useState<boolean>(false);
   const [apiKeyInput, setApiKeyInput] = useState<string>(getApiKey());
   const [keySavedFeedback, setKeySavedFeedback] = useState<boolean>(false);
-  const [copiedLinkFeedback, setCopiedLinkFeedback] = useState<boolean>(false);
-  const [copiedAdminLinkFeedback, setCopiedAdminLinkFeedback] = useState<boolean>(false);
 
   useEffect(() => {
     const handleAdminCheck = () => {
@@ -42,22 +40,6 @@ export const Navbar: React.FC<NavbarProps> = ({
       window.removeEventListener('storage', handleAdminCheck);
     };
   }, []);
-
-  const handleCopyPrivateLink = () => {
-    const baseUrl = window.location.origin + window.location.pathname;
-    const privateUrl = `${baseUrl.replace(/\/$/, '')}/?key=ordersieunhan`;
-    navigator.clipboard.writeText(privateUrl);
-    setCopiedLinkFeedback(true);
-    setTimeout(() => setCopiedLinkFeedback(false), 2500);
-  };
-
-  const handleCopyAdminLink = () => {
-    const baseUrl = window.location.origin + window.location.pathname;
-    const adminUrl = `${baseUrl.replace(/\/$/, '')}/?key=ordersieunhan&admin_key=admincrt2026`;
-    navigator.clipboard.writeText(adminUrl);
-    setCopiedAdminLinkFeedback(true);
-    setTimeout(() => setCopiedAdminLinkFeedback(false), 2500);
-  };
 
   const handleSaveKey = () => {
     setApiKey(apiKeyInput.trim());
@@ -217,54 +199,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Actions: Theme Toggle, Private Link & Add Button */}
           <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
-            {/* Private Link Copy Button */}
-            <button
-              onClick={handleCopyPrivateLink}
-              title="Sao chép link truy cập riêng tư có gắn mã bảo mật tự động"
-              className={`p-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
-                isDark
-                  ? 'bg-slate-900 hover:bg-slate-800 text-indigo-300 border-indigo-900/60'
-                  : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border-indigo-200 shadow-2xs'
-              }`}
-            >
-              {copiedLinkFeedback ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-emerald-500" />
-                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">Đã chép link!</span>
-                </>
-              ) : (
-                <>
-                  <Lock className="w-3.5 h-3.5 text-indigo-500" />
-                  <span className="hidden lg:inline text-[11px] font-semibold">Link Bí Mật</span>
-                </>
-              )}
-            </button>
-
-            {/* Copy Link Admin Riêng Button */}
-            <button
-              onClick={handleCopyAdminLink}
-              title="Sao chép đường link đầy đủ có kèm &admin_key=admincrt2026 để admin gửi cho nhau"
-              className={`p-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
-                copiedAdminLinkFeedback
-                  ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-400'
-                  : isDark
-                  ? 'bg-amber-950/40 hover:bg-amber-900/50 text-amber-300 border-amber-800/60'
-                  : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200 shadow-2xs'
-              }`}
-            >
-              {copiedAdminLinkFeedback ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-emerald-500" />
-                  <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">Đã chép link Admin!</span>
-                </>
-              ) : (
-                <>
-                  <span className="text-xs">🔑</span>
-                  <span className="hidden xl:inline text-[11px] font-semibold">Copy Link Admin Riêng</span>
-                  <span className="xl:hidden text-[11px] font-semibold">Link Admin</span>
-                </>
-              )}
-            </button>
 
             {/* API Key Modal Button */}
             <button
