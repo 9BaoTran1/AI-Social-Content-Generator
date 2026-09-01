@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check, Lock, BookmarkCheck, Layers } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check, Lock, BookmarkCheck, Layers, ShieldCheck, BookMarked } from 'lucide-react';
 import { ThemeMode } from '../types';
 import { getApiKey, setApiKey } from '../lib/aiService';
+import { isCrtAdmin } from '../lib/storage';
 
 interface NavbarProps {
-  activeTab: 'workbench' | 'orders' | 'benchmark' | 'programs' | 'assistant';
-  setActiveTab: (tab: 'workbench' | 'orders' | 'benchmark' | 'programs' | 'assistant') => void;
+  activeTab: 'workbench' | 'orders' | 'benchmark' | 'programs' | 'assistant' | 'guide';
+  setActiveTab: (tab: 'workbench' | 'orders' | 'benchmark' | 'programs' | 'assistant' | 'guide') => void;
   onOpenAddProgram: () => void;
   programCount: { ws: number; ct: number };
   theme: ThemeMode;
@@ -22,10 +23,25 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const isDark = theme === 'dark';
 
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => isCrtAdmin());
   const [showKeyModal, setShowKeyModal] = useState<boolean>(false);
   const [apiKeyInput, setApiKeyInput] = useState<string>(getApiKey());
   const [keySavedFeedback, setKeySavedFeedback] = useState<boolean>(false);
   const [copiedLinkFeedback, setCopiedLinkFeedback] = useState<boolean>(false);
+  const [copiedAdminLinkFeedback, setCopiedAdminLinkFeedback] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleAdminCheck = () => {
+      setIsAdmin(isCrtAdmin());
+    };
+    handleAdminCheck();
+    window.addEventListener('crt_admin_changed', handleAdminCheck);
+    window.addEventListener('storage', handleAdminCheck);
+    return () => {
+      window.removeEventListener('crt_admin_changed', handleAdminCheck);
+      window.removeEventListener('storage', handleAdminCheck);
+    };
+  }, []);
 
   const handleCopyPrivateLink = () => {
     const baseUrl = window.location.origin + window.location.pathname;
@@ -33,6 +49,14 @@ export const Navbar: React.FC<NavbarProps> = ({
     navigator.clipboard.writeText(privateUrl);
     setCopiedLinkFeedback(true);
     setTimeout(() => setCopiedLinkFeedback(false), 2500);
+  };
+
+  const handleCopyAdminLink = () => {
+    const baseUrl = window.location.origin + window.location.pathname;
+    const adminUrl = `${baseUrl.replace(/\/$/, '')}/?key=ordersieunhan&admin_key=admincrt2026`;
+    navigator.clipboard.writeText(adminUrl);
+    setCopiedAdminLinkFeedback(true);
+    setTimeout(() => setCopiedAdminLinkFeedback(false), 2500);
   };
 
   const handleSaveKey = () => {
@@ -80,6 +104,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   Social Conversion
                 </span>
+                {isAdmin && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 border border-amber-500/50 text-amber-700 dark:text-amber-300 font-bold text-[10px] shadow-xs animate-pulse">
+                    <span>👑 Admin CRT: Đã mở quyền Quản lý</span>
+                  </span>
+                )}
               </div>
               <p
                 className={`text-[10px] sm:text-[11px] hidden md:block ${
@@ -169,6 +198,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="hidden sm:inline">Trợ Lý & Lịch Sử</span>
               <span className="sm:hidden">Trợ Lý</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab('guide')}
+              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === 'guide'
+                  ? 'bg-indigo-600 text-white shadow-xs'
+                  : isDark
+                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white'
+              }`}
+            >
+              <BookMarked className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+              <span className="hidden sm:inline">Cẩm Nang & HDSD</span>
+              <span className="sm:hidden">Cẩm Nang</span>
+            </button>
           </nav>
 
           {/* Actions: Theme Toggle, Private Link & Add Button */}
@@ -192,6 +236,32 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <>
                   <Lock className="w-3.5 h-3.5 text-indigo-500" />
                   <span className="hidden lg:inline text-[11px] font-semibold">Link Bí Mật</span>
+                </>
+              )}
+            </button>
+
+            {/* Copy Link Admin Riêng Button */}
+            <button
+              onClick={handleCopyAdminLink}
+              title="Sao chép đường link đầy đủ có kèm &admin_key=admincrt2026 để admin gửi cho nhau"
+              className={`p-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                copiedAdminLinkFeedback
+                  ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-400'
+                  : isDark
+                  ? 'bg-amber-950/40 hover:bg-amber-900/50 text-amber-300 border-amber-800/60'
+                  : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200 shadow-2xs'
+              }`}
+            >
+              {copiedAdminLinkFeedback ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-500" />
+                  <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">Đã chép link Admin!</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-xs">🔑</span>
+                  <span className="hidden xl:inline text-[11px] font-semibold">Copy Link Admin Riêng</span>
+                  <span className="xl:hidden text-[11px] font-semibold">Link Admin</span>
                 </>
               )}
             </button>

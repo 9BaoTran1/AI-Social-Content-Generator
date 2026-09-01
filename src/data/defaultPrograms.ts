@@ -506,5 +506,70 @@ Anh/chị Leader và các đồng nghiệp HRBP nghĩ sao về vấn đề này?
 Trong bối cảnh hiện tại, đâu là rào cản lớn nhất mà anh/chị đang gặp phải khi xây dựng văn hóa gắn kết cho đội ngũ?
 
 Rất mong được lắng nghe góc nhìn thực chiến từ mọi người ở phần bình luận bên dưới.`
+  },
+  {
+    id: 'bm-email-nurture-1',
+    platform: 'Email',
+    category: 'Email Chuyển Đổi & Nurturing',
+    title: 'Mẫu Email Nurturing: Bận rộn mù quáng vs Thấu suốt điểm mạnh bản thân',
+    tags: ['Email', 'Nurturing', 'Điểm mạnh', '1-1 Consultation'],
+    keyInsight: '3 Dòng tiêu đề có tỷ lệ mở cao (>45%) -> Tâm sự chân thành -> Tặng bài test & tư vấn 1-1 -> Tái bút (P.S.) đòn bẩy.',
+    content: `[GỢI Ý 3 TIÊU ĐỀ EMAIL CÓ TỶ LỆ MỞ CAO]:
+1. (Tò mò): Bạn có đang bận rộn... nhưng là bận rộn một cách mù quáng?
+2. (Chạm nỗi đau): Khi nỗ lực cả năm nhưng vẫn thấy mình dậm chân tại chỗ
+3. (Ấm áp & Lợi ích): Một điểm dừng 15 phút để bạn nhìn rõ con đường phía trước
+
+---
+
+Chào bạn,
+
+Có bao giờ bạn kết thúc một tuần làm việc dài, nhìn lại danh sách việc đã hoàn thành và tự hỏi: "Mình đã làm việc rất nhiều, nhưng rốt cuộc mình đang đi về đâu?"
+
+Cảm giác đó hoàn toàn bình thường. Rất nhiều người trong chúng ta từng trải qua giai đoạn: Càng cố gắng làm nhiều, càng thấy kiệt sức và mất phương hướng.
+
+Vấn đề không nằm ở sự chăm chỉ. Vấn đề là chúng ta đang dồn năng lượng vào những việc không thuộc về điểm mạnh cốt lõi của mình.
+
+Nếu bạn đang cảm thấy cần một khoảng lặng để:
+• Nhìn nhận lại bức tranh toàn cảnh sau chuỗi ngày bận rộn
+• Nhận diện rõ đâu là tài năng và giá trị thật của bản thân
+• Thiết lập lại thứ tự ưu tiên cho chặng đường sắp tới
+
+Mình gửi tặng bạn bộ công cụ Self-Positioning Matrix & Bài đánh giá định vị bản thân (hoàn toàn miễn phí):
+👉 [Đường link làm bài test định vị]
+
+Sau khi bạn hoàn thành, mình và đội ngũ chuyên gia sẽ đồng hành giải đáp 1-1 kín đáo qua online để giúp bạn sáng tỏ hướng đi.
+
+Chúc bạn luôn giữ được sự an yên và vững vàng trên hành trình của mình.
+
+Thân mến,
+[Tên người gửi]
+
+P.S. Bộ câu hỏi và suất tham vấn 1-1 này hoàn toàn phi lợi nhuận từ dự án cộng đồng của tụi mình. Bạn cứ thong thả làm khi có không gian yên tĩnh nhé!`
+  },
+  {
+    id: 'bm-threads-cmt-vulnerable',
+    platform: 'Threads',
+    category: 'Comment Thấu Hiểu & Tự Sự',
+    title: 'Mẫu Comment Threads: Lời tâm sự đêm muộn & Gỡ bỏ chiếc bẫy so sánh',
+    tags: ['Threads', 'Comment', 'So sánh', '1-1'],
+    keyInsight: 'Ngắt dòng nhịp nhàng 3-4 đoạn ngắn, lời thì thầm đêm muộn gỡ bỏ phòng thủ, rủ rê nhận bài test 1-1.',
+    content: `Nhiều khi thấy bạn bè cùng tuổi mua nhà, đổi xe, tự nhiên thấy mình nhỏ bé ghê.
+Nhưng đi qua nhiều đợt khủng hoảng mới hiểu: Tốc độ của người ta là đồng hồ của người ta, nhịp sống của mình là hành trình của mình.
+
+Đừng ép mình phải trở thành phiên bản của ai khác. Chỉ cần tìm đúng điểm tựa của bản thân, mọi thứ sẽ tự khắc vào guồng.
+
+Mình có 1 template nhỏ soi chiếu lại tính cách và con người thật khá sâu, bạn nào đang cảm thấy chênh vênh thì cứ nhắn mình gửi tặng free nhé.`
+  },
+  {
+    id: 'bm-fb-cmt-multidimensional',
+    platform: 'Facebook',
+    category: 'Comment Phân Tích Đa Chiều',
+    title: 'Mẫu Comment Facebook: Phân tích khách quan hai chiều giữa Quản lý và Nhân sự',
+    tags: ['Facebook', 'Comment', 'Đa chiều', 'Quản lý'],
+    keyInsight: 'Không đổ lỗi, nhìn từ áp lực của cả cấp trên và cấp dưới, đề xuất workshop như giải pháp trung lập.',
+    content: `Ở góc độ người từng đứng ở cả vị trí nhân viên lẫn quản lý, mình thấy bài toán này rất đáng suy ngẫm cho cả đôi bên.
+Phía nhân sự cần sự công nhận và không gian an toàn tâm lý để phát triển. Nhưng phía sếp cũng đang gánh áp lực chỉ tiêu kinh doanh và sự sống còn của doanh nghiệp trong giai đoạn kinh tế biến động.
+Khi hai bên thiếu một ngôn ngữ chung để đối thoại, xung đột là điều tất yếu.
+Nếu bạn muốn tìm một góc nhìn trung lập và các phương pháp giải mã giao tiếp công sở, thử ghé qua buổi Workshop này xem sao nhé, rất hữu ích để tháo gỡ nút thắt.`
   }
 ];

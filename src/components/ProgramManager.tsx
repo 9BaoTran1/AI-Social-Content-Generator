@@ -55,6 +55,20 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
   const [adminError, setAdminError] = useState<string | null>(null);
   const [pendingAdminAction, setPendingAdminAction] = useState<(() => void) | null>(null);
 
+  // Sync admin state live with URL param or session storage
+  React.useEffect(() => {
+    const check = () => {
+      setIsAdmin(isCrtAdmin());
+    };
+    check();
+    window.addEventListener('crt_admin_changed', check);
+    window.addEventListener('storage', check);
+    return () => {
+      window.removeEventListener('crt_admin_changed', check);
+      window.removeEventListener('storage', check);
+    };
+  }, []);
+
   const requireAdmin = (action: () => void) => {
     if (isCrtAdmin()) {
       setIsAdmin(true);
@@ -214,17 +228,22 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto">
+          <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
             {isAdmin ? (
-              <button
-                type="button"
-                onClick={handleLogoutAdmin}
-                className="px-3 py-2 text-xs font-semibold rounded-xl border bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 flex items-center gap-1.5 cursor-pointer hover:bg-emerald-500/20 transition-all"
-                title="Bấm để khóa quyền Admin"
-              >
-                <Unlock className="w-3.5 h-3.5" />
-                <span>Admin (Đã mở khóa)</span>
-              </button>
+              <div className="flex items-center gap-1.5">
+                <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 border border-amber-500/40 text-amber-700 dark:text-amber-300 flex items-center gap-1.5 text-xs font-bold shadow-2xs">
+                  <span>👑 Admin CRT: Đã mở quyền Quản lý</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleLogoutAdmin}
+                  className="px-2.5 py-1.5 text-xs font-medium rounded-xl border text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border-slate-200 dark:border-slate-800 flex items-center gap-1 cursor-pointer transition-all"
+                  title="Bấm để khóa quyền Admin"
+                >
+                  <Lock className="w-3 h-3" />
+                  <span className="hidden sm:inline">Khóa Admin</span>
+                </button>
+              </div>
             ) : (
               <button
                 type="button"
@@ -251,6 +270,21 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Admin Active Banner */}
+        {isAdmin && (
+          <div className="px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-800 dark:text-amber-200 text-xs flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-base">👑</span>
+              <span>
+                <strong>Chế độ Admin CRT đang mở:</strong> Bạn có quyền Thêm mới, Chỉnh sửa, Xóa và Bật/Tắt chương trình trực tiếp mà không bị hỏi lại mật khẩu.
+              </span>
+            </div>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold hidden sm:inline-block">
+              admin_key=admincrt2026
+            </span>
+          </div>
+        )}
 
         {/* Filter Tabs & Search Box */}
         <div

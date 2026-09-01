@@ -368,10 +368,22 @@ app.post('/api/generate-order', async (req: Request, res: Response) => {
     // Filter available programs (Allowing both WS & CT)
     const availablePrograms = (programs || []).filter((p: any) => p.isActive !== false);
 
-    const systemPrompt = `Bạn là Senior Content Quality & Viral Strategy Auditor kiêm Content Copywriter hơn 20 năm kinh nghiệm hàng đầu Việt Nam.
-Sứ mệnh của bạn: Tạo ra content đạt điểm 10/10 về độ TỰ NHIÊN, SÂU SẮC, KHÔNG VĂN MẪU ROBOT, và TỐI ĐA HÓA TỶ LỆ CHUYỂN ĐỔI TỪ COMMENT/BÀI VIẾT THÀNH INBOX (1-1 DM LEAD).
+    const systemPrompt = `Bạn là AI Content Director (Giám Đốc Nội Dung 20+ Năm Kinh Nghiệm Hàng Đầu Việt Nam) - Tổng chỉ huy quy trình biên tập nội dung đa tác nhân (Multi-Agent Editorial Pipeline).
+Sứ mệnh của bạn: Trực tiếp điều phối và hợp nhất năng lực từ Hội Đồng 5 Tác Nhân AI Chuyên Trách để sản xuất nội dung đạt điểm 10/10 về độ TỰ NHIÊN, CHÂN THẬT, SÂU SẮC, GIÀU TÍNH THẤU CẢM VÀ TỶ LỆ CHUYỂN ĐỔI CAO NHẤT. Triệt tiêu 100% văn mẫu robot, sáo rỗng hay lý thuyết suông.
 
-QUY TẮC "ANTI-AI FLUFF" BẮT BUỘC (CỰC KỲ QUAN TRỌNG):
+=== HỘI ĐỒNG 5 TÁC NHÂN AI CHUYÊN TRÁCH DƯỚI QUYỀN CHỈ HUY CỦA GIÁM ĐỐC NỘI DUNG ===
+1. [Hook & Scroll-Stopper Specialist]:
+   - Tối ưu 3 dòng đầu tiên, giật tít in hoa đắt giá, dừng ngón tay cuộn của độc giả trong 3 giây đầu tiên mà không phản cảm/clickbait rẻ tiền.
+2. [Deep Storytelling & Empathy Specialist]:
+   - Khơi mở nỗi đau thực tế (áp lực đồng trang lứa, kiệt sức thầm lặng, hội chứng kẻ giả mạo, bẫy micromanage), tự sự chân thật, bẻ gãy định kiến, giải phóng tâm lý tự trách tuổi 20-39.
+3. [Anti-BS & Trust Builder]:
+   - Cam kết phi lợi nhuận 100% minh bạch, xóa bỏ hoài nghi bán khóa học/lùa gà, thiết lập niềm tin sắt đá.
+4. [Algorithm & First Comment Optimizer]:
+   - Tối ưu Dwell Time, sinh bình luận ghim mồi (First Comment Seed) chứa link khéo léo để né bóp reach, đặt câu hỏi mở kích hoạt tranh luận đa chiều.
+5. [Conversion DM Specialist]:
+   - Soạn thảo kịch bản inbox 1-1 chuyển đổi cao 3 bước (Đồng cảm sâu -> Câu hỏi đào sâu / Qualifying -> Mời gửi link test / tham vấn 1-1).
+
+QUY TẮC "ANTI-AI FLUFF" BẮT BUỘC:
 1. TUYỆT ĐỐI CẤM các mẫu câu sáo rỗng của AI:
    - CẤM: "Trong thế giới ngày nay...", "Bạn có bao giờ tự hỏi...", "Hãy nhớ rằng...", "Đừng ngần ngại...", "Hành trình vạn dặm...", "Ngọn hải đăng...".
    - CẤM các từ cảm thán giả tạo hoặc dùng dấu chấm than liên tiếp.
@@ -402,6 +414,12 @@ Hãy trả về kết quả định dạng JSON chính xác:
   "selectedProgramId": "id của dự án được chọn",
   "selectedProgramTitle": "Tên WS/CT",
   "selectedProgramType": "ws" | "ct",
+  "directorStrategicAnalysis": {
+    "targetAudience": "Mô tả đối tượng mục tiêu chi tiết",
+    "emotionalTouchpoint": "Điểm chạm cảm xúc then chốt & nỗi đau ẩn sâu",
+    "algorithmAssessment": "Đánh giá thuật toán phân phối (Dwell Time, First Comment Seed)",
+    "approachReason": "Lý do Giám Đốc Nội Dung chọn giải pháp và góc tiếp cận này"
+  },
   "rationale": "Phân tích insight tâm lý khách hàng và lý do chọn dự án này",
   "platformNotes": "Chiến lược câu chữ và lưu ý tone & mood theo nền tảng",
   "primaryContent": "Phương án nội dung xuất sắc nhất",
@@ -449,6 +467,16 @@ Hãy trả về kết quả định dạng JSON chính xác:
               selectedProgramId: { type: Type.STRING },
               selectedProgramTitle: { type: Type.STRING },
               selectedProgramType: { type: Type.STRING, enum: ['ws', 'ct'] },
+              directorStrategicAnalysis: {
+                type: Type.OBJECT,
+                properties: {
+                  targetAudience: { type: Type.STRING },
+                  emotionalTouchpoint: { type: Type.STRING },
+                  algorithmAssessment: { type: Type.STRING },
+                  approachReason: { type: Type.STRING },
+                },
+                required: ['targetAudience', 'emotionalTouchpoint', 'algorithmAssessment', 'approachReason'],
+              },
               rationale: { type: Type.STRING },
               platformNotes: { type: Type.STRING },
               primaryContent: { type: Type.STRING },
@@ -486,6 +514,16 @@ Hãy trả về kết quả định dạng JSON chính xác:
     );
 
     const parsed = JSON.parse(response.text || '{}');
+
+    // Ensure directorStrategicAnalysis default if missing
+    if (!parsed.directorStrategicAnalysis) {
+      parsed.directorStrategicAnalysis = {
+        targetAudience: 'Người đi làm & giới trẻ (20-39 tuổi) đang đối mặt với áp lực định vị và kiệt sức thầm lặng.',
+        emotionalTouchpoint: 'Cảm giác chông chênh, áp lực so sánh ngầm và mong muốn tìm lại nhịp điệu nội tại.',
+        algorithmAssessment: 'Tối ưu Dwell Time bằng cốt truyện cuốn hút, giữ trọn reach tự nhiên bằng bình luận ghim mồi.',
+        approachReason: 'Sử dụng tâm sự chân thật, cam kết phi lợi nhuận 100% để phá bỏ rào cản tâm lý và mở đường chuyển đổi 1-1.'
+      };
+    }
 
     // Ensure firstCommentSeed default if missing for FB/LinkedIn
     if (orderType === 'order_3' && !parsed.firstCommentSeed) {

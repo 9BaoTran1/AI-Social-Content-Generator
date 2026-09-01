@@ -39,6 +39,12 @@ import {
   HelpCircle,
   Lightbulb,
   Share2,
+  Target,
+  TrendingUp,
+  HeartHandshake,
+  Compass,
+  ChevronUp,
+  Award,
 } from 'lucide-react';
 import { saveHistoryItem, saveCustomBenchmarkTemplate } from '../lib/storage';
 import { generateOrderAI, getApiKey, setApiKey, refineContentAI } from '../lib/aiService';
@@ -104,24 +110,34 @@ const EXPERT_TIPS = [
 
 const PRODUCTION_STEPS = [
   {
-    title: 'Nghiên cứu tâm lý độc giả & bóc tách nỗi đau',
-    desc: 'Phân tích đối tượng mục tiêu, thấu cảm tâm lý và giải tỏa rào cản phòng thủ.',
+    agent: 'Hook & Scroll-Stopper Specialist',
+    title: '1. Hook & Scroll-Stopper Specialist (Dừng cuộn 3s đầu)',
+    desc: 'Tối ưu 3 dòng đầu & tiêu đề in hoa đắt giá, giật tít không phản cảm, dừng ngón tay cuộn của độc giả.',
+    badge: '3s Hook',
   },
   {
-    title: 'Đối chiếu triết lý Workshop & chọn góc tiếp cận',
-    desc: 'Kết nối nội dung với giá trị cốt lõi, cam kết phi lợi nhuận & không bán khóa học.',
+    agent: 'Deep Storytelling & Empathy Specialist',
+    title: '2. Deep Storytelling & Empathy Specialist (Khơi mở nỗi đau)',
+    desc: 'Bóc tách nỗi đau thực tế (áp lực ngầm, kiệt sức thầm lặng), tự sự chân thật, bẻ gãy định kiến tuổi 20-39.',
+    badge: 'Empathy & Pain',
   },
   {
-    title: 'Soạn thảo 4 phong cách viral chuyên biệt',
-    desc: 'Sản xuất 4 bản: Tự sự chạm tim, Bẻ khóa định kiến, Trắc nghiệm cộng đồng & Chuyên gia thực chiến.',
+    agent: 'Anti-BS & Trust Builder',
+    title: '3. Anti-BS & Trust Builder (Cam kết phi lợi nhuận 100%)',
+    desc: 'Thiết lập cam kết phi lợi nhuận 100% minh bạch, xóa bỏ hoài nghi bán khóa học/lùa gà.',
+    badge: '100% Trust',
   },
   {
-    title: 'Tạo bình luận ghim mồi đặt link (chống bóp reach)',
-    desc: 'Soạn sẵn bình luận dẫn link tài liệu/test 1-1, tối ưu thuật toán phân phối tự nhiên.',
+    agent: 'Algorithm & First Comment Optimizer',
+    title: '4. Algorithm & First Comment Optimizer (Tối ưu thuật toán)',
+    desc: 'Tối ưu Dwell Time, sinh bình luận ghim mồi (First Comment Seed), câu hỏi mở kích hoạt tranh luận.',
+    badge: 'Algo & Seed',
   },
   {
-    title: 'Hoàn thiện kịch bản inbox 1-1 chuyển đổi cao',
-    desc: 'Thiết lập 3 bước: Đồng cảm sâu → Câu hỏi đào sâu (Qualifying) → Mời gửi link 1-1.',
+    agent: 'Conversion DM Specialist',
+    title: '5. Conversion DM Specialist (Kịch bản inbox 1-1)',
+    desc: 'Soạn thảo kịch bản inbox 3 bước chuyển đổi cao: Đồng cảm sâu → Đào sâu (Qualifying) → Mời gửi link.',
+    badge: 'DM 1-1 Script',
   },
 ];
 
@@ -168,6 +184,7 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEnhancing, setIsEnhancing] = useState<boolean>(false);
   const [generatedResult, setGeneratedResult] = useState<GeneratedContent | null>(null);
+  const [showDirectorAnalysis, setShowDirectorAnalysis] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [inlineApiKey, setInlineApiKey] = useState<string>('');
@@ -479,10 +496,24 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
 
   const handleExportText = () => {
     if (!generatedResult) return;
+    const analysis = generatedResult.directorStrategicAnalysis;
     const content = `=== TỔNG HỢP NỘI DUNG ORDER ===
 Lệnh: Order ${currentOrderMeta.orderNumber} - ${generatedResult.orderTitle} (${generatedResult.platform})
 Dự án: ${generatedResult.programTitle}
 Thời gian tạo: ${new Date(generatedResult.createdAt).toLocaleString('vi-VN')}
+
+--- 🎬 PHÂN TÍCH CHIẾN LƯỢC TỪ AI CONTENT DIRECTOR (20+ NĂM KINH NGHIỆM) ---
+1. Đối tượng mục tiêu:
+${analysis?.targetAudience || 'Người đi làm & giới trẻ (20-39 tuổi)'}
+
+2. Điểm chạm cảm xúc:
+${analysis?.emotionalTouchpoint || 'Nỗi đau kiệt sức thầm lặng và áp lực định vị'}
+
+3. Đánh giá thuật toán phân phối:
+${analysis?.algorithmAssessment || generatedResult.platformNotes}
+
+4. Lý do chọn giải pháp & góc tiếp cận:
+${analysis?.approachReason || generatedResult.rationale}
 
 --- 4 PHƯƠNG ÁN NỘI DUNG ---
 ${generatedResult.variations.map((v, i) => `\n[PHƯƠNG ÁN ${i + 1}]:\n${v}\n`).join('\n')}
@@ -500,9 +531,6 @@ ${
 
 3. Lời mời gửi link test / form 1-1:
 "${generatedResult.dmFollowUpScript.step3_inviteLink}"
-
---- LÝ DO AI CHỌN DỰ ÁN & INSIGHT ---
-${generatedResult.rationale}
 `;
 
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
@@ -1034,15 +1062,20 @@ ${generatedResult.rationale}
               {/* Header: Progress & Timer */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-2xl bg-indigo-600/10 border border-indigo-500/30 flex items-center justify-center text-indigo-600 animate-pulse">
-                    <Sparkles className="w-5 h-5 text-amber-500" />
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center text-white shadow-xs animate-pulse">
+                    <Award className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      AI Social Studio 2.0 Đang Xử Lý...
-                    </h3>
+                    <div className="flex items-center gap-2">
+                      <h3 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        🎬 AI Content Director Đang Điều Phối...
+                      </h3>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                        20+ Năm
+                      </span>
+                    </div>
                     <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      Đang sản xuất Order {currentOrderMeta.orderNumber} ({currentOrderMeta.platform})
+                      Hội đồng 5 Tác nhân AI đang sản xuất Order {currentOrderMeta.orderNumber} ({currentOrderMeta.platform})
                     </p>
                   </div>
                 </div>
@@ -1073,14 +1106,21 @@ ${generatedResult.rationale}
                   </div>
                 </div>
                 <div className="flex justify-between text-[11px] text-slate-400">
-                  <span>Khởi động phân tích</span>
-                  <span>Đồng cảm & Viết bài</span>
-                  <span>Hoàn tất đóng gói</span>
+                  <span>1. Khởi động phân tích</span>
+                  <span>3. Anti-BS & Thấu cảm</span>
+                  <span>5. Hoàn tất đóng gói DM</span>
                 </div>
               </div>
 
-              {/* 5 Production Steps Checklist */}
+              {/* 5 Production Steps Checklist - 5 Specialized Sub-Agents */}
               <div className="space-y-2.5 pt-1">
+                <div className="flex items-center justify-between px-1">
+                  <span className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}>
+                    Quy trình điều phối 5 Tác Nhân Chuyên Trách:
+                  </span>
+                  <span className="text-[10px] text-slate-400 font-mono">5/5 AI Agents</span>
+                </div>
+
                 {PRODUCTION_STEPS.map((step, idx) => {
                   const isDone = idx < activeStepIndex;
                   const isCurrent = idx === activeStepIndex;
@@ -1103,11 +1143,11 @@ ${generatedResult.rationale}
                     >
                       <div className="shrink-0 mt-0.5">
                         {isDone ? (
-                          <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+                          <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-2xs">
                             <Check className="w-3 h-3 stroke-[3]" />
                           </div>
                         ) : isCurrent ? (
-                          <div className="w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-white">
+                          <div className="w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-white shadow-2xs">
                             <Loader2 className="w-3 h-3 animate-spin" />
                           </div>
                         ) : (
@@ -1121,8 +1161,27 @@ ${generatedResult.rationale}
                         )}
                       </div>
 
-                      <div className="space-y-0.5">
-                        <h4 className="text-xs font-bold leading-snug">{step.title}</h4>
+                      <div className="space-y-0.5 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <h4 className="text-xs font-bold leading-snug">{step.title}</h4>
+                          <span
+                            className={`text-[9px] px-2 py-0.5 rounded-full font-bold shrink-0 ${
+                              isDone
+                                ? isDark
+                                  ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/60'
+                                  : 'bg-emerald-100 text-emerald-800'
+                                : isCurrent
+                                ? isDark
+                                  ? 'bg-indigo-900/60 text-indigo-300 border border-indigo-700/60'
+                                  : 'bg-indigo-100 text-indigo-800'
+                                : isDark
+                                ? 'bg-slate-900 text-slate-500 border border-slate-800'
+                                : 'bg-slate-100 text-slate-500'
+                            }`}
+                          >
+                            {step.badge}
+                          </span>
+                        </div>
                         <p className="text-[11px] opacity-80 leading-relaxed">{step.desc}</p>
                       </div>
                     </div>
@@ -1310,6 +1369,158 @@ ${generatedResult.rationale}
                   <span>Xuất .TXT</span>
                 </button>
               </div>
+
+              {/* Strategic Analysis Hero Box: AI Content Director */}
+              {(() => {
+                const analysis = generatedResult.directorStrategicAnalysis || {
+                  targetAudience: 'Người đi làm & giới trẻ (20-39 tuổi) đang đối mặt với áp lực định vị và kiệt sức thầm lặng.',
+                  emotionalTouchpoint: 'Cảm giác chông chênh, áp lực so sánh ngầm và mong muốn tìm lại nhịp điệu nội tại.',
+                  algorithmAssessment: generatedResult.platformNotes || 'Tối ưu Dwell Time bằng cấu trúc câu chuyện chặt chẽ, né bóp reach bằng First Comment Seed ghim link.',
+                  approachReason: generatedResult.rationale || 'Tiếp cận bằng sự chân thành, phi lợi nhuận 100% để phá vỡ hoài nghi và dẫn dắt tự nhiên sang đối thoại 1-1.',
+                };
+
+                return (
+                  <div
+                    className={`rounded-2xl border p-4.5 transition-all shadow-xs space-y-3.5 ${
+                      isDark
+                        ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950/40 border-indigo-500/40 ring-1 ring-indigo-500/20'
+                        : 'bg-gradient-to-br from-indigo-50/80 via-white to-purple-50/60 border-indigo-200 ring-1 ring-indigo-100'
+                    }`}
+                  >
+                    {/* Header */}
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center text-white shadow-xs">
+                          <Award className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                              🎬 Phân Tích Chiến Lược Từ AI Content Director
+                            </h3>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                              20+ Năm Kinh Nghiệm
+                            </span>
+                          </div>
+                          <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                            Hội đồng 5 Tác nhân AI phối hợp biên tập & đánh giá thuật toán phân phối viral
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setShowDirectorAnalysis(!showDirectorAnalysis)}
+                        className={`text-xs px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1 cursor-pointer transition-colors ${
+                          isDark
+                            ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
+                            : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                        }`}
+                      >
+                        <span>{showDirectorAnalysis ? 'Thu gọn' : 'Xem chi tiết'}</span>
+                        {showDirectorAnalysis ? (
+                          <ChevronUp className="w-3.5 h-3.5" />
+                        ) : (
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
+
+                    {/* 4 Strategic Pillars Grid */}
+                    {showDirectorAnalysis && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                        {/* 1. Đối tượng mục tiêu */}
+                        <div
+                          className={`p-3 rounded-xl border space-y-1.5 transition-colors ${
+                            isDark
+                              ? 'bg-slate-900/80 border-indigo-900/50 text-slate-200'
+                              : 'bg-white/90 border-indigo-100 text-slate-800'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between text-xs">
+                            <div className="flex items-center gap-1.5 font-bold text-indigo-600 dark:text-indigo-400">
+                              <Target className="w-3.5 h-3.5" />
+                              <span>Đối tượng mục tiêu</span>
+                            </div>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-medium bg-indigo-500/10 text-indigo-500">
+                              Target Audience
+                            </span>
+                          </div>
+                          <p className="text-xs leading-relaxed opacity-90">
+                            {analysis.targetAudience}
+                          </p>
+                        </div>
+
+                        {/* 2. Điểm chạm cảm xúc */}
+                        <div
+                          className={`p-3 rounded-xl border space-y-1.5 transition-colors ${
+                            isDark
+                              ? 'bg-slate-900/80 border-rose-900/40 text-slate-200'
+                              : 'bg-white/90 border-rose-100 text-slate-800'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between text-xs">
+                            <div className="flex items-center gap-1.5 font-bold text-rose-600 dark:text-rose-400">
+                              <HeartHandshake className="w-3.5 h-3.5" />
+                              <span>Điểm chạm cảm xúc</span>
+                            </div>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-medium bg-rose-500/10 text-rose-500">
+                              Emotional Hook
+                            </span>
+                          </div>
+                          <p className="text-xs leading-relaxed opacity-90">
+                            {analysis.emotionalTouchpoint}
+                          </p>
+                        </div>
+
+                        {/* 3. Đánh giá thuật toán phân phối */}
+                        <div
+                          className={`p-3 rounded-xl border space-y-1.5 transition-colors ${
+                            isDark
+                              ? 'bg-slate-900/80 border-emerald-900/40 text-slate-200'
+                              : 'bg-white/90 border-emerald-100 text-slate-800'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between text-xs">
+                            <div className="flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400">
+                              <TrendingUp className="w-3.5 h-3.5" />
+                              <span>Đánh giá thuật toán phân phối</span>
+                            </div>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-medium bg-emerald-500/10 text-emerald-500">
+                              Algorithm
+                            </span>
+                          </div>
+                          <p className="text-xs leading-relaxed opacity-90">
+                            {analysis.algorithmAssessment}
+                          </p>
+                        </div>
+
+                        {/* 4. Lý do chọn giải pháp */}
+                        <div
+                          className={`p-3 rounded-xl border space-y-1.5 transition-colors ${
+                            isDark
+                              ? 'bg-slate-900/80 border-amber-900/40 text-slate-200'
+                              : 'bg-white/90 border-amber-100 text-slate-800'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between text-xs">
+                            <div className="flex items-center gap-1.5 font-bold text-amber-600 dark:text-amber-400">
+                              <Compass className="w-3.5 h-3.5" />
+                              <span>Lý do chọn giải pháp</span>
+                            </div>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-medium bg-amber-500/10 text-amber-500">
+                              Strategic Rationale
+                            </span>
+                          </div>
+                          <p className="text-xs leading-relaxed opacity-90">
+                            {analysis.approachReason}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
 
               {/* TAB 1: 4 Content Variations */}
               {resultTab === 'variations' && (

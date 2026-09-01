@@ -63,12 +63,20 @@ export interface GenerationOptions {
   selectedProgramId?: string;
   targetAge?: string;
   lengthPreference?: 'short' | 'medium' | 'long';
+  forceRefresh?: boolean;
 }
 
 export interface DmFollowUpScript {
   step1_empathy: string;
   step2_qualifyQuestion: string;
   step3_inviteLink: string;
+}
+
+export interface DirectorStrategicAnalysis {
+  targetAudience: string; // Đối tượng mục tiêu
+  emotionalTouchpoint: string; // Điểm chạm cảm xúc
+  algorithmAssessment: string; // Đánh giá thuật toán phân phối
+  approachReason: string; // Lý do chọn giải pháp & góc tiếp cận
 }
 
 export interface GeneratedContent {
@@ -85,6 +93,7 @@ export interface GeneratedContent {
   dmFollowUpScript: DmFollowUpScript;
   rationale: string;
   platformNotes: string;
+  directorStrategicAnalysis?: DirectorStrategicAnalysis;
   createdAt: string;
 }
 

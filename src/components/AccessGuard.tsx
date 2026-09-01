@@ -23,9 +23,16 @@ export const AccessGuard: React.FC<AccessGuardProps> = ({ children, theme }) => 
       const urlKey = urlParams.get('key') || urlParams.get('access');
 
       const customStoredKey = localStorage.getItem('app_custom_secret_key') || DEFAULT_SECRET_KEY;
+      const adminKey = urlParams.get('admin_key');
 
-      if (urlKey && urlKey.trim().toLowerCase() === customStoredKey.toLowerCase()) {
+      if (
+        (urlKey && urlKey.trim().toLowerCase() === customStoredKey.toLowerCase()) ||
+        (adminKey && adminKey.trim().toLowerCase() === 'admincrt2026')
+      ) {
         localStorage.setItem('app_access_granted', 'true');
+        if (adminKey && adminKey.trim().toLowerCase() === 'admincrt2026') {
+          sessionStorage.setItem('order_ai_crt_admin_auth', 'true');
+        }
         setIsAuthenticated(true);
         setIsChecking(false);
         return;

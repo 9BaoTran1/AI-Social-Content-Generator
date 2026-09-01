@@ -92,9 +92,37 @@ export function deleteCustomBenchmarkTemplate(id: string): void {
 }
 
 // === CRT Admin Authentication ===
+export function notifyAdminStatusChanged(): void {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('crt_admin_changed'));
+  }
+}
+
+export function checkAdminKeyFromUrl(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const adminKey = urlParams.get('admin_key');
+    if (adminKey && adminKey.trim().toLowerCase() === DEFAULT_CRT_ADMIN_KEY.toLowerCase()) {
+      sessionStorage.setItem(STORAGE_KEYS.CRT_ADMIN_AUTH, 'true');
+      notifyAdminStatusChanged();
+      return true;
+    }
+  } catch (e) {
+    console.error('Failed to parse admin_key from URL:', e);
+  }
+  return false;
+}
+
+// Auto check URL parameter on module load
+if (typeof window !== 'undefined') {
+  checkAdminKeyFromUrl();
+}
+
 export function isCrtAdmin(): boolean {
   if (typeof window === 'undefined') return false;
-  return sessionStorage.getItem(STORAGE_KEYS.CRT_ADMIN_AUTH) === 'true';
+  if (sessionStorage.getItem(STORAGE_KEYS.CRT_ADMIN_AUTH) === 'true') return true;
+  return checkAdminKeyFromUrl();
 }
 
 export function verifyCrtAdmin(passcode: string): boolean {
@@ -102,6 +130,7 @@ export function verifyCrtAdmin(passcode: string): boolean {
   const validKey = (localStorage.getItem('crt_custom_admin_key') || DEFAULT_CRT_ADMIN_KEY).toLowerCase();
   if (cleanPasscode === validKey) {
     sessionStorage.setItem(STORAGE_KEYS.CRT_ADMIN_AUTH, 'true');
+    notifyAdminStatusChanged();
     return true;
   }
   return false;
@@ -109,4 +138,6 @@ export function verifyCrtAdmin(passcode: string): boolean {
 
 export function logoutCrtAdmin(): void {
   sessionStorage.removeItem(STORAGE_KEYS.CRT_ADMIN_AUTH);
+  notifyAdminStatusChanged();
 }
+
