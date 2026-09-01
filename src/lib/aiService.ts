@@ -76,22 +76,34 @@ export async function generateOrderAI(params: {
     throw new Error('CHƯA_CÓ_API_KEY: Ứng dụng đang chạy ở chế độ tĩnh. Vui lòng nhập Gemini API Key của bạn để bắt đầu tạo nội dung.');
   }
 
-  const modelName = params.options?.modelSelection || 'gemini-3.6-flash';
+  const isFacebookPost = params.orderType === 'order_3';
 
-  const systemInstruction = `Bạn là Content Master 10 năm kinh nghiệm và Social Media Copywriter hàng đầu Việt Nam.
-Nhiệm vụ: Tạo ra content đạt điểm 10/10 về độ TỰ NHIÊN, CHÂN THẬT, KHÔNG VĂN MẪU ROBOT và tối đa tỷ lệ chuyển đổi từ comment/post thành tin nhắn 1-1 (DM).
-QUY TẮC:
-- CẤM văn mẫu AI sáo rỗng ("Trong cuộc sống...", "Bạn có bao giờ...").
-- Dùng từ ngữ đời thường của người đi làm 20-39 tuổi (áp lực so sánh ngầm, kiệt sức, loay hoay định vị, sợ tụt hậu).
-- Nền tảng Facebook TUYỆT ĐỐI chỉ rải Workshop (WS), KHÔNG rải Chương trình (CT), tone khách quan trung lập.
-- 3 Biến thể: Mẫu 1 (Đồng cảm & Storytelling), Mẫu 2 (Phản biện & Reframe), Mẫu 3 (Trắc nghiệm & Test 1-1).
+  const systemInstruction = `Bạn là Chuyên gia Social Media & Content Copywriter hơn 20 năm kinh nghiệm hàng đầu Việt Nam.
+Nhiệm vụ: Tạo ra content đạt điểm 10/10 về độ TỰ NHIÊN, CHÂN THẬT, KHÔNG VĂN MẪU ROBOT, KHÔNG SÁO RỖNG và tối đa tỷ lệ chuyển đổi từ comment/post thành tin nhắn 1-1 (DM) hoặc tương tác bình luận.
 
-DANH SÁCH DỰ ÁN:
+QUY TẮC VÀNG TỪ CHUYÊN GIA 20 NĂM:
+- CẤM văn mẫu AI sáo rỗng ("Trong cuộc sống...", "Bạn có bao giờ tự hỏi...", "Hãy cùng tôi khám phá...").
+- Dùng ngôn ngữ đời thường, gãy gọn, chạm đúng tâm lý thực tế của người đi làm (áp lực so sánh ngầm, kiệt sức, loay hoay định vị, bế tắc ý tưởng, sợ tụt hậu).
+- Nền tảng Facebook: Cho phép rải tự do cả Workshop (WS), Chương trình (CT) hoặc các dự án cộng đồng phi lợi nhuận.
+${
+  isFacebookPost
+    ? `- ĐẶC BIỆT VỚI BÀI VIẾT FACEBOOK (ORDER 3): Phải là BÀI VIẾT DÀI (Long-form 350 - 650 từ) có chiều sâu, ngắt đoạn thoáng, cảm xúc chân thực theo cấu trúc:
+       1. Tiêu đề in hoa / Hook giật tít không phản cảm, gợi mở nghịch lý hoặc câu hỏi trăn trở lớn.
+       2. Đoạn mở đầu thấu hiểu, đồng cảm sâu sắc về áp lực, cảm xúc làm nghề của độc giả.
+       3. Tuyên bố dự án cộng đồng phi lợi nhuận chia sẻ giá trị: Khẳng định thẳng thắn "KHÔNG bán khóa học, KHÔNG PR lùa gà hay kinh doanh sản phẩm gì ở đây hết".
+       4. Móc nối thời điểm (kỳ nghỉ, cuối tuần, thời điểm chuyển giao) để refresh tâm trí và nạp năng lượng.
+       5. Giới thiệu giải pháp / bài test (Well-being WHO-5, Trắc nghiệm thế mạnh, Định vị bản thân...) kèm hỗ trợ giải đáp 1-1 hoặc tư vấn từ chuyên gia.
+       6. Kêu gọi hành động khéo léo (CTA): Hướng dẫn ghé xuống phần bình luận để nhận link / trải nghiệm thử (không để link trực tiếp trên cap bài viết để tránh bị Facebook bóp reach!).
+       7. Tự động sinh thêm 'firstCommentSeed' (Bình luận mồi ghim đầu) chứa link và lời mời thân thiện.`
+    : `- Với Comment TikTok/Facebook/Threads: Ngắn gọn, tự nhiên như người dùng thật đang tâm sự hoặc chia sẻ góc nhìn đắt giá.`
+}
+
+DANH SÁCH DỰ ÁN KHẢ DỤNG:
 ${JSON.stringify(params.programs, null, 2)}`;
 
   const promptText = `Yêu cầu thực hiện Order: ${params.orderType}
-Ngữ cảnh: "${params.context}"
-${params.selectedProgramId && params.selectedProgramId !== 'auto' ? `Dự án chỉ định ID: ${params.selectedProgramId}` : 'Hãy tự động chọn WS/CT phù hợp nhất.'}
+Ý tưởng, bối cảnh & từ khóa: "${params.context}"
+${params.selectedProgramId && params.selectedProgramId !== 'auto' ? `Dự án chỉ định ID: ${params.selectedProgramId}` : 'Hãy tự động chọn WS/CT phù hợp nhất với ngữ cảnh.'}
 Tùy chọn: Gắn link: ${params.options?.includeLink}, Giọng văn: ${params.options?.tone || 'Tự nhiên'}, Độ dài: ${params.options?.lengthPreference || 'Vừa vặn'}
 
 Trả về JSON đúng cấu trúc:
@@ -99,14 +111,16 @@ Trả về JSON đúng cấu trúc:
   "selectedProgramId": "id",
   "selectedProgramTitle": "Tên WS/CT",
   "selectedProgramType": "ws" | "ct",
-  "rationale": "Lý do và phân tích tâm lý",
-  "platformNotes": "Lưu ý tone & mood",
-  "primaryContent": "Nội dung chính",
+  "rationale": "Phân tích tâm lý đối tượng và lý do lựa chọn góc tiếp cận",
+  "platformNotes": "Lưu ý thuật toán hiển thị & tương tác",
+  "primaryContent": "Nội dung bài viết/comment xuất sắc nhất",
   "variations": [
-    "Mẫu 1 (Đồng cảm & Storytelling): ...",
-    "Mẫu 2 (Phản biện & Reframe đa chiều): ...",
-    "Mẫu 3 (Trắc nghiệm & Test 1-1 miễn phí): ..."
+    "Mẫu 1 (Tự sự - Đồng cảm sâu sắc): ...",
+    "Mẫu 2 (Phản biện - Góc nhìn mới lạ): ...",
+    "Mẫu 3 (Giá trị cộng đồng - Trắc nghiệm / Test 1-1 phi lợi nhuận): ...",
+    "Mẫu 4 (Chuyên gia thực chiến - Đúc kết kinh nghiệm): ..."
   ],
+  "firstCommentSeed": "Mẫu bình luận ghim mồi chứa link bài test/đăng ký dưới bài viết Facebook (nếu là bài FB)",
   "dmFollowUpScript": {
     "step1_empathy": "Lời mở đầu trong DM...",
     "step2_qualifyQuestion": "Câu hỏi đào sâu...",
@@ -127,13 +141,12 @@ Trả về JSON đúng cấu trúc:
   parts.push({ text: promptText });
 
   const modelsToTry = [
-    modelName,
-    'gemini-3.6-flash',
     'gemini-3.7-flash',
+    'gemini-3.6-flash',
     'gemini-3.5-flash',
     'gemini-flash-latest',
     'gemini-3.1-flash-lite',
-  ].filter((v, i, a) => a.indexOf(v) === i);
+  ];
 
   let parsed: any = null;
   let lastErrMessage = '';
@@ -197,12 +210,13 @@ Trả về JSON đúng cấu trúc:
     id: `gen-${Date.now()}`,
     orderId: params.orderType,
     orderTitle: params.orderType,
-    platform: 'Social',
+    platform: isFacebookPost ? 'Facebook' : 'Social',
     programId: parsed.selectedProgramId || '',
     programTitle: parsed.selectedProgramTitle || '',
     programType: (parsed.selectedProgramType as ProgramType) || 'ws',
     primaryContent: parsed.primaryContent || variationsList[0] || '',
     variations: variationsList,
+    firstCommentSeed: parsed.firstCommentSeed || (isFacebookPost ? 'Link bài test và thông tin chi tiết mình để ở bình luận này nhé mọi người ơi: [Link_Đăng_Ký]' : undefined),
     dmFollowUpScript: parsed.dmFollowUpScript || {
       step1_empathy: '',
       step2_qualifyQuestion: '',
@@ -212,6 +226,81 @@ Trả về JSON đúng cấu trúc:
     platformNotes: parsed.platformNotes || '',
     createdAt: new Date().toISOString(),
   };
+}
+
+// === Tinh Chỉnh Nội Dung Hội Thoại Trực Tiếp (Interactive Refinement Chat) ===
+export async function refineContentAI(params: {
+  currentContent: string;
+  instruction: string;
+  orderTitle?: string;
+  programTitle?: string;
+}): Promise<{ refinedContent: string; explanation: string }> {
+  const apiKey = getApiKey();
+  if (!apiKey || apiKey.trim() === '') {
+    throw new Error('Vui lòng cung cấp Gemini API Key để tinh chỉnh nội dung.');
+  }
+
+  const systemInstruction = `Bạn là Chuyên gia Social Media & Content Copywriter hơn 20 năm kinh nghiệm.
+Nhiệm vụ: Nhận nội dung hiện tại và yêu cầu chỉnh sửa từ người dùng, sau đó tinh chỉnh lại bài viết/comment cho thật tự nhiên, hấp dẫn, đúng yêu cầu và giữ vững chuyển đổi cao.
+QUY TẮC:
+- CẤM dùng văn mẫu AI sáo rỗng.
+- Thực hiện chính xác yêu cầu (viết dài hơn, ngắn lại, thêm cam kết phi lợi nhuận, đổi giọng văn, v.v.).
+Xuất JSON:
+{
+  "refinedContent": "Nội dung bài viết mới sau khi chỉnh sửa",
+  "explanation": "Tóm tắt ngắn gọn 1 câu về điểm đã được điều chỉnh"
+}`;
+
+  const promptText = `Nội dung hiện tại:
+"""
+${params.currentContent}
+"""
+
+Yêu cầu điều chỉnh từ người dùng:
+"${params.instruction}"
+${params.orderTitle ? `Thể loại: ${params.orderTitle}` : ''}
+${params.programTitle ? `Dự án liên quan: ${params.programTitle}` : ''}`;
+
+  const modelsToTry = [
+    'gemini-3.7-flash',
+    'gemini-3.6-flash',
+    'gemini-3.5-flash',
+    'gemini-flash-latest',
+  ];
+
+  let lastErr = '';
+  for (const model of modelsToTry) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: promptText }] }],
+          systemInstruction: { parts: [{ text: systemInstruction }] },
+          generationConfig: { responseMimeType: 'application/json', temperature: 0.7 },
+        }),
+      });
+
+      if (!res.ok) {
+        lastErr = await res.text();
+        continue;
+      }
+
+      const data = await res.json();
+      const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+      const clean = raw.replace(/```json\s*/i, '').replace(/```\s*$/, '').trim();
+      const parsed = JSON.parse(clean);
+      return {
+        refinedContent: parsed.refinedContent || clean,
+        explanation: parsed.explanation || 'Đã cập nhật bài viết theo yêu cầu.',
+      };
+    } catch (e: any) {
+      lastErr = e.message || String(e);
+    }
+  }
+
+  throw new Error(`Không thể tinh chỉnh nội dung: ${lastErr}`);
 }
 
 export async function extractProgramAI(params: {

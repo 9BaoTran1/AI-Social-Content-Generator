@@ -36,10 +36,15 @@ import {
   Zap,
   Download,
   SendHorizontal,
-  Key
+  Key,
+  BookmarkPlus,
+  Pin,
+  Send,
+  Loader2,
+  MessageSquare,
 } from 'lucide-react';
-import { saveHistoryItem } from '../lib/storage';
-import { generateOrderAI, getApiKey, setApiKey } from '../lib/aiService';
+import { saveHistoryItem, saveCustomBenchmarkTemplate } from '../lib/storage';
+import { generateOrderAI, getApiKey, setApiKey, refineContentAI } from '../lib/aiService';
 
 interface GeneratorWorkbenchProps {
   programs: ProgramItem[];
@@ -50,6 +55,11 @@ interface GeneratorWorkbenchProps {
 }
 
 const QUICK_IDEAS = [
+  {
+    label: 'Dân Content & Well-being (FB Dài)',
+    orderType: 'order_3' as OrderType,
+    text: 'Sáng tạo hết mình, bay bổng cùng ý tưởng: Dân Content đang duy trì cảm hứng như thế nào? Dự án cộng đồng phi lợi nhuận kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5, không bán khóa học, không PR lùa gà, kèm tư vấn bác sĩ 1-1.',
+  },
   {
     label: 'Khủng hoảng 25 tuổi',
     orderType: 'order_1' as OrderType,
@@ -89,7 +99,6 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
     }
   }, [initialContext]);
   const [selectedProgramId, setSelectedProgramId] = useState<string>('auto');
-  const [modelSelection, setModelSelection] = useState<AIModelOption>('gemini-2.5-flash');
   const [writingTone, setWritingTone] = useState<WritingToneOption>('empathy_story');
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const [includeLink, setIncludeLink] = useState<boolean>(false);
@@ -112,6 +121,14 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [inlineApiKey, setInlineApiKey] = useState<string>('');
 
+  // Interactive Refinement state (Chat tiếp để chỉnh sửa theo ý muốn)
+  const [refineInstruction, setRefineInstruction] = useState<string>('');
+  const [isRefining, setIsRefining] = useState<boolean>(false);
+  const [refineExplanation, setRefineExplanation] = useState<string | null>(null);
+
+  // Save to Benchmark status
+  const [savedBenchmarkIdx, setSavedBenchmarkIdx] = useState<number | null>(null);
+
   const copyWithFeedback = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
@@ -123,22 +140,57 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
 
   const isFacebook = currentOrderMeta.platform === 'Facebook';
 
-  // Filter programs based on order restrictions
-  const filteredPrograms = programs.filter((p) => {
-    if (!p.isActive) return false;
-    if (isFacebook) return p.type === 'ws'; // Strictly WS only for FB
-    return true;
-  });
+  // Allow ALL active programs freely on Facebook & other platforms (No restriction)
+  const filteredPrograms = programs.filter((p) => p.isActive !== false);
 
-  // Auto reset program if switching to FB and CT was selected
-  useEffect(() => {
-    if (isFacebook && selectedProgramId !== 'auto') {
-      const selected = programs.find((p) => p.id === selectedProgramId);
-      if (selected && selected.type === 'ct') {
-        setSelectedProgramId('auto');
-      }
+  const handleSaveToBenchmark = (variationText: string, idx: number) => {
+    if (!generatedResult) return;
+    saveCustomBenchmarkTemplate({
+      id: `custom-bm-${Date.now()}-${idx}`,
+      platform: generatedResult.platform,
+      category: generatedResult.orderTitle,
+      title: `${generatedResult.orderTitle} - ${generatedResult.programTitle || 'Bài Mẫu'} (Mẫu ${idx + 1})`,
+      content: variationText,
+      firstCommentSeed: generatedResult.firstCommentSeed,
+      keyInsight: generatedResult.rationale,
+      tags: [generatedResult.platform, generatedResult.orderId, 'Custom Benchmark'],
+      isCustom: true,
+    });
+    setSavedBenchmarkIdx(idx);
+    setTimeout(() => setSavedBenchmarkIdx(null), 3000);
+  };
+
+  const handleRefine = async () => {
+    if (!generatedResult || !refineInstruction.trim()) return;
+    setIsRefining(true);
+    setRefineExplanation(null);
+
+    const currentText = generatedResult.variations[activeVariationIndex] || generatedResult.primaryContent;
+    try {
+      const res = await refineContentAI({
+        currentContent: currentText,
+        instruction: refineInstruction.trim(),
+        orderTitle: generatedResult.orderTitle,
+        programTitle: generatedResult.programTitle,
+      });
+
+      const updatedVariations = [...generatedResult.variations];
+      updatedVariations[activeVariationIndex] = res.refinedContent;
+
+      setGeneratedResult({
+        ...generatedResult,
+        variations: updatedVariations,
+        primaryContent: activeVariationIndex === 0 ? res.refinedContent : generatedResult.primaryContent,
+      });
+
+      setRefineExplanation(res.explanation);
+      setRefineInstruction('');
+    } catch (err: any) {
+      alert(err.message || 'Không thể tinh chỉnh bài viết.');
+    } finally {
+      setIsRefining(false);
     }
-  }, [selectedOrderType, isFacebook, selectedProgramId, programs]);
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -395,7 +447,7 @@ ${generatedResult.rationale}
                   }`}
                 >
                   <option value="auto">✨ AI tự động chọn WS/CT phù hợp nhất với ngữ cảnh</option>
-                  <optgroup label={isFacebook ? 'Workshops Khả Dụng (FB chỉ chạy WS)' : 'Workshops & Chương Trình'}>
+                  <optgroup label="Tất Cả Workshops & Chương Trình Khả Dụng">
                     {filteredPrograms.map((p) => (
                       <option key={p.id} value={p.id}>
                         [{p.type === 'ws' ? 'Workshop (WS)' : 'Chương trình (CT)'}] {p.title}
@@ -407,115 +459,49 @@ ${generatedResult.rationale}
               </div>
             </div>
 
-            {/* AI Model & Tone Style Bar */}
+            {/* Tone & Writing Style */}
             <div
-              className={`p-3 rounded-xl border space-y-2.5 ${
+              className={`p-3 rounded-xl border space-y-2 ${
                 isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span
+                <label
                   className={`text-[11px] font-bold flex items-center gap-1.5 ${
                     isDark ? 'text-slate-200' : 'text-slate-800'
                   }`}
                 >
-                  <Cpu className="w-3.5 h-3.5 text-indigo-600" />
-                  <span>Model AI & Công nghệ xử lý</span>
-                </span>
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Định hướng phong cách & Giọng văn:</span>
+                </label>
                 <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  Sẵn sàng 100%
+                  Cascade Model Tự Động
                 </span>
               </div>
 
-              {/* Model selection pills */}
-              <div className="grid grid-cols-3 gap-1 text-[11px]">
-                <button
-                  type="button"
-                  onClick={() => setModelSelection('gemini-3.6-flash')}
-                  className={`p-1.5 rounded-lg border text-center transition-all cursor-pointer ${
-                    modelSelection === 'gemini-3.6-flash'
-                      ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-2xs'
-                      : isDark
-                      ? 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  <div className="flex items-center justify-center gap-1">
-                    <Zap className="w-3 h-3 text-amber-400" />
-                    <span>Gemini 3.6</span>
-                  </div>
-                  <span className="text-[9px] opacity-80 block font-normal">Siêu tốc 1s (Mặc định)</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setModelSelection('gemini-3.7-flash')}
-                  className={`p-1.5 rounded-lg border text-center transition-all cursor-pointer ${
-                    modelSelection === 'gemini-3.7-flash'
-                      ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-2xs'
-                      : isDark
-                      ? 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  <div className="flex items-center justify-center gap-1">
-                    <Sparkles className="w-3 h-3 text-indigo-300" />
-                    <span>Gemini 3.7</span>
-                  </div>
-                  <span className="text-[9px] opacity-80 block font-normal">Chất lượng cao nhất</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setModelSelection('gemini-3.7-flash-thinking')}
-                  className={`p-1.5 rounded-lg border text-center transition-all cursor-pointer ${
-                    modelSelection === 'gemini-3.7-flash-thinking'
-                      ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-2xs'
-                      : isDark
-                      ? 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  <div className="flex items-center justify-center gap-1">
-                    <Brain className="w-3 h-3 text-amber-300" />
-                    <span>3.7 Thinking</span>
-                  </div>
-                  <span className="text-[9px] opacity-80 block font-normal">Tư duy tâm lý sâu</span>
-                </button>
-              </div>
-
-              {/* Tone style dropdown */}
-              <div className="pt-1">
-                <label
-                  className={`text-[11px] font-medium block mb-1 ${
-                    isDark ? 'text-slate-400' : 'text-slate-600'
-                  }`}
-                >
-                  Định hướng giọng văn (Tone & Angle):
-                </label>
-                <select
-                  value={writingTone}
-                  onChange={(e) => setWritingTone(e.target.value as WritingToneOption)}
-                  className={`w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer ${
-                    isDark
-                      ? 'bg-slate-900 border-slate-800 text-slate-200'
-                      : 'bg-white border-slate-300 text-slate-800'
-                  }`}
-                >
-                  <option value="empathy_story">💬 Tâm sự tự sự & Đồng cảm sâu sắc (Storytelling)</option>
-                  <option value="workplace_insight">🏢 Đa chiều & Phân tích tâm lý công sở (Reframe góc nhìn)</option>
-                  <option value="provocative_reframe">⚡ Phản biện bẻ khóa định kiến (Aha Moment)</option>
-                  <option value="assessment_test">📋 Khơi gợi bài test & Trắc nghiệm 1-1 miễn phí</option>
-                </select>
-              </div>
+              <select
+                value={writingTone}
+                onChange={(e) => setWritingTone(e.target.value as WritingToneOption)}
+                className={`w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer ${
+                  isDark
+                    ? 'bg-slate-900 border-slate-800 text-slate-200'
+                    : 'bg-white border-slate-300 text-slate-800'
+                }`}
+              >
+                <option value="empathy_story">💬 Tự sự & Đồng cảm sâu sắc (Storytelling chạm tim)</option>
+                <option value="workplace_insight">🏢 Phân tích tâm lý công sở & Reframe góc nhìn mới lạ</option>
+                <option value="provocative_reframe">⚡ Phản biện bẻ khóa định kiến (Góc nhìn độc bản)</option>
+                <option value="assessment_test">📋 Giá trị cộng đồng - Trắc nghiệm / Test 1-1 phi lợi nhuận</option>
+              </select>
             </div>
 
-            {/* Input Context & Prompt */}
-            <div className="space-y-1.5">
+            {/* Hộp Ý Tưởng, Từ Khóa & Bối Cảnh Toàn Năng (Unified Smart Composer) */}
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className={`text-xs font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-                  Ý tưởng / Ngữ cảnh clip / Nỗi đau người xem <span className="text-rose-500">*</span>
+                <label className={`text-xs font-bold flex items-center gap-1.5 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                  <span>Hộp Ý Tưởng, Từ Khóa & Bối Cảnh Toàn Năng</span>
+                  <span className="text-rose-500">*</span>
                 </label>
                 {context && (
                   <button
@@ -533,8 +519,8 @@ ${generatedResult.rationale}
               <textarea
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
-                placeholder="Ví dụ: Clip nói về nỗi sợ tuổi 25, làm nhiều việc nhưng không tự tin, muốn tìm lộ trình định vị bản thân rõ ràng..."
-                rows={4}
+                placeholder="Dán toàn bộ những gì bạn có vào đây: ý tưởng thô, từ khóa chính, bối cảnh clip/bài viết hoặc nỗi trăn trở của đối tượng mục tiêu. AI sẽ tự động liên kết thành content hoàn chỉnh..."
+                rows={5}
                 className={`w-full border rounded-xl p-3 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 leading-relaxed font-sans ${
                   isDark
                     ? 'bg-slate-950 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-indigo-500'
@@ -542,10 +528,10 @@ ${generatedResult.rationale}
                 }`}
               />
 
-              {/* Quick Idea Chips */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pt-1 no-scrollbar">
-                <span className={`text-[10px] whitespace-nowrap ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                  Ý tưởng nhanh:
+              {/* Quick Idea & Keyword Helper Chips */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pt-0.5 no-scrollbar">
+                <span className={`text-[10px] font-semibold whitespace-nowrap ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                  Gợi ý nhanh:
                 </span>
                 {QUICK_IDEAS.map((idea, i) => (
                   <button
@@ -818,7 +804,7 @@ ${generatedResult.rationale}
               ) : (
                 <>
                   <Sparkles className="w-4 h-4" />
-                  <span>Tạo 3 Phương Án & Kịch Bản DM</span>
+                  <span>Tạo 4 Phong Cách & Kịch Bản DM</span>
                 </>
               )}
             </button>
@@ -875,7 +861,7 @@ ${generatedResult.rationale}
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    3 Phương Án
+                    4 Phong Cách Bài Viết
                   </button>
                   <button
                     onClick={() => setResultTab('dm_script')}
@@ -911,7 +897,7 @@ ${generatedResult.rationale}
                     type="button"
                     onClick={() => handleGenerate(true)}
                     disabled={isLoading}
-                    title="Gọi AI suy luận sâu và tạo lại 3 phương án với góc nhìn hoàn toàn mới"
+                    title="Gọi AI đổi góc nhìn và tạo lại các phương án mới"
                     className={`px-2.5 py-1 text-xs font-semibold rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
                       isDark
                         ? 'bg-slate-950 hover:bg-slate-800 text-amber-300 border-amber-800/60'
@@ -939,12 +925,12 @@ ${generatedResult.rationale}
                     {copiedId === 'copy-all-vars' ? (
                       <>
                         <Check className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="text-emerald-600 font-semibold">Đã chép cả 3</span>
+                        <span className="text-emerald-600 font-semibold">Đã chép tất cả mẫu</span>
                       </>
                     ) : (
                       <>
                         <Copy className="w-3.5 h-3.5 text-slate-500" />
-                        <span>Sao chép cả 3 mẫu</span>
+                        <span>Sao chép tất cả</span>
                       </>
                     )}
                   </button>
@@ -964,62 +950,204 @@ ${generatedResult.rationale}
                 </button>
               </div>
 
-              {/* TAB 1: 3 Content Variations */}
+              {/* TAB 1: 4 Content Variations */}
               {resultTab === 'variations' && (
-                <div className="space-y-3">
-                  {generatedResult.variations.map((variation, idx) => (
+                <div className="space-y-4">
+                  {/* First Comment Seed Highlight (Facebook Posts) */}
+                  {generatedResult.firstCommentSeed && (
                     <div
-                      key={idx}
-                      className={`border rounded-xl p-4 space-y-2 transition-colors ${
-                        isDark
-                          ? 'bg-slate-950 border-slate-800/90 hover:border-slate-700'
-                          : 'bg-slate-50/80 border-slate-200 hover:border-slate-300'
+                      className={`p-3.5 rounded-xl border space-y-1.5 ${
+                        isDark ? 'bg-amber-950/25 border-amber-900/40 text-amber-200' : 'bg-amber-50/80 border-amber-200 text-amber-900'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-indigo-600">
-                          Phương án {idx + 1}
+                        <span className="text-xs font-bold flex items-center gap-1.5 text-amber-700 dark:text-amber-300">
+                          <Pin className="w-3.5 h-3.5 text-amber-500" />
+                          Bình luận ghim mồi đặt link (Tránh bóp reach Facebook):
                         </span>
                         <button
-                          onClick={() => copyWithFeedback(variation, `var-${idx}`)}
-                          className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all flex items-center gap-1.5 cursor-pointer ${
-                            isDark
-                              ? 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80'
-                              : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300 shadow-2xs'
-                          }`}
+                          onClick={() => copyWithFeedback(generatedResult.firstCommentSeed!, 'cmt-seed')}
+                          className="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white flex items-center gap-1 cursor-pointer transition-all shadow-2xs"
                         >
-                          {copiedId === `var-${idx}` ? (
+                          {copiedId === 'cmt-seed' ? (
                             <>
-                              <Check className="w-3.5 h-3.5 text-emerald-600" />
-                              <span className="text-emerald-600 font-semibold">Đã sao chép</span>
+                              <Check className="w-3 h-3" />
+                              <span>Đã chép cmt</span>
                             </>
                           ) : (
                             <>
-                              <Copy className="w-3.5 h-3.5 text-slate-400" />
-                              <span>Sao chép</span>
+                              <Copy className="w-3 h-3" />
+                              <span>Sao chép cmt</span>
                             </>
                           )}
                         </button>
                       </div>
-
-                      <p
-                        className={`text-xs leading-relaxed whitespace-pre-line font-sans select-all ${
-                          isDark ? 'text-slate-200' : 'text-slate-800'
-                        }`}
-                      >
-                        {variation}
+                      <p className="text-xs font-mono select-all whitespace-pre-line leading-relaxed opacity-95">
+                        {generatedResult.firstCommentSeed}
                       </p>
-
-                      <div
-                        className={`text-[10px] pt-2 flex items-center justify-between border-t ${
-                          isDark ? 'text-slate-500 border-slate-900' : 'text-slate-400 border-slate-200'
-                        }`}
-                      >
-                        <span>{variation.length} ký tự</span>
-                        <span>Tone chuẩn {generatedResult.platform}</span>
-                      </div>
                     </div>
-                  ))}
+                  )}
+
+                  {/* List of Variations */}
+                  <div className="space-y-3">
+                    {generatedResult.variations.map((variation, idx) => {
+                      const styleNames = [
+                        'Mẫu 1: Tự Sự & Đồng Cảm Sâu Sắc (Storytelling)',
+                        'Mẫu 2: Phản Biện & Góc Nhìn Mới Lạ (Reframe)',
+                        'Mẫu 3: Giá Trị Cộng Đồng - Trắc Nghiệm / Test 1-1',
+                        'Mẫu 4: Chuyên Gia Thực Chiến & Đúc Kết Kinh Nghiệm',
+                      ];
+                      const styleTitle = styleNames[idx] || `Mẫu ${idx + 1}`;
+                      const isSelectedForRefine = activeVariationIndex === idx;
+
+                      return (
+                        <div
+                          key={idx}
+                          onClick={() => setActiveVariationIndex(idx)}
+                          className={`border rounded-xl p-4 space-y-2.5 transition-all cursor-pointer ${
+                            isSelectedForRefine
+                              ? isDark
+                                ? 'bg-slate-950 border-indigo-500/80 ring-1 ring-indigo-500/50'
+                                : 'bg-indigo-50/30 border-indigo-400 ring-1 ring-indigo-200'
+                              : isDark
+                              ? 'bg-slate-950/70 border-slate-800/90 hover:border-slate-700'
+                              : 'bg-slate-50/80 border-slate-200 hover:border-slate-300'
+                          }`}
+                        >
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                                {styleTitle}
+                              </span>
+                              {isSelectedForRefine && (
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-600 text-white font-semibold">
+                                  Đang chọn chỉnh sửa
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                              {/* Save to Benchmark Library */}
+                              <button
+                                onClick={() => handleSaveToBenchmark(variation, idx)}
+                                title="Lưu bài viết này vào Kho Mẫu Chuển để dùng lại"
+                                className={`px-2 py-1 rounded-lg text-[11px] font-semibold border transition-all flex items-center gap-1 cursor-pointer ${
+                                  savedBenchmarkIdx === idx
+                                    ? 'bg-amber-500 text-white border-amber-500'
+                                    : isDark
+                                    ? 'bg-slate-900 hover:bg-slate-800 text-amber-400 border-amber-900/60'
+                                    : 'bg-white hover:bg-amber-50 text-amber-700 border-amber-200'
+                                }`}
+                              >
+                                <BookmarkPlus className="w-3 h-3 text-amber-500" />
+                                <span>{savedBenchmarkIdx === idx ? 'Đã lưu kho!' : 'Lưu vào Kho Mẫu'}</span>
+                              </button>
+
+                              {/* Copy Button */}
+                              <button
+                                onClick={() => copyWithFeedback(variation, `var-${idx}`)}
+                                className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all flex items-center gap-1 cursor-pointer ${
+                                  isDark
+                                    ? 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80'
+                                    : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300 shadow-2xs'
+                                }`}
+                              >
+                                {copiedId === `var-${idx}` ? (
+                                  <>
+                                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                    <span className="text-emerald-600 font-semibold">Đã sao chép</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy className="w-3.5 h-3.5 text-slate-400" />
+                                    <span>Sao chép</span>
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+
+                          <p
+                            className={`text-xs leading-relaxed whitespace-pre-line font-sans select-all ${
+                              isDark ? 'text-slate-200' : 'text-slate-800'
+                            }`}
+                          >
+                            {variation}
+                          </p>
+
+                          <div
+                            className={`text-[10px] pt-2 flex items-center justify-between border-t ${
+                              isDark ? 'text-slate-500 border-slate-900' : 'text-slate-400 border-slate-200'
+                            }`}
+                          >
+                            <span>{variation.length} ký tự</span>
+                            <span className="italic text-indigo-500">Bấm vào bài viết để chọn tinh chỉnh qua Chat</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Interactive Refinement Chat (Chat tiếp để chỉnh theo ý muốn) */}
+                  <div
+                    className={`border rounded-xl p-4 space-y-3 ${
+                      isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-indigo-50/40 border-indigo-100'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
+                          <MessageSquare className="w-3.5 h-3.5" />
+                        </div>
+                        <span className={`text-xs font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                          Chat Tinh Chỉnh Với Chuyên Gia Content (20+ Năm Kinh Nghiệm)
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-medium">
+                        Đang sửa: <strong>Mẫu {activeVariationIndex + 1}</strong>
+                      </span>
+                    </div>
+
+                    {refineExplanation && (
+                      <div className="p-2 rounded-lg text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5 shrink-0" />
+                        <span>{refineExplanation}</span>
+                      </div>
+                    )}
+
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={refineInstruction}
+                        onChange={(e) => setRefineInstruction(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && !isRefining && handleRefine()}
+                        placeholder="Ví dụ: Viết dài hơn, thêm cam kết không bán khóa học mạnh hơn, đổi tone hài hước..."
+                        className={`flex-1 border rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 ${
+                          isDark
+                            ? 'bg-slate-900 border-slate-800 text-slate-200 placeholder-slate-500'
+                            : 'bg-white border-slate-300 text-slate-900 placeholder-slate-400 shadow-2xs'
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={handleRefine}
+                        disabled={isRefining || !refineInstruction.trim()}
+                        className="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white flex items-center gap-1.5 cursor-pointer shadow-xs transition-all"
+                      >
+                        {isRefining ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>Đang tinh chỉnh...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-3.5 h-3.5" />
+                            <span>Chỉnh sửa</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
 

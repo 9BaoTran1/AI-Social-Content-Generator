@@ -448,5 +448,25 @@ Nhưng sau này mình mới nhận ra: Chạy theo tốc độ của người kh
 Hiểu rõ nhịp độ và thế mạnh cốt lõi của chính mình mới là cách bền vững nhất.
 
 Nếu bạn cũng đang loay hoay trong khoảng thời gian này, mình có 1 bài đánh giá định hướng 1-1 khá hay, bạn nào cần thì nhắn mình nhé.`
+  },
+  {
+    id: 'bm-fb-longform-creator-wellbeing',
+    platform: 'Facebook',
+    category: 'Bài Viết Facebook Long-Form (Dự Án Cộng Đồng)',
+    title: 'Facebook Long-Form: Dân Content Duy Trì Cảm Hứng & Test Sức Khỏe Tinh Thần WHO-5',
+    tags: ['Facebook', 'Long-form', 'Dân Content', 'Well-being', 'Phi lợi nhuận'],
+    keyInsight: 'Mẫu chuẩn bài viết Facebook dài: Hook in hoa giật tít chân thật -> Thấu hiểu nỗi đau nghề nghiệp -> Khẳng định dự án cộng đồng phi lợi nhuận (không bán khóa học, không lùa gà) -> Kêu gọi làm bài test WHO-5 -> Dẫn link ở bình luận ghim mồi.',
+    firstCommentSeed: `Link bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 ở đây nhé anh em: https://tally.so/r/wellbeing-test (Hoàn toàn miễn phí, làm xong có bác sĩ hỗ trợ giải đáp 1-1 nha mọi người ơi ❤️)`,
+    content: `Sáng tạo hết mình, bay bổng cùng ý tưởng: Dân Content ĐANG DUY TRÌ nguồn cảm hứng NHƯ THẾ NÀO?
+
+Làm công việc sáng tạo hay tự do nhận dự án thực sự mang lại sự hứng khởi rất lớn. Khi cảm xúc thăng hoa, tâm trí thoải mái thì ý tưởng tuôn chảy cực kỳ mượt mà. Tuy nhiên, muốn giữ được nguồn cảm hứng dồi dào và tư duy sáng tạo sắc bén lâu dài, bệ phóng quan trọng nhất chính là một cơ thể khỏe mạnh cùng một tinh thần thật thảnh thơi.
+
+Nhận thấy việc nuôi dưỡng cảm xúc và tái tạo năng lượng là chìa khóa vàng cho anh em làm sáng tạo, mình cùng đồng đội làm một dự án cộng đồng hoàn toàn phi lợi nhuận. Mục đích thuần túy là muốn chia sẻ giá trị, đồng hành cùng anh em để giữ lửa nghề bền bỉ hơn. Mình khẳng định luôn là không bán khóa học, không PR lùa gà hay kinh doanh sản phẩm gì ở đây hết nhé, ai nghĩ vậy thì lướt qua giùm cho đỡ mất thời gian đôi bên ạ.
+
+Kỳ nghỉ lễ 2/9 này là cơ hội tuyệt vời để dân sáng tạo mình chậm lại một chút, refresh lại tâm trí và nạp đầy pin cho những ý tưởng bứt phá sắp tới.
+
+Bên mình đang triển khai bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa theo bộ chỉ số Well-being (WHO-5). Link bài đánh giá mình để ngay dưới phần bình luận, anh em cứ làm thử để lắng nghe lại cảm xúc cá nhân xem sao nhé. Nếu kết quả phù hợp, bên mình sẽ hỗ trợ giải đáp chuyên sâu cùng sự tư vấn từ bác sĩ để giúp anh em tối ưu lại nhịp sinh hoạt và duy trì phong độ sáng tạo tốt nhất.
+
+Mn nào muốn tranh thủ đợt nghỉ này làm mới lại nguồn năng lượng sáng tạo thì ghé xuống bình luận trải nghiệm thử nhé!`
   }
 ];

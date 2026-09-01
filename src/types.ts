@@ -75,6 +75,7 @@ export interface GeneratedContent {
   programType: ProgramType;
   primaryContent: string;
   variations: string[];
+  firstCommentSeed?: string; // Bình luận mồi chứa link cho bài Facebook
   dmFollowUpScript: DmFollowUpScript;
   rationale: string;
   platformNotes: string;
@@ -99,4 +100,6 @@ export interface SampleTemplate {
   content: string;
   tags: string[];
   keyInsight: string;
+  firstCommentSeed?: string;
+  isCustom?: boolean;
 }
