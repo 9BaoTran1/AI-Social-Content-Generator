@@ -396,6 +396,8 @@ export function extractBenchmarkFallback(params: {
     programType: prog?.type || 'ws',
     primaryContent: primaryTmpl.content,
     variations: variationsList,
+    appliedTone: params.options?.tone || 'empathy_story',
+    customTone: params.options?.customTone,
     firstCommentSeed: firstComment,
     dmFollowUpScript: {
       step1_empathy: 'Chào bạn, mình thấy bạn vừa để lại tương tác trên bài viết. Mình nhắn để gửi bạn tài liệu/bài test như đã hẹn nhé.',
@@ -849,8 +851,8 @@ Sứ mệnh của bạn: Trực tiếp điều phối và hợp nhất năng l�
    - Nguyên tắc: Hạ thấp bản thân, đồng cảm sâu sắc, không phán xét, không giáo điều, không lên gân dạy đời.
 3. [Paradigm Shift & Reframe Specialist]:
    - Nhiệm vụ: Bẻ gãy lối mòn tư duy (reframe) bằng góc nhìn phản biện logic, chỉ ra gốc rễ vì sao càng gượng ép càng bế tắc, đưa ra giải pháp giải phóng tâm lý.
-4. [Conversion & 1-on-1 Bridge Specialist]:
-   - Nhiệm vụ: Xây dựng cầu nối chuyển đổi tự nhiên từ comment/post sang inbox/DM và bài test/template tự đánh giá.
+4. [Chuyên Gia Tư Vấn & Kết Nối Chuyển Đổi]:
+   - Nhiệm vụ: Xây dựng cầu nối chuyển đổi tự nhiên từ comment/post sang inbox/DM và bài test/template tự đánh giá, tư vấn riêng nhẹ nhàng.
    - Nguyên tắc: Đưa ra lời mời nhẹ nhàng, tặng miễn phí 100%, tạo cảm giác được lắng nghe và an toàn tuyệt đối.
 5. [Platform Algorithm & Anti-Detection Auditor]:
    - Nhiệm vụ: Kiểm duyệt và triệt tiêu 100% từ ngữ cấm kỵ/AI fluff ("Trong cuộc sống hiện đại...", "Hãy nhớ rằng...", "Hành trình vạn dặm...", "Ngọn hải đăng...").
@@ -879,20 +881,17 @@ ${
   * Mẫu 3 (Trải nghiệm thực tế & Hạ mình chia sẻ): Kể bài học đắt giá bản thân từng gặp phải và cách Workshop/Chương trình giúp tái cấu trúc góc nhìn.
   * Mẫu 4 (Đặt câu hỏi gợi mở & Đổi lăng kính): Đặt câu hỏi kích thích suy ngẫm sâu sắc, gợi ý tham gia WS/CT như một trạm dừng chân làm mới tư duy.`
     : isFacebookPost
-    ? `=== CHIẾN LƯỢC ORDER 3: BÀI VIẾT DÀI FACEBOOK VIRAL (500 - 850 TỪ, GIỮ DWELL TIME & SHARE TỰ NHIÊN) ===
-1. TIÊU ĐỀ IN HOA / HOOK GỢI CẢM XÚC MẠNH: Câu hỏi nhức nhối hoặc một nghịch lý trần trụi chạm đúng tim đen người làm nghề (VD: "SÁNG TẠO HẾT MÌNH, BAY BỔNG CÙNG Ý TƯỞNG: DÂN CONTENT ĐANG DUY TRÌ NGUỒN CẢM HỨNG NHƯ THẾ NÀO KHI MỖI ĐÊM ĐỀU BẤT AN VỀ TƯƠNG LAI?").
-2. THỰC TẾ ĐỒNG CẢM & VULNERABLE STORYTELLING: Kể câu chuyện chân thực, miêu tả chi tiết áp lực deadline, kiệt sức thầm lặng, cảm giác so sánh ngầm với bạn bè trên MXH mà không phán xét, không giáo điều.
-3. PHẢN BIỆN BẺ GÃY LỐI MÒN (PARADIGM SHIFT): Phân tích vì sao càng gượng ép càng bế tắc. Nền tảng cốt lõi của sự thăng hoa là phục hồi năng lượng thể chất và sự thấu suốt bản thân.
-4. TUYÊN BỐ DỰ ÁN CỘNG ĐỒNG PHI LỢI NHUẬN (100% MINH BẠCH TẠO NIỀM TIN): Bắt buộc có đoạn cam kết dứt khoát:
-   "Mình cùng đồng đội làm một dự án cộng đồng hoàn toàn phi lợi nhuận. Mục đích thuần túy là muốn chia sẻ giá trị, đồng hành cùng anh em để giữ lửa nghề bền bỉ hơn. Mình khẳng định luôn là KHÔNG bán khóa học, KHÔNG PR lùa gà hay kinh doanh sản phẩm gì ở đây hết nhé, ai nghĩ vậy thì lướt qua giùm cho đỡ mất thời gian đôi bên ạ."
-5. CÔNG CỤ TỰ ĐÁNH GIÁ CHUẨN KHOA HỌC: Giới thiệu bài test đo lường sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 (Well-being index) hoặc bản đồ định vị thế mạnh, có bác sĩ/chuyên gia hỗ trợ giải đáp kín đáo.
-6. CTA HƯỚNG VỀ FIRST COMMENT: Mời độc giả ghé xuống phần bình luận để nhận link (tuyệt đối không gắn link trên caption bài viết để tránh Facebook bóp reach 80%).
-7. XUẤT 'firstCommentSeed': Bình luận ghim mồi đặt link bài test chân tình, tự nhiên.
-- YÊU CẦU 4 BIẾN THỂ (VARIATIONS - MỖI BÀI 500-850 TỪ):
-  * Mẫu 1 (Tự sự - Nỗi đau kiệt sức & Well-being): Khắc họa kiệt sức thầm lặng của người làm nghề, kêu gọi lắng nghe cơ thể, test WHO-5.
-  * Mẫu 2 (Phản biện - Nghịch lý nghề nghiệp & Thấu suốt con người thật): Bẻ gãy bẫy so sánh và bận rộn mù quáng, tái định vị bản thân.
-  * Mẫu 3 (Dự án cộng đồng phi lợi nhuận & Khảo sát WHO-5): Cam kết đanh thép phi lợi nhuận, đồng hành gỡ rối tâm lý cùng bác sĩ.
-  * Mẫu 4 (Chuyên gia thực chiến - Đúc kết chuyển hóa & Sức bền): Góc nhìn cố vấn 20 năm, giải pháp nuôi dưỡng năng lực nội tại.`
+    ? `=== CHIẾN LƯỢC ORDER 3: BÀI VIẾT FACEBOOK HOÀN CHỈNH (LONG-FORM 500 - 900 TỪ, TUYỆT ĐỐI KHÔNG PHẢI LÀ COMMENT) ===
+⚠️ QUY TẮC BẮT BUỘC ĐẶC BIỆT QUAN TRỌNG:
+- ĐÂY LÀ BÀI VIẾT FACEBOOK ĐẦY ĐỦ VÀ HOÀN CHỈNH (POST DÀI 500 - 900 TỪ), TUYỆT ĐỐI KHÔNG ĐƯỢC VIẾT THÀNH ĐOẠN BÌNH LUẬN (COMMENT) NGẮN 3-5 DÒNG!
+- MỖI BÀI VIẾT PHẢI CÓ ĐẦY ĐỦ CÁC PHẦN RÕ RÀNG:
+  1. TIÊU ĐỀ IN HOA & HOOK 3S ĐẮT GIÁ: Chạm trúng tim đen hoặc nghịch lý thực tế người đi làm/người trẻ tuổi 20-39.
+  2. MỞ ĐẦU & THÂN BÀI CHIA NHIỀU ĐOẠN ĐỜI THƯỜNG: Kể câu chuyện chân thực, giàu cảm xúc, phân tích sâu sắc không phán xét, không giáo điều.
+  3. BẺ KHÓA LỐI MÒN TƯ DUY (PARADIGM SHIFT): Chỉ ra nguyên nhân gốc rễ và góc nhìn mới mẻ giúp tháo gỡ bế tắc.
+  4. TUYÊN BỐ DỰ ÁN CỘNG ĐỒNG MINH BẠCH: Khẳng định dự án hoàn toàn phi lợi nhuận, KHÔNG bán khóa học, KHÔNG PR lùa gà hay kinh doanh sản phẩm.
+  5. GIỚI THIỆU BÀI TEST TỰ ĐÁNH GIÁ: Đề xuất bài test định vị thế mạnh / sức khỏe tinh thần có chuyên gia hỗ trợ giải đáp kín đáo.
+  6. LỜI NHẮC XEM BÌNH LUẬN ĐẦU TIÊN (FIRST COMMENT): Mời độc giả ghé xuống phần bình luận để nhận link (tránh Facebook bóp reach khi gắn link trên caption).
+- TOÀN BỘ 4 BIẾN THỂ PHẢI LÀ 4 BÀI VIẾT DÀI HOÀN CHỈNH, ĐƯỢC BIẾN HÓA SÁNG TẠO THEO ĐÚNG PHONG CÁCH NGƯỜI DÙNG ĐÃ CHỌN HOẶC TỰ NHẬP!`
     : isThreadsComment
     ? `=== CHIẾN LƯỢC ORDER 4: COMMENT THREADS (STORYTELLING CHÂN THẬT, CHẠM VÀO TÂM SỰ NỘI TÂM) ===
 - Format: Ngắn gọn (3-5 dòng), ngắt dòng nhịp nhàng chuẩn văn hóa Threads, không hashtag, không màu mè.
@@ -1150,6 +1149,8 @@ Trả về JSON đúng cấu trúc:
       programType: (parsed.selectedProgramType as ProgramType) || 'ws',
       primaryContent: parsed.primaryContent || variationsList[0] || '',
       variations: variationsList,
+      appliedTone: params.options?.tone || 'empathy_story',
+      customTone: params.options?.customTone,
       firstCommentSeed: parsed.firstCommentSeed || (isFacebookPost ? 'Link bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 ở đây nhé anh em: https://tally.so/r/wellbeing-test (Hoàn toàn miễn phí, làm xong có bác sĩ hỗ trợ giải đáp chi tiết nha mọi người ơi ❤️)' : isLinkedInPost ? 'P/S: Với anh/chị Leader hoặc HRBP đang quan tâm đến bộ chỉ số đo lường sức khỏe tổ chức & khung đánh giá Well-being nhân sự, em xin phép để link tài liệu chi tiết tại bình luận này nhé: [Link_Tài_Liệu] (Hoàn toàn mở và có hỗ trợ giải đáp trực tiếp ạ).' : undefined),
       dmFollowUpScript: parsed.dmFollowUpScript || {
         step1_empathy: '',

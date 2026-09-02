@@ -50,11 +50,15 @@ export type AIModelOption =
   | 'gemini-3.7-flash-thinking';
 
 export type WritingToneOption =
-  | 'empathy_story' // Tâm sự tự sự & Đồng cảm sâu sắc
-  | 'humorous' // Hài hước, hóm hỉnh, dí dỏm
-  | 'workplace_insight' // Đa chiều & Phân tích tâm lý công sở
-  | 'provocative_reframe' // Phản biện bẻ khóa góc nhìn (Reframe)
-  | 'assessment_test' // Khơi gợi bài trắc nghiệm tự đánh giá
+  | 'empathy_story' // Tự sự & Tâm tình (Chân thật, chạm cảm xúc)
+  | 'humorous' // Hài hước & Hóm hỉnh (Dí dỏm, duyên dáng, tự trào)
+  | 'workplace_insight' // Phân tích & Thực tế công sở (Góc nhìn nghề nghiệp)
+  | 'provocative_reframe' // Phản biện sắc bén (Bẻ khóa định kiến)
+  | 'thought_leader' // Chuyên gia & Cố vấn (Đĩnh đạc, sâu sắc)
+  | 'healing_gentle' // Nhẹ nhàng & Chữa lành (Thấu cảm, vỗ về)
+  | 'dramatic_suspense' // Kịch tính & Gay cấn (Mở màn nút thắt bất ngờ)
+  | 'gen_z_trend' // Gen Z & Bắt trend viral (Ngôn từ đời thường)
+  | 'assessment_test' // Giá trị cộng đồng (Khơi gợi bài test miễn phí)
   | 'custom'; // Tự nhập phong cách riêng
 
 export interface GenerationOptions {
@@ -109,6 +113,8 @@ export interface GeneratedContent {
   programType: ProgramType;
   primaryContent: string;
   variations: string[];
+  appliedTone?: WritingToneOption;
+  customTone?: string;
   firstCommentSeed?: string; // Bình luận mồi chứa link cho bài Facebook
   dmFollowUpScript: DmFollowUpScript;
   rationale: string;

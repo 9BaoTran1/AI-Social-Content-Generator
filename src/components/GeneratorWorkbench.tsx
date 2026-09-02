@@ -481,6 +481,8 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
 
       result.orderTitle = currentOrderMeta.title;
       result.platform = currentOrderMeta.platform;
+      result.appliedTone = writingTone;
+      result.customTone = writingTone === 'custom' ? customTone.trim() : writingTone === 'humorous' ? 'Hài hước dí dỏm, duyên dáng' : undefined;
 
       // Finish progress animation smoothly
       setProgressPercent(100);
@@ -656,6 +658,12 @@ ${
               <p className={`text-[11px] leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-800'}`}>
                 {currentOrderMeta.description}
               </p>
+              {selectedOrderType === 'order_3' && (
+                <div className="mt-2 pt-2 border-t border-indigo-200/60 dark:border-slate-800 flex items-center gap-1.5 text-[11px] text-blue-700 dark:text-blue-300 font-medium">
+                  <span>📝</span>
+                  <span><strong>Định dạng chuẩn:</strong> Bài viết Facebook hoàn chỉnh (Long-Form 500-900 từ, đầy đủ tiêu đề & thân bài, không phải comment).</span>
+                </div>
+              )}
             </div>
 
             {/* Target Workshop / Program Selector */}
@@ -730,10 +738,14 @@ ${
                   isDark ? 'bg-slate-900 border-slate-800 text-slate-200' : 'bg-white border-slate-300 text-slate-800'
                 }`}
               >
-                <option value="empathy_story">💬 Tự sự & Đồng cảm sâu sắc (Chạm cảm xúc)</option>
+                <option value="empathy_story">💬 Tự sự & Tâm tình chạm cảm xúc</option>
                 <option value="humorous">😂 Hài hước & Hóm hỉnh (Dí dỏm, duyên dáng, bắt trend)</option>
-                <option value="workplace_insight">🏢 Phân tích công sở & Góc nhìn thực tế</option>
-                <option value="provocative_reframe">⚡ Phản biện sắc bén (Bẻ khóa góc nhìn)</option>
+                <option value="workplace_insight">🏢 Phân tích tâm lý & Thực tế công sở</option>
+                <option value="provocative_reframe">⚡ Phản biện sắc bén (Bẻ khóa định kiến)</option>
+                <option value="thought_leader">👔 Chuyên gia & Cố vấn đĩnh đạc</option>
+                <option value="healing_gentle">🌿 Nhẹ nhàng & Chữa lành tâm hồn</option>
+                <option value="dramatic_suspense">🎭 Kịch tính, gay cấn (Nút thắt bất ngờ)</option>
+                <option value="gen_z_trend">🔥 Gen Z đời thường & Bắt trend viral</option>
                 <option value="assessment_test">📋 Giá trị cộng đồng (Khơi gợi bài test miễn phí)</option>
                 <option value="custom">✏️ Tự nhập phong cách riêng... (Ví dụ: Hài hước, châm biếm, kịch tính...)</option>
               </select>
@@ -1425,7 +1437,102 @@ ${
                   {/* List of 4 Variations */}
                   <div className="space-y-3.5">
                     {generatedResult.variations.map((variation, idx) => {
-                      const getOrderStyleNames = () => {
+                                            const getOrderStyleNames = () => {
+                        const tone = generatedResult.appliedTone || writingTone;
+                        const custom = (generatedResult.customTone || (tone === 'custom' ? customTone : '')).trim();
+                        const isHumor = tone === 'humorous' || (custom && custom.toLowerCase().includes('hài'));
+
+                        // 1. Phong cách Hài hước & Hóm hỉnh
+                        if (isHumor) {
+                          return [
+                            'Mẫu 1: Hài Hước & Châm Biếm Nhẹ Nhàng Công Sở',
+                            'Mẫu 2: Hóm Hỉnh Tự Trào Bản Thân Duyên Dáng',
+                            'Mẫu 3: Bắt Trend Vui Nhộn & Ví Von Sinh Động',
+                            'Mẫu 4: Vui Tươi & Đọng Lại Thông Điệp Thấu Cảm',
+                          ];
+                        }
+
+                        // 2. Phong cách Tự Nhập Riêng
+                        if (custom) {
+                          return [
+                            `Mẫu 1: [${custom}] - Góc Tiếp Cận Trực Diện`,
+                            `Mẫu 2: [${custom}] - Lát Cắt Câu Chuyện Đời Thường`,
+                            `Mẫu 3: [${custom}] - Góc Nhìn Sâu Sắc & Bẻ Khóa Tư Duy`,
+                            `Mẫu 4: [${custom}] - Đúc Kết Chuyển Hóa & Gợi Mở`,
+                          ];
+                        }
+
+                        // 3. Phong cách Nhẹ nhàng & Chữa lành
+                        if (tone === 'healing_gentle') {
+                          return [
+                            'Mẫu 1: Nhẹ Nhàng & Lắng Nghe Tiếng Lòng Nội Tâm',
+                            'Mẫu 2: Thấu Cảm & Vỗ Về Áp Lực Vô Hình',
+                            'Mẫu 3: Không Gian Chữa Lành & Khoảng Thở Tĩnh Lặng',
+                            'Mẫu 4: Nuôi Dưỡng Năng Lượng Bình An & Phục Hồi',
+                          ];
+                        }
+
+                        // 4. Phong cách Gen Z & Bắt trend
+                        if (tone === 'gen_z_trend') {
+                          return [
+                            'Mẫu 1: Gen Z - Bắt Trend Ngôn Từ Viral Đời Thường',
+                            'Mẫu 2: Tiếng Lòng Người Trẻ Thực Tế, Không Sáo Rỗng',
+                            'Mẫu 3: Đời Thường Không Gồng Gượng, Chạm Đúng Nỗi Bất An',
+                            'Mẫu 4: Năng Lượng Trẻ Trung & Kết Nối Tự Nhiên',
+                          ];
+                        }
+
+                        // 5. Phong cách Kịch tính & Gay cấn
+                        if (tone === 'dramatic_suspense') {
+                          return [
+                            'Mẫu 1: Kịch Tính - Nút Thắt Bất Ngờ Mở Màn',
+                            'Mẫu 2: Gay Cấn - Nghịch Lý Giằng Xé Tâm Lý',
+                            'Mẫu 3: Cao Trào - Thức Tỉnh Cảm Xúc Mạnh Mẽ',
+                            'Mẫu 4: Hạ Màn - Giải Phóng Bế Tắc & Hướng Đi Mới',
+                          ];
+                        }
+
+                        // 6. Phong cách Chuyên gia & Cố vấn
+                        if (tone === 'thought_leader') {
+                          return [
+                            'Mẫu 1: Tầm Nhìn Chiến Lược & Lãnh Đạo Con Người',
+                            'Mẫu 2: Bài Học Quản Trị Thực Chiến & Góc Khuất Tổ Chức',
+                            'Mẫu 3: Framework Đo Lường Sức Khỏe Tổ Chức & Well-being',
+                            'Mẫu 4: Định Vị Giá Trị Cốt Lõi Thời Đại Số',
+                          ];
+                        }
+
+                        // 7. Phong cách Phân tích công sở
+                        if (tone === 'workplace_insight') {
+                          return [
+                            'Mẫu 1: Bóc Tách Logic Công Sở & Áp Lực Ngầm',
+                            'Mẫu 2: Phân Tích Đa Chiều Quan Hệ Sếp - Nhân Viên',
+                            'Mẫu 3: Chiếc Bẫy Bận Rộn Mù Quáng & Kiệt Sức',
+                            'Mẫu 4: Lối Thoát Tái Cấu Trúc Năng Lượng Nghề Nghiệp',
+                          ];
+                        }
+
+                        // 8. Phong cách Phản biện sắc bén
+                        if (tone === 'provocative_reframe') {
+                          return [
+                            'Mẫu 1: Phản Biện Bẻ Khóa Định Kiến Số Đông',
+                            'Mẫu 2: Nghịch Lý Nghề Nghiệp & Thấu Suốt Bản Thân',
+                            'Mẫu 3: Chữa Lành Bề Nổi vs Năng Lực Cốt Lõi',
+                            'Mẫu 4: Đột Phá Tư Duy & Tái Định Vị Bản Lĩnh',
+                          ];
+                        }
+
+                        // 9. Phong cách Giá trị cộng đồng
+                        if (tone === 'assessment_test') {
+                          return [
+                            'Mẫu 1: Dự Án Cộng Đồng & Khảo Sát WHO-5 Miễn Phí',
+                            'Mẫu 2: Bộ Câu Hỏi Soi Chiếu & Thấu Hiểu Điểm Mạnh',
+                            'Mẫu 3: Cam Kết Phi Lợi Nhuận & Đồng Hành Chuyên Sâu',
+                            'Mẫu 4: Template Tự Đánh Giá Định Vị Sự Nghiệp',
+                          ];
+                        }
+
+                        // 10. Mặc định theo từng Order
                         switch (generatedResult.orderId) {
                           case 'order_1':
                             return [
@@ -1443,10 +1550,10 @@ ${
                             ];
                           case 'order_3':
                             return [
-                              'Mẫu 1: Tự Sự - Nỗi Đau Kiệt Sức & Well-being (Long-Form)',
-                              'Mẫu 2: Phản Biện - Nghịch Lý Nghề Nghiệp & Thấu Suốt Bản Thân',
-                              'Mẫu 3: Dự Án Cộng Đồng Phi Lợi Nhuận & Khảo Sát WHO-5',
-                              'Mẫu 4: Chuyên Gia Thực Chiến - Đúc Kết Chuyển Hóa & Sức Bền',
+                              'Mẫu 1: Tự Sự & Đồng Cảm Sâu Sắc (Post Facebook hoàn chỉnh)',
+                              'Mẫu 2: Phản Biện Nghịch Lý Thực Tế (Post Facebook hoàn chỉnh)',
+                              'Mẫu 3: Dự Án Cộng Đồng Phi Lợi Nhuận (Post Facebook hoàn chỉnh)',
+                              'Mẫu 4: Đúc Kết Chuyển Hóa & Sức Bền (Post Facebook hoàn chỉnh)',
                             ];
                           case 'order_4':
                             return [
@@ -1464,8 +1571,8 @@ ${
                             ];
                           case 'order_6':
                             return [
-                              'Mẫu 1: Case Study Quản Trị & Lãnh Đạo Thực Chiến (Thought Leadership)',
-                              'Mẫu 2: Phản Biện Góc Khuất Quản Trị Cấp Trung (Workplace Reframe)',
+                              'Mẫu 1: Case Study Quản Trị & Lãnh Đạo Thực Chiến',
+                              'Mẫu 2: Phản Biện Góc Khuất Quản Trị Cấp Trung',
                               'Mẫu 3: Framework Đo Lường Sức Khỏe Tổ Chức & Well-being',
                               'Mẫu 4: Thought Leadership Kỷ Nguyên AI',
                             ];

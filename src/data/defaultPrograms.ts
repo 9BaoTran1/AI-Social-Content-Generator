@@ -196,24 +196,24 @@ export const ORDERS_METADATA: OrderMeta[] = [
   {
     id: 'order_2',
     orderNumber: 2,
-    title: 'Comment qua post Facebook',
+    title: 'Comment phản hồi post Facebook (Bình luận đa chiều)',
     platform: 'Facebook',
     category: 'comment',
     allowedTypes: ['ws', 'ct'], // Chạy tự do cả WS & CT
-    description: 'Comment đa chiều, đồng cảm thực tế cho các bên, hạ thấp bản thân, gợi ý Workshop hoặc Chương trình nhẹ nhàng, tinh tế. Không giới hạn WS/CT.',
+    description: 'Bình luận (comment) phản hồi đa chiều dưới bài viết Facebook người khác, đồng cảm thực tế cho các bên, hạ thấp bản thân, gợi ý Workshop hoặc Chương trình nhẹ nhàng, tinh tế.',
     toneGuideline: 'Tự nhiên, đa chiều, khách quan, không áp đặt hay giáo điều. Đề xuất WS hoặc CT một cách tinh tế.',
     defaultPrompt: 'Tạo comment Facebook tự nhiên, góc nhìn đa chiều và đề xuất Workshop/Chương trình phù hợp.'
   },
   {
     id: 'order_3',
     orderNumber: 3,
-    title: 'Viết bài Facebook (Long-Form)',
+    title: 'Bài viết Facebook hoàn chỉnh (Post dài 500-900 từ)',
     platform: 'Facebook',
     category: 'post',
     allowedTypes: ['ws', 'ct'], // Chạy tự do cả WS & CT
-    description: 'Bài viết Facebook dài (Long-Form) có chiều sâu, hook giật tít chạm trăn trở nghề nghiệp, khẳng định dự án cộng đồng phi lợi nhuận không bán khóa học/PR lùa gà, kèm bình luận ghim mồi đặt link.',
+    description: 'Bài viết Facebook đầy đủ và hoàn chỉnh (Long-Form 500-900 từ, tuyệt đối không phải comment), có tiêu đề giật tít, hook 3s, thân bài đời thường sâu sắc, cam kết dự án phi lợi nhuận minh bạch và bình luận ghim mồi đặt link.',
     toneGuideline: 'Đồng cảm sâu sắc, chân thực, cuốn hút, cam kết phi lợi nhuận minh bạch. Kết bài bằng lời kêu gọi xem bình luận ghim để nhận link bài test/đăng ký.',
-    defaultPrompt: 'Viết bài Facebook dài (Long-form) có chiều sâu, kèm bình luận ghim mồi đặt link.'
+    defaultPrompt: 'Viết bài Facebook hoàn chỉnh (Long-Form 500-900 từ, không phải comment) có chiều sâu, kèm bình luận ghim mồi đặt link.'
   },
   {
     id: 'order_4',
