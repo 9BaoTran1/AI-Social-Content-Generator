@@ -155,7 +155,7 @@ Hãy trích xuất và trả về định dạng JSON chính xác:
   "targetAudience": ["Đối tượng 1 (kèm độ tuổi nếu có)", "Đối tượng 2", "Đối tượng 3"],
   "painPoints": ["Nỗi đau 1", "Nỗi đau 2", "Nỗi đau 3"],
   "coreValues": ["Giá trị mang lại 1", "Giá trị mang lại 2", "Giá trị mang lại 3"],
-  "testOrFormAngle": "Mô tả góc tiếp cận form/bài test (ví dụ: Template đánh giá tính cách & tham vấn 1-1, Test định vị bản thân)",
+  "testOrFormAngle": "Mô tả góc tiếp cận form/bài test (ví dụ: Template đánh giá tính cách & hỗ trợ giải đáp, Test định vị bản thân)",
   "imageUrl": "Link ảnh nếu tìm thấy trong text/link (hoặc để trống)",
   "tallyUrl": "Link Tally hoặc Form nếu có",
   "notes": "Ghi chú thêm về tone & mood hoặc lưu ý đặc thù"
@@ -254,12 +254,12 @@ app.post('/api/generate-order', async (req: Request, res: Response) => {
         allowedTypes: ['ws', 'ct'],
         rules: `ORDER 1: COMMENT QUA CLIP TIKTOK (THU HÚT INBOX TỰ NHIÊN, 20-39T)
 - Văn phong: Tự sự, ấm áp, thủ thỉ, chân thành, hạ thấp bản thân như người anh/chị/bạn bè từng đi qua giai đoạn khủng hoảng trải lòng.
-- Không phán xét, không giáo điều: Đồng cảm từ một chi tiết sâu sắc trong clip -> Giải phóng tâm lý tự trách -> Giới thiệu bài test/template đánh giá tính cách, con người thật hoặc sức bền tinh thần 1-1 kín đáo.
+- Không phán xét, không giáo điều: Đồng cảm từ một chi tiết sâu sắc trong clip -> Giải phóng tâm lý tự trách -> Giới thiệu bài test/template đánh giá tính cách, con người thật hoặc sức bền tinh thần tự đánh giá kín đáo.
 - Lời mời inbox: Nhẹ nhàng, chân tình, tặng miễn phí 100% ("bạn nào đang cần người lắng nghe/soi chiếu thì nhắn mình gửi tặng free nhé ạ").
 - Tiêu chuẩn 4 biến thể (Variations):
   * Mẫu 1 (Tự sự - Đồng cảm sâu sắc từ chi tiết clip): Bắt trúng cảm xúc trong clip, kể lại trải nghiệm bản thân, gỡ bỏ mặc cảm so sánh ngầm tuổi 20-39.
   * Mẫu 2 (Phản biện Reframe - Bẻ khóa tư duy): Chỉ ra sự thật "không phải bạn dở hay lười, mà do đang gượng ép mình vào hệ quy chiếu không thuộc về điểm mạnh".
-  * Mẫu 3 (Trắc nghiệm Soi chiếu - Test 1-1 kín đáo): Khơi gợi điểm mù tư duy và tặng bài test trưởng thành/sức bền tinh thần có chuyên gia giải đáp 1-1.
+  * Mẫu 3 (Trắc nghiệm Soi chiếu - Bộ câu hỏi tự đánh giá): Khơi gợi điểm mù tư duy và tặng bài test trưởng thành/sức bền tinh thần có chuyên gia hỗ trợ giải đáp.
   * Mẫu 4 (Đúc kết khiêm nhường từ tiền bối): Chia sẻ bài học thực chiến của người đi làm nhiều năm, tặng template/bản đồ định vị bản sắc cá nhân free qua inbox.`,
       },
       order_2: {
@@ -285,7 +285,7 @@ app.post('/api/generate-order', async (req: Request, res: Response) => {
 3. PHẢN BIỆN BẺ GÃY LỐI MÒN (PARADIGM SHIFT): Phân tích vì sao càng gượng ép càng bế tắc. Nền tảng cốt lõi của sự thăng hoa là phục hồi năng lượng thể chất và sự thấu suốt bản thân.
 4. TUYÊN BỐ DỰ ÁN CỘNG ĐỒNG PHI LỢI NHUẬN (100% MINH BẠCH TẠO NIỀM TIN): Bắt buộc có đoạn cam kết dứt khoát:
    "Mình cùng đồng đội làm một dự án cộng đồng hoàn toàn phi lợi nhuận. Mục đích thuần túy là muốn chia sẻ giá trị, đồng hành cùng anh em để giữ lửa nghề bền bỉ hơn. Mình khẳng định luôn là KHÔNG bán khóa học, KHÔNG PR lùa gà hay kinh doanh sản phẩm gì ở đây hết nhé, ai nghĩ vậy thì lướt qua giùm cho đỡ mất thời gian đôi bên ạ."
-5. CÔNG CỤ TỰ ĐÁNH GIÁ CHUẨN KHOA HỌC: Giới thiệu bài test đo lường sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 (Well-being index) hoặc bản đồ định vị thế mạnh, có bác sĩ/chuyên gia giải đáp 1-1 kín đáo.
+5. CÔNG CỤ TỰ ĐÁNH GIÁ CHUẨN KHOA HỌC: Giới thiệu bài test đo lường sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 (Well-being index) hoặc bản đồ định vị thế mạnh, có bác sĩ/chuyên gia hỗ trợ giải đáp kín đáo.
 6. CTA HƯỚNG VỀ FIRST COMMENT: Mời độc giả ghé xuống phần bình luận để nhận link (tuyệt đối không gắn link trên caption bài viết để tránh Facebook bóp reach 80%).
 7. XUẤT 'firstCommentSeed': Bình luận ghim mồi đặt link bài test chân tình, tự nhiên.
 - Tiêu chuẩn 4 biến thể (Variations - Mỗi bài 500-850 từ):
@@ -300,11 +300,11 @@ app.post('/api/generate-order', async (req: Request, res: Response) => {
         rules: `ORDER 4: COMMENT THREADS (STORYTELLING CHÂN THẬT, CHẠM VÀO TÂM SỰ NỘI TÂM)
 - Format: Ngắn gọn (3-5 dòng), ngắt dòng nhịp nhàng chuẩn văn hóa Threads, không hashtag, không màu mè.
 - Tone: Tự sự, thổ lộ chân thật (vulnerable confession), như một lời thì thầm đêm muộn gỡ bỏ hoàn toàn sự phòng thủ của người đọc.
-- Chuyển đổi: Gợi ý bài test/template tự soi chiếu 1-1 miễn phí giúp sáng tỏ hướng đi, mời chủ động nhắn tin.
+- Chuyển đổi: Gợi ý bài test/template tự soi chiếu tự đánh giá miễn phí giúp sáng tỏ hướng đi, mời chủ động nhắn tin.
 - Tiêu chuẩn 4 biến thể (Variations):
   * Mẫu 1 (Lời tự sự đêm muộn): Chạm vào nỗi cô đơn, lạc lõng giữa thành phố sau giờ tan sở.
   * Mẫu 2 (Lát cắt công sở chân thực): Áp lực deadline và nỗi sợ bị tụt lại phía sau dù đã nỗ lực hết sức.
-  * Mẫu 3 (Lời động viên ấm áp & Soi chiếu): Nhẹ nhàng gỡ bỏ áp lực so sánh với người khác, tặng test 1-1.
+  * Mẫu 3 (Lời động viên ấm áp & Soi chiếu): Nhẹ nhàng gỡ bỏ áp lực so sánh với người khác, tặng bài trắc nghiệm tự đánh giá.
   * Mẫu 4 (Bẻ khóa cảm xúc giấu kín): Nói hộ tiếng lòng về sự trống rỗng bên trong dù bề ngoài vẫn ổn.`,
       },
       order_5: {
@@ -314,7 +314,7 @@ app.post('/api/generate-order', async (req: Request, res: Response) => {
 - Format: Chuỗi câu ngắn (1-2 câu mỗi đoạn), ngắt dòng rộng rãi, cực kỳ bắt mắt trên mobile feed.
 - Hook mở đầu: Đánh thẳng vào một nghịch lý tâm lý hoặc cảm xúc giấu kín của người đi làm tuổi 20-35.
 - Nội dung: Gãy gọn, nhịp điệu nhanh, sắc sảo, không hoa mỹ, câu trước kéo câu sau.
-- Kết bài: CTA tự nhiên mời thảo luận và nhắn tin riêng để nhận link bài test / template định vị 1-1.
+- Kết bài: CTA tự nhiên mời thảo luận và nhắn tin riêng để nhận link bài test / template định vị tự đánh giá.
 - Tiêu chuẩn 4 biến thể (Variations):
   * Mẫu 1 (Nghịch lý tuổi 20-30): Chạy theo tốc độ của người khác vs Tìm ra nhịp độ của chính mình.
   * Mẫu 2 (Bẫy chăm chỉ mù quáng): Làm việc cật lực nhưng vẫn tự ti và trống rỗng vì thiếu bản sắc riêng.
@@ -335,7 +335,7 @@ app.post('/api/generate-order', async (req: Request, res: Response) => {
 4. VĂN PHONG ĐĨNH ĐẠC, KHIÊM NHƯỜNG: Tầm vóc chuyên gia từng trải, tôn trọng con người, không sáo rỗng.
 5. CÂU HỎI MỞ KÍCH HOẠT TRANH LUẬN: Gợi mở bàn luận giữa các C-Level, HR Leader, Manager bên dưới bài viết.
 6. XUẤT 'firstCommentSeed': Bình luận ghim mồi chứa link tài liệu, framework hoặc bài test chuyên sâu (tránh LinkedIn bóp reach outlink).
-7. KÈM KỊCH BẢN INMAIL 3 BƯỚC: Lời mở đầu HRBP ấm áp -> Câu hỏi đào sâu -> Lời mời tham vấn 1-1 miễn phí.
+7. KÈM KỊCH BẢN INMAIL 3 BƯỚC: Lời mở đầu HRBP ấm áp -> Câu hỏi đào sâu -> Lời mời kết nối đồng hành / trao đổi trực tiếp miễn phí.
 - Tiêu chuẩn 4 biến thể (Variations - Mỗi bài 450-800 từ):
   * Mẫu 1 (Case Study Quản Trị & Nghịch Lý Giữ Chân Nhân Tài)
   * Mẫu 2 (Phản Biện Góc Khuất Quản Trị Cấp Trung)
@@ -353,7 +353,7 @@ app.post('/api/generate-order', async (req: Request, res: Response) => {
 2. MỞ ĐẦU THÂN MẬT NHƯ NGƯỜI BẠN ĐỒNG HÀNH: Bắt đầu bằng một câu chuyện ngắn, một quan sát đời thường hoặc một sự đồng cảm ấm áp.
 3. CÂU HỎI SOI CHIẾU TRÚNG TIM ĐEN: Đặt 2-3 câu hỏi gợi mở sâu sắc giúp người nhận tự nhìn nhận lại năng lượng, mục tiêu và điểm nghẽn của mình.
 4. GIỚI THIỆU GIẢI PHÁP / WORKSHOP / CHƯƠNG TRÌNH: Dẫn dắt nhẹ nhàng, khi manh, nhấn mạnh tính đồng hành và giá trị chuyển hóa bên trong.
-5. KÊU GỌI HÀNH ĐỘNG (CTA) KHÔNG ÁP LỰC: Mời bấm link đăng ký hoặc reply trực tiếp email này để chia sẻ câu chuyện và nhận tham vấn 1-1.
+5. KÊU GỌI HÀNH ĐỘNG (CTA) KHÔNG ÁP LỰC: Mời bấm link đăng ký hoặc reply trực tiếp email này để chia sẻ câu chuyện và nhận hỗ trợ giải đáp.
 6. TÁI BÚT (P.S.): Đòn bẩy tâm lý cuối cùng, nhắc lại quà tặng/suất tham vấn miễn phí hoặc một lời chúc chân thành.
 - Tiêu chuẩn 4 biến thể (Variations):
   * Mẫu 1 (Email Storytelling từ người bạn đồng hành - kèm 3 Subject Lines & P.S.)
@@ -381,7 +381,7 @@ Sứ mệnh của bạn: Trực tiếp điều phối và hợp nhất năng l�
 4. [Algorithm & First Comment Optimizer]:
    - Tối ưu Dwell Time, sinh bình luận ghim mồi (First Comment Seed) chứa link khéo léo để né bóp reach, đặt câu hỏi mở kích hoạt tranh luận đa chiều.
 5. [Conversion DM Specialist]:
-   - Soạn thảo kịch bản inbox 1-1 chuyển đổi cao 3 bước (Đồng cảm sâu -> Câu hỏi đào sâu / Qualifying -> Mời gửi link test / tham vấn 1-1).
+   - Soạn thảo kịch bản inbox chuyển đổi cao 3 bước (Đồng cảm sâu -> Câu hỏi đào sâu / Qualifying -> Mời gửi link test / hỗ trợ giải đáp).
 
 QUY TẮC "ANTI-AI FLUFF" BẮT BUỘC:
 1. TUYỆT ĐỐI CẤM các mẫu câu sáo rỗng của AI:
@@ -433,7 +433,7 @@ Hãy trả về kết quả định dạng JSON chính xác:
   "dmFollowUpScript": {
     "step1_empathy": "Lời chào và đồng cảm khi khách inbox...",
     "step2_qualifyQuestion": "Câu hỏi mở đào sâu trúng tâm lý...",
-    "step3_inviteLink": "Lời mời nhận bài test / link tham vấn 1-1 không áp lực..."
+    "step3_inviteLink": "Lời mời nhận bài test / link hỗ trợ giải đáp không áp lực..."
   }
 }`;
 
@@ -521,15 +521,15 @@ Hãy trả về kết quả định dạng JSON chính xác:
         targetAudience: 'Người đi làm & giới trẻ (20-39 tuổi) đang đối mặt với áp lực định vị và kiệt sức thầm lặng.',
         emotionalTouchpoint: 'Cảm giác chông chênh, áp lực so sánh ngầm và mong muốn tìm lại nhịp điệu nội tại.',
         algorithmAssessment: 'Tối ưu Dwell Time bằng cốt truyện cuốn hút, giữ trọn reach tự nhiên bằng bình luận ghim mồi.',
-        approachReason: 'Sử dụng tâm sự chân thật, cam kết phi lợi nhuận 100% để phá bỏ rào cản tâm lý và mở đường chuyển đổi 1-1.'
+        approachReason: 'Sử dụng tâm sự chân thật, cam kết phi lợi nhuận 100% để phá bỏ rào cản tâm lý và mở đường kết nối trực tiếp.'
       };
     }
 
     // Ensure firstCommentSeed default if missing for FB/LinkedIn
     if (orderType === 'order_3' && !parsed.firstCommentSeed) {
-      parsed.firstCommentSeed = 'Link bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 ở đây nhé anh em: https://tally.so/r/wellbeing-test (Hoàn toàn miễn phí, làm xong có bác sĩ hỗ trợ giải đáp 1-1 nha mọi người ơi ❤️)';
+      parsed.firstCommentSeed = 'Link bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 ở đây nhé anh em: https://tally.so/r/wellbeing-test (Hoàn toàn miễn phí, làm xong có bác sĩ hỗ trợ giải đáp chi tiết nha mọi người ơi ❤️)';
     } else if (orderType === 'order_6' && !parsed.firstCommentSeed) {
-      parsed.firstCommentSeed = 'P/S: Với anh/chị Leader hoặc HRBP đang quan tâm đến bộ chỉ số đo lường sức khỏe tổ chức & khung đánh giá Well-being nhân sự, em xin phép để link tài liệu chi tiết tại bình luận này nhé: [Link_Tài_Liệu] (Hoàn toàn mở và có hỗ trợ trao đổi 1-1 ạ).';
+      parsed.firstCommentSeed = 'P/S: Với anh/chị Leader hoặc HRBP đang quan tâm đến bộ chỉ số đo lường sức khỏe tổ chức & khung đánh giá Well-being nhân sự, em xin phép để link tài liệu chi tiết tại bình luận này nhé: [Link_Tài_Liệu] (Hoàn toàn mở và có hỗ trợ trao đổi trực tiếp ạ).';
     }
 
     res.json({
@@ -600,12 +600,12 @@ app.post('/api/chat', async (req: Request, res: Response) => {
 
     // Special trigger: If message is "hi" or greeting, immediately return the automated Order menu
     if (lowerMessage === 'hi' || lowerMessage === 'hello' || lowerMessage === 'xin chào' || lowerMessage === 'chào') {
-      const orderMenuText = `Xin chào bạn! Mình là Trợ lý AI Content & Social Media Manager (hơn 20 năm kinh nghiệm). Mình đã sẵn sàng hỗ trợ bạn sản xuất content chuyển đổi và kịch bản 1-1 theo chuẩn từng nền tảng.
+      const orderMenuText = `Xin chào bạn! Mình là Trợ lý AI Content & Social Media Manager (hơn 20 năm kinh nghiệm). Mình đã sẵn sàng hỗ trợ bạn sản xuất content chuyển đổi và kịch bản tin nhắn riêng theo chuẩn từng nền tảng.
 
 Dưới đây là danh sách 7 Order tự động, bạn chỉ cần gõ **Order [số]** kèm thông tin/mô tả clip/post hoặc gửi ảnh màn hình nhé:
 
 📋 **DANH SÁCH 7 ORDER TỰ ĐỘNG:**
-- **Order 1**: Comment qua clip TikTok (Tự sự, thấu cảm tuổi 20-39, tặng bài test 1-1)
+- **Order 1**: Comment qua clip TikTok (Tự sự, thấu cảm tuổi 20-39, tặng bài test tự đánh giá)
 - **Order 2**: Comment qua post Facebook (Góc nhìn đa chiều, khách quan, tự do WS/CT)
 - **Order 3**: Viết bài Facebook Long-Form (500-850 từ, cam kết phi lợi nhuận 100%, test WHO-5, link ghim mồi)
 - **Order 4**: Comment Threads (Storytelling chân thật, tâm sự đêm muộn 3-5 dòng)
@@ -631,7 +631,7 @@ Dưới đây là danh sách 7 Order tự động, bạn chỉ cần gõ **Order
     }
 
     const systemPrompt = `Bạn là Senior Content Quality & Viral Strategy Auditor kiêm Content Copywriter hơn 20 năm kinh nghiệm, chuyên sâu 5 nền tảng (TikTok, Facebook, Threads, LinkedIn, Email).
-Nhiệm vụ của bạn là hỗ trợ người dùng sản xuất content chuyển đổi và kịch bản chat 1-1 đạt chất lượng đỉnh cao.
+Nhiệm vụ của bạn là hỗ trợ người dùng sản xuất content chuyển đổi và kịch bản tin nhắn riêng đạt chất lượng đỉnh cao.
 
 QUY TẮC BẮT BUỘC:
 - Cho phép phân phối tự do cả Workshop (WS) và Chương trình (CT) trên mọi nền tảng.

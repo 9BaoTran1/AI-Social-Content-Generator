@@ -43,4 +43,4 @@ Google AI Studio đã cung cấp sẵn đường link Web App chính thức:
 1. **Model Gemini 3.7 Flash Mới Nhất**: Tốc độ xử lý siêu tốc, chất lượng nội dung sắc sảo, tự nhiên 100% không văn mẫu chatbot.
 2. **Chế độ Gemini 3.7 Thinking (Suy Luận Tâm Lý)**: Tự động phân tích tâm lý người đọc, nỗi đau ngầm tuổi 20-39 để tạo chuyển đổi cao.
 3. **Nút "Đổi góc nhìn (Remix)"**: Tạo lại 3 phương án với góc nhìn hoàn toàn mới chỉ bằng 1 chạm.
-4. **Nút "Tải file .TXT" & Sao chép nhanh**: Tải toàn bộ 3 phương án + kịch bản DM 1-1 về máy lưu trữ.
+4. **Nút "Tải file .TXT" & Sao chép nhanh**: Tải toàn bộ 3 phương án + kịch bản tin nhắn chuyển đổi về máy lưu trữ.

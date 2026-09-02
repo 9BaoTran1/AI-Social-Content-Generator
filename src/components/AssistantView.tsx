@@ -126,7 +126,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
           role: 'assistant',
           content: `Đã hoàn thành **Order ${orderNum}** cho bạn! Dự án được AI lựa chọn: **${generatedObj.programTitle}** (${
             generatedObj.programType === 'ws' ? 'Workshop' : 'Chương trình'
-          }). Dưới đây là các phương án nội dung và kịch bản DM 1-1:`,
+          }). Dưới đây là các phương án nội dung và kịch bản tin nhắn chuyển đổi:`,
           generatedResult: generatedObj,
           timestamp: new Date().toISOString(),
         };
@@ -307,7 +307,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
                             }`}
                           >
                             <span className={`font-bold block ${isDark ? 'text-emerald-300' : 'text-emerald-900'}`}>
-                              Kịch bản DM 1-1 (3 bước):
+                              Kịch bản Tin Nhắn Chuyển Đổi (3 bước):
                             </span>
                             <p className="italic">
                               1. {msg.generatedResult.dmFollowUpScript.step1_empathy}

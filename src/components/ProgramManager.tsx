@@ -473,7 +473,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                         isDark ? 'text-emerald-300' : 'text-emerald-900'
                       }`}
                     >
-                      📋 Góc tiếp cận bài test / form 1-1:
+                      📋 Góc tiếp cận bài trắc nghiệm tự đánh giá / form:
                     </span>
                     <p
                       className={`text-[11px] italic p-2 rounded-lg border select-all ${
@@ -681,7 +681,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
 
                 <div>
                   <label className={`text-xs font-semibold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                    Góc tiếp cận bài test / form 1-1
+                    Góc tiếp cận bài trắc nghiệm tự đánh giá / form
                   </label>
                   <input
                     type="text"

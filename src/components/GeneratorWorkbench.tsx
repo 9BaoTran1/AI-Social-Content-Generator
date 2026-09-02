@@ -61,7 +61,7 @@ const QUICK_IDEAS = [
   {
     label: 'Dân Content & Well-being (FB Dài)',
     orderType: 'order_3' as OrderType,
-    text: 'Sáng tạo hết mình, bay bổng cùng ý tưởng: Dân Content đang duy trì cảm hứng như thế nào? Dự án cộng đồng phi lợi nhuận kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5, không bán khóa học, không PR lùa gà, kèm tư vấn bác sĩ 1-1.',
+    text: 'Sáng tạo hết mình, bay bổng cùng ý tưởng: Dân Content đang duy trì cảm hứng như thế nào? Dự án cộng đồng phi lợi nhuận kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5, không bán khóa học, không PR lùa gà, kèm bác sĩ hỗ trợ giải đáp.',
   },
   {
     label: 'Khủng hoảng 25 tuổi',
@@ -96,14 +96,14 @@ const EXPERT_TIPS = [
   },
   {
     title: 'Tâm lý học Độc giả Trẻ (TikTok & Threads)',
-    content: 'Người trẻ 20-39 tuổi rất dị ứng với việc bị "dạy đời" hay PR bán khóa học. Hãy chia sẻ như một người bạn đồng hành rồi gợi ý làm bài test 1-1.',
+    content: 'Người trẻ 20-39 tuổi rất dị ứng với việc bị "dạy đời" hay PR bán khóa học. Hãy chia sẻ như một người bạn đồng hành rồi gợi ý làm bài trắc nghiệm tự đánh giá.',
   },
   {
     title: 'LinkedIn: Giá trị của Framework & Số liệu',
     content: 'Cộng đồng LinkedIn chuộng bài viết có cấu trúc rõ ràng, case study thực tế và các framework giải quyết vấn đề nơi công sở.',
   },
   {
-    title: 'Kịch bản Inbox 1-1: Đồng cảm trước - Trao giải pháp sau',
+    title: 'Kịch bản Nhắn Tin Riêng: Đồng cảm trước - Trao giải pháp sau',
     content: 'Đừng vội gửi link form ngay câu chào đầu. Hãy hỏi 1-2 câu đào sâu để độc giả tự nhận ra nhu cầu, sau đó gửi link tham gia như một món quà.',
   },
 ];
@@ -135,9 +135,9 @@ const PRODUCTION_STEPS = [
   },
   {
     agent: 'Conversion DM Specialist',
-    title: '5. Conversion DM Specialist (Kịch bản inbox 1-1)',
+    title: '5. Conversion DM Specialist (Kịch bản tin nhắn riêng)',
     desc: 'Soạn thảo kịch bản inbox 3 bước chuyển đổi cao: Đồng cảm sâu → Đào sâu (Qualifying) → Mời gửi link.',
-    badge: 'DM 1-1 Script',
+    badge: 'DM Script',
   },
 ];
 
@@ -443,7 +443,7 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
     setTimeout(() => {
       setContext((prev) => {
         const trimmed = prev.trim();
-        return `${trimmed}\n\n[Góc tiếp cận gợi ý]: Nhấn mạnh sự đồng cảm với nỗi băn khoăn về năng lực thật sự, phân tích nguyên nhân gốc rễ và gợi mở làm bài trắc nghiệm/tham vấn 1-1 để định vị bản thân rõ ràng.`;
+        return `${trimmed}\n\n[Góc tiếp cận gợi ý]: Nhấn mạnh sự đồng cảm với nỗi băn khoăn về năng lực thật sự, phân tích nguyên nhân gốc rễ và gợi mở làm bài trắc nghiệm tự đánh giá/hỗ trợ giải đáp để định vị bản thân rõ ràng.`;
       });
       setIsEnhancing(false);
     }, 400);
@@ -522,14 +522,14 @@ ${
   generatedResult.firstCommentSeed
     ? `--- BÌNH LUẬN GHIM MỒI ĐẶT LINK (Đăng ngay sau khi post) ---\n${generatedResult.firstCommentSeed}\n\n`
     : ''
-}--- KỊCH BẢN DM 1-1 CHUYỂN ĐỔI ---
+}--- KỊCH BẢN TIN NHẮN CHUYỂN ĐỔI ---
 1. Đồng cảm:
 "${generatedResult.dmFollowUpScript.step1_empathy}"
 
 2. Câu hỏi đào sâu:
 "${generatedResult.dmFollowUpScript.step2_qualifyQuestion}"
 
-3. Lời mời gửi link test / form 1-1:
+3. Lời mời gửi link trắc nghiệm tự đánh giá / form hỗ trợ:
 "${generatedResult.dmFollowUpScript.step3_inviteLink}"
 `;
 
@@ -730,7 +730,7 @@ ${
                 <option value="empathy_story">💬 Tự sự & Đồng cảm sâu sắc (Storytelling chạm tim)</option>
                 <option value="workplace_insight">🏢 Phân tích tâm lý công sở & Reframe góc nhìn mới lạ</option>
                 <option value="provocative_reframe">⚡ Phản biện bẻ khóa định kiến (Góc nhìn độc bản)</option>
-                <option value="assessment_test">📋 Giá trị cộng đồng - Trắc nghiệm / Test 1-1 phi lợi nhuận</option>
+                <option value="assessment_test">📋 Giá trị cộng đồng - Bài trắc nghiệm tự đánh giá phi lợi nhuận</option>
               </select>
             </div>
 
@@ -1041,7 +1041,7 @@ ${
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 text-amber-300" />
-                  <span>Tạo 4 Phong Cách & Kịch Bản DM 1-1</span>
+                  <span>Tạo 4 Phong Cách & Kịch Bản Tin Nhắn Chuyển Đổi</span>
                 </>
               )}
             </button>
@@ -1269,7 +1269,7 @@ ${
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    Kịch Bản DM 1-1
+                    Kịch Bản Tin Nhắn Chuyển Đổi
                   </button>
                   <button
                     onClick={() => setResultTab('preview')}
@@ -1376,7 +1376,7 @@ ${
                   targetAudience: 'Người đi làm & giới trẻ (20-39 tuổi) đang đối mặt với áp lực định vị và kiệt sức thầm lặng.',
                   emotionalTouchpoint: 'Cảm giác chông chênh, áp lực so sánh ngầm và mong muốn tìm lại nhịp điệu nội tại.',
                   algorithmAssessment: generatedResult.platformNotes || 'Tối ưu Dwell Time bằng cấu trúc câu chuyện chặt chẽ, né bóp reach bằng First Comment Seed ghim link.',
-                  approachReason: generatedResult.rationale || 'Tiếp cận bằng sự chân thành, phi lợi nhuận 100% để phá vỡ hoài nghi và dẫn dắt tự nhiên sang đối thoại 1-1.',
+                  approachReason: generatedResult.rationale || 'Tiếp cận bằng sự chân thành, phi lợi nhuận 100% để phá vỡ hoài nghi và dẫn dắt tự nhiên sang kết nối trực tiếp.',
                 };
 
                 return (
@@ -1573,7 +1573,7 @@ ${
                             return [
                               'Mẫu 1: Tự Sự & Đồng Cảm Sâu Sắc Từ Clip',
                               'Mẫu 2: Phản Biện Reframe - Bẻ Khóa Tâm Lý',
-                              'Mẫu 3: Trắc Nghiệm Soi Chiếu - Test 1-1 Kín Đáo',
+                              'Mẫu 3: Trắc Nghiệm Soi Chiếu - Bộ Câu Hỏi Tự Đánh Giá',
                               'Mẫu 4: Đúc Kết Khiêm Nhường Từ Tiền Bối',
                             ];
                           case 'order_2':
@@ -1622,7 +1622,7 @@ ${
                             return [
                               'Mẫu 1: Tự Sự & Đồng Cảm Sâu Sắc',
                               'Mẫu 2: Phản Biện & Góc Nhìn Mới Lạ',
-                              'Mẫu 3: Giá Trị Cộng Đồng - Khảo Sát Test 1-1',
+                              'Mẫu 3: Giá Trị Cộng Đồng - Khảo Sát Tự Đánh Giá',
                               'Mẫu 4: Chuyên Gia Thực Chiến & Đúc Kết Kinh Nghiệm',
                             ];
                         }
@@ -1836,7 +1836,7 @@ ${
                 </div>
               )}
 
-              {/* TAB 2: DM 1-1 Inbound Script */}
+              {/* TAB 2: DM Inbound Script */}
               {resultTab === 'dm_script' && (
                 <div className="space-y-3.5">
                   <div
@@ -1960,7 +1960,7 @@ ${
                   >
                     <div className="flex items-center justify-between text-xs">
                       <span className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-                        Bước 3: Lời mời gửi bài test / Form tham vấn 1-1
+                        Bước 3: Lời mời gửi bài trắc nghiệm / Form hỗ trợ giải đáp
                       </span>
                       <button
                         onClick={() =>
@@ -2098,7 +2098,7 @@ ${
                   Sẵn sàng tạo nội dung chuyển đổi
                 </h3>
                 <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Nhập ý tưởng bài đăng ở cột bên trái và bấm <strong>"Tạo 4 Phong Cách & Kịch Bản DM 1-1"</strong>. AI sẽ tự động phân tích tâm lý, bóc tách nỗi đau và đề xuất 4 phương án độc bản.
+                  Nhập ý tưởng bài đăng ở cột bên trái và bấm <strong>"Tạo 4 Phong Cách & Kịch Bản Tin Nhắn Chuyển Đổi"</strong>. AI sẽ tự động phân tích tâm lý, bóc tách nỗi đau và đề xuất 4 phương án độc bản.
                 </p>
               </div>
             </div>

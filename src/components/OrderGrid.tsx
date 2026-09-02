@@ -119,7 +119,7 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
                 isDark ? 'text-white' : 'text-slate-900'
               }`}
             >
-              Biến Comment Lướt Thành Đơn Đăng Ký & Inbox 1-1
+              Biến Comment Lướt Thành Đơn Đăng Ký & Khách Nhắn Tin
             </h1>
             <p
               className={`text-xs sm:text-sm leading-relaxed ${
@@ -159,7 +159,7 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
               <div>
                 <strong className="block font-bold">TikTok & Threads (20-39 tuổi):</strong>
                 <span className="text-[11px] opacity-90">
-                  Đồng cảm sâu sắc, không bán khóa học lộ liễu, dẫn dắt làm bài test 1-1 tự nhiên.
+                  Đồng cảm sâu sắc, không bán khóa học lộ liễu, dẫn dắt nhận bài test tự nhiên.
                 </span>
               </div>
             </div>

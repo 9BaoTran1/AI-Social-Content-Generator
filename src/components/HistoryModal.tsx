@@ -47,7 +47,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ onUseContent }) => {
             </h2>
           </div>
           <p className="text-slate-400 text-xs mt-1">
-            Xem lại các bài viết, comment và kịch bản 1-1 đã tạo trước đó trên các nền tảng.
+            Xem lại các bài viết, comment và kịch bản nhắn tin riêng đã tạo trước đó trên các nền tảng.
           </p>
         </div>
 
@@ -129,7 +129,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ onUseContent }) => {
               {item.dmFollowUpScript && (
                 <div className="p-3 rounded-xl bg-indigo-950/30 border border-indigo-900/40 text-xs space-y-1">
                   <span className="font-bold text-emerald-300 block text-[11px]">
-                    Kịch bản Chat 1-1:
+                    Kịch bản Nhắn Tin Riêng:
                   </span>
                   <p className="text-slate-300 italic">
                     1. {item.dmFollowUpScript.step1_empathy}

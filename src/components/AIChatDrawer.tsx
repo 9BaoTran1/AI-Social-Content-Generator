@@ -33,7 +33,7 @@ export const AIChatDrawer: React.FC<AIChatDrawerProps> = ({
       role: 'assistant',
       content: `Xin chào! Mình là Trợ lý AI Content 10 năm kinh nghiệm & Social Media Manager.
 
-💡 Bạn có thể gõ **"Hi"** bất cứ lúc nào để mở Menu 7 Order tự động, hoặc gõ trực tiếp **"Order 1 [mô tả clip]"** để mình sản xuất content và kịch bản chat 1-1 ngay nhé!`,
+💡 Bạn có thể gõ **"Hi"** bất cứ lúc nào để mở Menu 7 Order tự động, hoặc gõ trực tiếp **"Order 1 [mô tả clip]"** để mình sản xuất content và kịch bản nhắn tin riêng ngay nhé!`,
       timestamp: new Date().toISOString(),
       suggestedActions: [
         { label: 'Gõ "Hi" mở 7 Order', action: 'Hi' },
@@ -114,7 +114,7 @@ export const AIChatDrawer: React.FC<AIChatDrawerProps> = ({
         const assistantMsg: ChatMessage = {
           id: `asst-${Date.now()}`,
           role: 'assistant',
-          content: `Đã hoàn thành **Order ${orderNum}** cho bạn! Dự án được chọn: **${generatedObj.programTitle}** (${generatedObj.programType === 'ws' ? 'Workshop' : 'Chương trình'}). Dưới đây là 3 phương án content và kịch bản chat 1-1:`,
+          content: `Đã hoàn thành **Order ${orderNum}** cho bạn! Dự án được chọn: **${generatedObj.programTitle}** (${generatedObj.programType === 'ws' ? 'Workshop' : 'Chương trình'}). Dưới đây là 3 phương án content và kịch bản nhắn tin riêng:`,
           generatedResult: generatedObj,
           timestamp: new Date().toISOString(),
         };
@@ -173,7 +173,7 @@ export const AIChatDrawer: React.FC<AIChatDrawerProps> = ({
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             </div>
             <p className="text-[11px] text-slate-400">
-              Gõ "Hi" để mở menu • Nhận diện Order 1-7 • Hướng dẫn chat 1-1
+              Gõ "Hi" để mở menu • Nhận diện Order 1-7 • Hướng dẫn nhắn tin riêng
             </p>
           </div>
         </div>
@@ -264,7 +264,7 @@ export const AIChatDrawer: React.FC<AIChatDrawerProps> = ({
                     <div className="p-2.5 rounded-lg bg-indigo-950/30 border border-indigo-900/40 space-y-1 text-[11px]">
                       <span className="font-bold text-emerald-300 flex items-center gap-1">
                         <UserCheck className="w-3.5 h-3.5" />
-                        Kịch bản Chat 1-1:
+                        Kịch bản Nhắn Tin Riêng:
                       </span>
                       <p className="text-slate-300 italic">
                         1. {msg.generatedResult.dmFollowUpScript.step1_empathy}

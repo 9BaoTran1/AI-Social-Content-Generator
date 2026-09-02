@@ -18,7 +18,7 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
       'Rút ra bài học quý giá và thực hành lòng biết ơn',
       'Định vị lại chính mình và chuẩn bị bứt phá năm mới'
     ],
-    testOrFormAngle: 'Self-Positioning Test & Year Review Matrix - Test định vị bản thân & bài tập soi chiếu cá nhân hóa 1-1',
+    testOrFormAngle: 'Self-Positioning Test & Year Review Matrix - Test định vị bản thân & bài tập soi chiếu cá nhân hóa',
     isActive: true,
     isBuiltin: true,
     createdAt: '2026-01-01'
@@ -40,7 +40,7 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
       'Giao tiếp thành công bền vững, giữ bình an nội tâm',
       'Tích hợp bài tập thực hành hàng ngày và theo dõi tiến trình cá nhân'
     ],
-    testOrFormAngle: 'Bộ đánh giá phong cách giao tiếp & giải mã điểm nghẽn tương tác 1:1',
+    testOrFormAngle: 'Bộ đánh giá phong cách giao tiếp & giải mã điểm nghẽn tương tác trực tiếp',
     imageUrl: 'https://storage.tally.so/30581dc9-c72d-4fb7-9469-676e57bb30ed/photo_6197064284425096831_y.jpg',
     isActive: true,
     isBuiltin: true,
@@ -63,7 +63,7 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
       'Xây nền vững chắc: định hướng môi trường và con đường phù hợp với giá trị thật',
       'Tự tin tự nhiên khi không cần phải cố trở thành một ai khác'
     ],
-    testOrFormAngle: 'Template đánh giá mức độ thấu hiểu tính cách, con người thật & lộ trình phát triển điểm mạnh 1-1',
+    testOrFormAngle: 'Template đánh giá mức độ thấu hiểu tính cách, con người thật & lộ trình phát triển điểm mạnh cá nhân hóa',
     isActive: true,
     isBuiltin: true,
     createdAt: '2026-01-10'
@@ -85,7 +85,7 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
       'Hiểu góc nhìn của nhà tuyển dụng và thị trường lao động thực tế',
       'Có cơ sở vững vàng để đưa ra quyết định bước ngoặt sự nghiệp'
     ],
-    testOrFormAngle: 'Bài đánh giá năng lực & độ phù hợp nghề nghiệp kèm tư vấn định hướng 1-1',
+    testOrFormAngle: 'Bài đánh giá năng lực & độ phù hợp nghề nghiệp kèm hỗ trợ định hướng trực tiếp',
     imageUrl: 'https://storage.tally.so/54a75189-634d-42f2-b242-6a2d421b87a5/photo_2026-07-31_18-06-37.jpg',
     isActive: true,
     isBuiltin: true,
@@ -107,7 +107,7 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
       'Thực hành: Xác định ưu tiên, sắp xếp lộ trình và lựa chọn tâm điểm theo từng giai đoạn',
       'Chuyển hóa: Tối ưu thời gian và năng lượng để sống chủ động và rõ ràng mỗi ngày'
     ],
-    testOrFormAngle: 'Bảng đánh giá mức độ rò rỉ năng lượng & quản trị sự chú ý cá nhân hóa 1-1',
+    testOrFormAngle: 'Bảng đánh giá mức độ rò rỉ năng lượng & quản trị sự chú ý cá nhân hóa',
     isActive: true,
     isBuiltin: true,
     createdAt: '2026-01-20'
@@ -129,7 +129,7 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
       'Nơi soi chiếu: Nhận ra mình là ai, mình đang có gì và muốn trở thành người như thế nào',
       'Chủ động viết tiếp chương mới rực rỡ của cuộc đời'
     ],
-    testOrFormAngle: 'Review đánh giá hành trình cá nhân & định hướng tái cấu trúc tư duy 1-1',
+    testOrFormAngle: 'Review đánh giá hành trình cá nhân & định hướng tái cấu trúc tư duy trực tiếp',
     isActive: true,
     isBuiltin: true,
     createdAt: '2026-01-25'
@@ -150,7 +150,7 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
       'Rèn luyện cơ bắp não bộ thông qua phân tích, nghiền ngẫm sâu',
       'Gia tăng năng lực thấu hiểu bản thân và giải quyết vấn đề thực tế'
     ],
-    testOrFormAngle: 'Bài test đánh giá độ bền tinh thần & khả năng chịu áp lực giải quyết vấn đề 1-1',
+    testOrFormAngle: 'Bài test đánh giá độ bền tinh thần & khả năng chịu áp lực giải quyết vấn đề cá nhân hóa',
     imageUrl: 'https://storage.tally.so/e198b8f6-8c1a-4faa-aeb4-b3a65a302e62/6069155373756649146.jpg',
     isActive: true,
     isBuiltin: true,
@@ -173,7 +173,7 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
       'Nâng cao năng lực giao tiếp khéo léo, xử lý xung đột và hợp tác',
       'Chuẩn bị hành trang tự tin và vững vàng nhất trước ngày tốt nghiệp'
     ],
-    testOrFormAngle: 'Bảng đánh giá năng lực thực chiến sinh viên & chuẩn bị phỏng vấn/tâm thế đi làm 1-1',
+    testOrFormAngle: 'Bảng đánh giá năng lực thực chiến sinh viên & chuẩn bị phỏng vấn/tâm thế đi làm thực tế',
     imageUrl: 'https://storage.tally.so/39fa7140-d0ba-4419-8a74-1d7e3935b165/6087095795749425686.jpg',
     isActive: true,
     isBuiltin: true,
@@ -189,7 +189,7 @@ export const ORDERS_METADATA: OrderMeta[] = [
     platform: 'Tiktok',
     category: 'comment',
     allowedTypes: ['ws', 'ct'],
-    description: 'Viết comment đồng cảm, đánh đúng tâm lý người trẻ 20-39 tuổi, khơi gợi nhu cầu hiểu mình và tặng bài test / đánh giá 1-1 miễn phí.',
+    description: 'Viết comment đồng cảm, đánh đúng tâm lý người trẻ 20-39 tuổi, khơi gợi nhu cầu hiểu mình và tặng bài trắc nghiệm tự đánh giá miễn phí.',
     toneGuideline: 'Đồng cảm sâu sắc, nhẹ nhàng, không phán xét, văn phong tự nhiên đời thường, kết thúc bằng lời mời inbox nhận test free.',
     defaultPrompt: 'Tạo comment TikTok chuyển đổi comment thành inbox dựa trên nội dung clip này.'
   },
@@ -233,7 +233,7 @@ export const ORDERS_METADATA: OrderMeta[] = [
     platform: 'Threads',
     category: 'post',
     allowedTypes: ['ws', 'ct'],
-    description: 'Bài đăng Threads ngắn gọn, ngắt dòng nhịp nhàng, hook thu hút, insight sắc bén và CTA tự nhiên về dự án/bài test 1-1.',
+    description: 'Bài đăng Threads ngắn gọn, ngắt dòng nhịp nhàng, hook thu hút, insight sắc bén và CTA tự nhiên về dự án/bài test định vị bản thân.',
     toneGuideline: 'Authentic, gần gũi, câu từ gãy gọn, không đao to búa lớn, giữ sự khiêm nhường và cởi mở.',
     defaultPrompt: 'Viết bài Threads viral giữ đúng tinh thần chân thật và kết nối.'
   },
@@ -244,7 +244,7 @@ export const ORDERS_METADATA: OrderMeta[] = [
     platform: 'LinkedIn',
     category: 'post',
     allowedTypes: ['ws', 'ct'],
-    description: 'Bài viết LinkedIn Long-Form chuẩn Thought Leadership (3-line hook mở "...see more", case study quản trị thực chiến, framework 3-4 điểm, câu hỏi mở, firstCommentSeed) kèm kịch bản InMail tiếp cận chuyên nghiệp 1:1.',
+    description: 'Bài viết LinkedIn Long-Form chuẩn Thought Leadership (3-line hook mở "...see more", case study quản trị thực chiến, framework 3-4 điểm, câu hỏi mở, firstCommentSeed) kèm kịch bản InMail tiếp cận chuyên nghiệp, tinh tế.',
     toneGuideline: 'Đĩnh đạc, khiêm nhường, am hiểu sâu sắc góc nhìn HRBP/Senior Leader, có căn cứ khoa học và tôn trọng đối phương.',
     defaultPrompt: 'Viết bài LinkedIn Long-Form chuyên sâu và soạn kịch bản InMail tiếp cận cá nhân hóa.'
   },
@@ -276,9 +276,9 @@ export const BENCHMARK_TEMPLATES: SampleTemplate[] = [
     platform: 'TikTok',
     category: 'Comment Tuổi 20-39',
     title: 'Khung mẫu: Đừng so sánh bản thân & Test trưởng thành',
-    tags: ['Tiktok', 'So sánh', 'Bài test 1-1'],
+    tags: ['Tiktok', 'So sánh', 'Bài test tự đánh giá'],
     keyInsight: 'Gỡ bỏ tự ti khi so sánh với người khác, trao quyền tự quyết cuộc đời.',
-    content: `Gửi các bạn đang ở độ tuổi 20-39t, đừng so sánh bản thân với người khác, cũng đừng vì 1 lời của người khác mà nghi ngờ và tự ti về bản thân. Cuộc đời của bản thân phụ thuộc vào sự lựa chọn của chính mình, vậy hãy suy nghĩ thật kỹ và lựa chọn đúng và trải nghiệm tất cả để biết mình chọn đúng hay sai. Mình có 1 bài test đánh giá mức độ trưởng thành của suy nghĩ và có giải đáp chi tiết 1-1 hướng phát triển. Bạn nào mong muốn mình trở nên vững vàng, quyết đoán, tích cực hơn, cần mình gửi cho free nhé ạ   `
+    content: `Gửi các bạn đang ở độ tuổi 20-39t, đừng so sánh bản thân với người khác, cũng đừng vì 1 lời của người khác mà nghi ngờ và tự ti về bản thân. Cuộc đời của bản thân phụ thuộc vào sự lựa chọn của chính mình, vậy hãy suy nghĩ thật kỹ và lựa chọn đúng và trải nghiệm tất cả để biết mình chọn đúng hay sai. Mình có 1 bài test đánh giá mức độ trưởng thành của suy nghĩ và có hỗ trợ giải đáp chi tiết hướng phát triển. Bạn nào mong muốn mình trở nên vững vàng, quyết đoán, tích cực hơn, cần mình gửi cho free nhé ạ   `
   },
   {
     id: 'bm-tt-3',
@@ -287,16 +287,16 @@ export const BENCHMARK_TEMPLATES: SampleTemplate[] = [
     title: 'Khung mẫu: Vượt qua tiêu cực & Xây dựng tư duy bền bỉ',
     tags: ['Tiktok', 'Cảm xúc', 'Sức bền'],
     keyInsight: 'Bình thường hóa cảm giác muốn bỏ cuộc và đưa ra giải pháp rèn luyện ý chí.',
-    content: `Một điều mà mình thấy các bạn trẻ bây giờ cũng nên học đó là nhanh lấy lại cảm xúc - vượt qua sự tiêu cực Vì chúng ta thì rất dễ buồn chán và từ bỏ chỉ vì một vài vấn đề nhỏ trong ngày, ngay sau đó là vứt hết mọi thứ, không muốn làm gì, cũng không giải quyết vấn đề. Đôi khi bạn không muốn vậy đâu, nhưng không thể làm khác được. Điều này cũng là ở tinh thần, ý chí của bản thân. Mình đang có một bài test review nhỏ có giải đáp chi tiết 1-1 qua online giúp đỡ xây dựng suy nghĩ tư duy mạnh mẽ, chủ động, tích cực, bền bỉ hơn phù hợp với tính cách, tiềm năng của từng bạn. Mình vẫn chia sẻ free cho các bạn nào từ 20+ đang cần ạ.   `
+    content: `Một điều mà mình thấy các bạn trẻ bây giờ cũng nên học đó là nhanh lấy lại cảm xúc - vượt qua sự tiêu cực Vì chúng ta thì rất dễ buồn chán và từ bỏ chỉ vì một vài vấn đề nhỏ trong ngày, ngay sau đó là vứt hết mọi thứ, không muốn làm gì, cũng không giải quyết vấn đề. Đôi khi bạn không muốn vậy đâu, nhưng không thể làm khác được. Điều này cũng là ở tinh thần, ý chí của bản thân. Mình đang có một bài test review nhỏ có hỗ trợ giải đáp chi tiết qua online giúp đỡ xây dựng suy nghĩ tư duy mạnh mẽ, chủ động, tích cực, bền bỉ hơn phù hợp với tính cách, tiềm năng của từng bạn. Mình vẫn chia sẻ free cho các bạn nào từ 20+ đang cần ạ.   `
   },
   {
     id: 'bm-tt-4',
     platform: 'TikTok',
     category: 'Comment Tuổi 21-35',
     title: 'Khung mẫu: Chữa lành vs Thấu hiểu bản chất',
-    tags: ['Tiktok', 'Đứa trẻ bên trong', 'Template 1-1'],
+    tags: ['Tiktok', 'Đứa trẻ bên trong', 'Bộ câu hỏi soi chiếu'],
     keyInsight: 'Đi tìm nguyên nhân gốc rễ của sự thiếu tự tin thay vì chỉ chữa lành tạm thời.',
-    content: `Gửi các bạn đang trong hành trình rực rỡ tuổi 21-35 tuổi: Đây có lẽ là lúc bạn đang tha thiết đi tìm hướng đi phù hợp cho mình. Nhưng đa số chúng ta lại đang đi tìm “giải pháp” để chữa lành cho đứa trẻ bên trong của mình. Dù có làm được nhiều việc, nhưng sao vẫn không cảm thấy tự tin và hạnh phúc mỗi ngày? Mình có một Template đánh giá mức độ thấu hiểu tính cách, con người thật của bạn và hỗ trợ giải đáp 1-1 về lộ trình để cải thiện bản lĩnh và sự tự tin từ bên trong. Bạn nào đang cần một "người dẫn đường" thì mình gửi tặng free nhé   `
+    content: `Gửi các bạn đang trong hành trình rực rỡ tuổi 21-35 tuổi: Đây có lẽ là lúc bạn đang tha thiết đi tìm hướng đi phù hợp cho mình. Nhưng đa số chúng ta lại đang đi tìm “giải pháp” để chữa lành cho đứa trẻ bên trong của mình. Dù có làm được nhiều việc, nhưng sao vẫn không cảm thấy tự tin và hạnh phúc mỗi ngày? Mình có một Template đánh giá mức độ thấu hiểu tính cách, con người thật của bạn và hỗ trợ giải đáp về lộ trình để cải thiện bản lĩnh và sự tự tin từ bên trong. Bạn nào đang cần một "người dẫn đường" thì mình gửi tặng free nhé   `
   },
   {
     id: 'bm-tt-5',
@@ -312,13 +312,13 @@ export const BENCHMARK_TEMPLATES: SampleTemplate[] = [
     platform: 'LinkedIn',
     category: 'Tin nhắn Outreach HRBP',
     title: 'Mẫu tiếp cận LinkedIn: HRBP & Nghiên cứu năng lượng Work-Life',
-    tags: ['LinkedIn', 'HRBP', 'MBTI', '1:1 Consultation'],
+    tags: ['LinkedIn', 'HRBP', 'MBTI', 'Kết nối chia sẻ'],
     keyInsight: 'Tạo uy tín bằng vị trí HRBP/L&D và góc nhìn khoa học (MBTI, cân bằng năng lượng).',
     content: `Xin chào bạn, mình là Ngọc Diệp, hiện đang làm HRBP. Ngoài công việc chính thì mình yêu thích nghiên cứu về phát triển con người. Mình đang đang cộng tác cùng team HR, L&D về một project về phát triển bản thân & cách mỗi người sử dụng năng lượng trong work-life. Dự án dành cho sinh viên năm 3, 4 và người đi làm, có:
 - Test tính cách khoa học (có MBTI) để hiểu rõ điểm mạnh, điểm yếu của mình
 - Tìm hiểu nguyên nhân và cách cân bằng năng lượng
 - Định hướng phát triển cá nhân hóa cho từng người
-Project tâm huyết của chúng mình đang mở online, miễn phí nhận tham vấn 1:1. Nếu bạn quan tâm, bạn đăng ký tại đây: [Link Tally/Form]
+Project tâm huyết của chúng mình đang mở online, miễn phí kết nối chia sẻ và đồng hành giải đáp. Nếu bạn quan tâm, bạn đăng ký tại đây: [Link Tally/Form]
 Nếu có câu hỏi cho mình và dự án, bạn nhắn lại mình nhé.
 Cảm ơn bạn đã đọc.
 Chúc bạn một ngày tích cực và hiệu quả ạ. ❤️`
@@ -447,7 +447,7 @@ Nhìn bạn bè cùng lứa ai cũng có vẻ thành công, tự dưng áp lực
 Nhưng sau này mình mới nhận ra: Chạy theo tốc độ của người khác chỉ làm mình kiệt sức.
 Hiểu rõ nhịp độ và thế mạnh cốt lõi của chính mình mới là cách bền vững nhất.
 
-Nếu bạn cũng đang loay hoay trong khoảng thời gian này, mình có 1 bài đánh giá định hướng 1-1 khá hay, bạn nào cần thì nhắn mình nhé.`
+Nếu bạn cũng đang loay hoay trong khoảng thời gian này, mình có 1 bài test định vị bản thân khá hay, bạn nào cần thì nhắn mình nhé.`
   },
   {
     id: 'bm-fb-longform-creator-wellbeing',
@@ -456,7 +456,7 @@ Nếu bạn cũng đang loay hoay trong khoảng thời gian này, mình có 1 b
     title: 'Facebook Long-Form: Dân Content Duy Trì Cảm Hứng & Test Sức Khỏe Tinh Thần WHO-5',
     tags: ['Facebook', 'Long-form', 'Dân Content', 'Well-being', 'Phi lợi nhuận'],
     keyInsight: 'Mẫu chuẩn bài viết Facebook dài: Hook in hoa giật tít chân thật -> Thấu hiểu nỗi đau nghề nghiệp -> Khẳng định dự án cộng đồng phi lợi nhuận (không bán khóa học, không lùa gà) -> Kêu gọi làm bài test WHO-5 -> Dẫn link ở bình luận ghim mồi.',
-    firstCommentSeed: `Link bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 ở đây nhé anh em: https://tally.so/r/wellbeing-test (Hoàn toàn miễn phí, làm xong có bác sĩ hỗ trợ giải đáp 1-1 nha mọi người ơi ❤️)`,
+    firstCommentSeed: `Link bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 ở đây nhé anh em: https://tally.so/r/wellbeing-test (Hoàn toàn miễn phí, làm xong có bác sĩ đồng hành giải đáp nha mọi người ơi ❤️)`,
     content: `Sáng tạo hết mình, bay bổng cùng ý tưởng: Dân Content ĐANG DUY TRÌ nguồn cảm hứng NHƯ THẾ NÀO?
 
 Làm công việc sáng tạo hay tự do nhận dự án thực sự mang lại sự hứng khởi rất lớn. Khi cảm xúc thăng hoa, tâm trí thoải mái thì ý tưởng tuôn chảy cực kỳ mượt mà. Tuy nhiên, muốn giữ được nguồn cảm hứng dồi dào và tư duy sáng tạo sắc bén lâu dài, bệ phóng quan trọng nhất chính là một cơ thể khỏe mạnh cùng một tinh thần thật thảnh thơi.
@@ -476,7 +476,7 @@ Mn nào muốn tranh thủ đợt nghỉ này làm mới lại nguồn năng lư
     title: 'LinkedIn Long-Form: Nghịch Lý Giữ Chân Nhân Tài & Bẫy "Càng Kiểm Soát Càng Mất Người"',
     tags: ['LinkedIn', 'Long-form', 'Thought Leadership', 'HRBP', 'Quản trị nhân sự', 'Leadership'],
     keyInsight: 'Chuẩn bài viết LinkedIn Viral: 3 dòng đầu mở nút "...see more" -> Case study từ chức bất ngờ -> Phân tích 3 rào cản gốc rễ quản trị -> Framework 3 trụ cột People-First -> Câu hỏi mở kích hoạt tranh luận chuyên môn -> Link tài liệu ở First Comment.',
-    firstCommentSeed: `P/S: Với anh/chị Leader hoặc HRBP đang quan tâm đến bộ chỉ số đo lường sức khỏe tổ chức & khung đánh giá Well-being nhân sự, em xin phép để link tài liệu chi tiết tại đây nhé: https://tally.so/r/leadership-assessment (Hoàn toàn mở và có hỗ trợ trao đổi 1-1 cho các Case Study khó ạ).`,
+    firstCommentSeed: `P/S: Với anh/chị Leader hoặc HRBP đang quan tâm đến bộ chỉ số đo lường sức khỏe tổ chức & khung đánh giá Well-being nhân sự, em xin phép để link tài liệu chi tiết tại đây nhé: https://tally.so/r/leadership-assessment (Hoàn toàn mở và có hỗ trợ trao đổi trực tiếp cho các Case Study khó ạ).`,
     content: `Nhân sự giỏi không rời bỏ công ty vì thiếu KPI.
 Họ rời đi khi nhận ra: Sự tận tâm của mình chỉ được đổi lại bằng những quy trình kiểm soát ngày càng nghẹt thở.
 
@@ -484,7 +484,7 @@ Tuần trước, tôi nhận được tin nhắn từ một bạn Senior Lead 6 
 Bạn ấy là người luôn đạt 120% hiệu suất, gánh team qua những đợt khủng hoảng lớn nhất.
 Khi sếp hỏi lý do: "Em thấy mệt và muốn nghỉ ngơi."
 
-Nhưng khi ngồi trò chuyện 1-on-1 riêng, sự thật hoàn toàn khác:
+Nhưng khi ngồi trò chuyện riêng, sự thật hoàn toàn khác:
 "Anh ơi, em không sợ cực. Em chỉ sợ cảm giác mỗi ngày đi làm như một chiếc máy chấm công. Mọi ý kiến cải tiến đều bị gạt đi vì 'chưa có trong tiền lệ', và thời gian làm báo cáo giải trình còn nhiều hơn thời gian giải quyết vấn đề cho khách hàng."
 
 Trong thời đại AI và thị trường cạnh tranh khốc liệt ngày nay, rất nhiều nhà quản lý đang vô tình rơi vào chiếc bẫy: CÀNG LO LẮNG VỀ NĂNG SUẤT -> CÀNG XIẾT CHẶT KIỂM SOÁT -> NHÂN TÀI CÀNG CẠN KIỆT NĂNG LƯỢNG VÀ RỜI ĐI.
@@ -512,8 +512,8 @@ Rất mong được lắng nghe góc nhìn thực chiến từ mọi người �
     platform: 'Email',
     category: 'Email Chuyển Đổi & Nurturing',
     title: 'Mẫu Email Nurturing: Bận rộn mù quáng vs Thấu suốt điểm mạnh bản thân',
-    tags: ['Email', 'Nurturing', 'Điểm mạnh', '1-1 Consultation'],
-    keyInsight: '3 Dòng tiêu đề có tỷ lệ mở cao (>45%) -> Tâm sự chân thành -> Tặng bài test & tư vấn 1-1 -> Tái bút (P.S.) đòn bẩy.',
+    tags: ['Email', 'Nurturing', 'Điểm mạnh', 'Kết nối đồng hành'],
+    keyInsight: '3 Dòng tiêu đề có tỷ lệ mở cao (>45%) -> Tâm sự chân thành -> Tặng bài test & hỗ trợ giải đáp -> Tái bút (P.S.) đòn bẩy.',
     content: `[GỢI Ý 3 TIÊU ĐỀ EMAIL CÓ TỶ LỆ MỞ CAO]:
 1. (Tò mò): Bạn có đang bận rộn... nhưng là bận rộn một cách mù quáng?
 2. (Chạm nỗi đau): Khi nỗ lực cả năm nhưng vẫn thấy mình dậm chân tại chỗ
@@ -537,22 +537,22 @@ Nếu bạn đang cảm thấy cần một khoảng lặng để:
 Mình gửi tặng bạn bộ công cụ Self-Positioning Matrix & Bài đánh giá định vị bản thân (hoàn toàn miễn phí):
 👉 [Đường link làm bài test định vị]
 
-Sau khi bạn hoàn thành, mình và đội ngũ chuyên gia sẽ đồng hành giải đáp 1-1 kín đáo qua online để giúp bạn sáng tỏ hướng đi.
+Sau khi bạn hoàn thành, mình và đội ngũ chuyên gia sẽ đồng hành giải đáp kín đáo qua online để giúp bạn sáng tỏ hướng đi.
 
 Chúc bạn luôn giữ được sự an yên và vững vàng trên hành trình của mình.
 
 Thân mến,
 [Tên người gửi]
 
-P.S. Bộ câu hỏi và suất tham vấn 1-1 này hoàn toàn phi lợi nhuận từ dự án cộng đồng của tụi mình. Bạn cứ thong thả làm khi có không gian yên tĩnh nhé!`
+P.S. Bộ câu hỏi và buổi kết nối chia sẻ này hoàn toàn phi lợi nhuận từ dự án cộng đồng của tụi mình. Bạn cứ thong thả làm khi có không gian yên tĩnh nhé!`
   },
   {
     id: 'bm-threads-cmt-vulnerable',
     platform: 'Threads',
     category: 'Comment Thấu Hiểu & Tự Sự',
     title: 'Mẫu Comment Threads: Lời tâm sự đêm muộn & Gỡ bỏ chiếc bẫy so sánh',
-    tags: ['Threads', 'Comment', 'So sánh', '1-1'],
-    keyInsight: 'Ngắt dòng nhịp nhàng 3-4 đoạn ngắn, lời thì thầm đêm muộn gỡ bỏ phòng thủ, rủ rê nhận bài test 1-1.',
+    tags: ['Threads', 'Comment', 'So sánh', 'Tự đánh giá'],
+    keyInsight: 'Ngắt dòng nhịp nhàng 3-4 đoạn ngắn, lời thì thầm đêm muộn gỡ bỏ phòng thủ, rủ rê nhận bộ câu hỏi soi chiếu.',
     content: `Nhiều khi thấy bạn bè cùng tuổi mua nhà, đổi xe, tự nhiên thấy mình nhỏ bé ghê.
 Nhưng đi qua nhiều đợt khủng hoảng mới hiểu: Tốc độ của người ta là đồng hồ của người ta, nhịp sống của mình là hành trình của mình.
 

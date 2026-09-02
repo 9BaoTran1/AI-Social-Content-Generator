@@ -52,7 +52,7 @@ export type WritingToneOption =
   | 'empathy_story' // Tâm sự tự sự & Đồng cảm sâu sắc
   | 'workplace_insight' // Đa chiều & Phân tích tâm lý công sở
   | 'provocative_reframe' // Phản biện bẻ khóa góc nhìn (Reframe)
-  | 'assessment_test'; // Khơi gợi bài test & Trắc nghiệm 1-1
+  | 'assessment_test'; // Khơi gợi bài trắc nghiệm tự đánh giá
 
 export interface GenerationOptions {
   includeLink?: boolean;

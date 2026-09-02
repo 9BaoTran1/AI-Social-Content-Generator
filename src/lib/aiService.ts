@@ -380,9 +380,9 @@ export function extractBenchmarkFallback(params: {
 
   const firstComment = primaryTmpl.firstCommentSeed || (
     isFacebookPost
-      ? 'Link bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 ở đây nhé anh em: https://tally.so/r/wellbeing-test (Hoàn toàn miễn phí, làm xong có bác sĩ hỗ trợ giải đáp 1-1 nha mọi người ơi ❤️)'
+      ? 'Link bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 ở đây nhé anh em: https://tally.so/r/wellbeing-test (Hoàn toàn miễn phí, làm xong có bác sĩ hỗ trợ giải đáp chi tiết nha mọi người ơi ❤️)'
       : isLinkedInPost
-      ? 'P/S: Với anh/chị Leader hoặc HRBP đang quan tâm đến bộ chỉ số đo lường sức khỏe tổ chức & khung đánh giá Well-being nhân sự, em xin phép để link tài liệu chi tiết tại bình luận này nhé: [Link_Tài_Liệu] (Hoàn toàn mở và có hỗ trợ trao đổi 1-1 ạ).'
+      ? 'P/S: Với anh/chị Leader hoặc HRBP đang quan tâm đến bộ chỉ số đo lường sức khỏe tổ chức & khung đánh giá Well-being nhân sự, em xin phép để link tài liệu chi tiết tại bình luận này nhé: [Link_Tài_Liệu] (Hoàn toàn mở và có hỗ trợ giải đáp trực tiếp ạ).'
       : undefined
   );
 
@@ -400,7 +400,7 @@ export function extractBenchmarkFallback(params: {
     dmFollowUpScript: {
       step1_empathy: 'Chào bạn, mình thấy bạn vừa để lại tương tác trên bài viết. Mình nhắn để gửi bạn tài liệu/bài test như đã hẹn nhé.',
       step2_qualifyQuestion: 'Bạn hiện tại đang làm trong lĩnh vực nào và có đang gặp trở ngại gì về định vị mục tiêu hay cân bằng năng lượng không?',
-      step3_inviteLink: 'Mình gửi bạn link bộ câu hỏi và form tham vấn 1-1 kín đáo qua online nhé: [Link]. Tụi mình hỗ trợ hoàn toàn miễn phí ạ.',
+      step3_inviteLink: 'Mình gửi bạn link bộ câu hỏi và form tự đánh giá kín đáo qua online nhé: [Link]. Tụi mình hỗ trợ hoàn toàn miễn phí ạ.',
     },
     rationale: `⚡ [Chế độ Dự Phòng Thông Minh - Template Fallback Engine]: Do máy chủ AI Google đang tải cao hoặc đường truyền gián đoạn, hệ thống đã tự động trích xuất bài mẫu từ Kho Mẫu Benchmark đã qua kiểm chứng chuyển đổi thực tế cao nhất ("${primaryTmpl.title}"). Toàn bộ quy trình phản hồi tức thì trong 0.1s, bảo đảm không bao giờ bị trắng trang hay đứng máy.`,
     platformNotes: `Nội dung chuẩn hóa thuật toán cho nền tảng ${platform}. Đã tối ưu Dwell Time và tỷ lệ chuyển đổi bình luận thành tin nhắn riêng.`,
@@ -437,9 +437,9 @@ export function applyLocalRefinement(currentContent: string, instruction: string
       result = `Chào bạn, gửi bạn một chút suy ngẫm từ người cũng từng trải qua giai đoạn này...\n\n${result}`;
       explanation = 'Đã gia tăng sắc thái tự sự ấm áp và tính thấu cảm cho bài viết.';
     }
-  } else if (cleanInst.includes('test') || cleanInst.includes('1-1') || cleanInst.includes('inbox')) {
-    result += `\n\n👉 Bạn nào đang cần người lắng nghe hoặc nhận bài test định vị thế mạnh 1-1 kín đáo thì cứ nhắn tin riêng cho mình nhé, mình hỗ trợ hoàn toàn miễn phí ạ!`;
-    explanation = 'Đã tăng cường lời mời nhận bài test và kết nối 1-1 chân tình.';
+  } else if (cleanInst.includes('test') || cleanInst.includes('tu van') || cleanInst.includes('inbox')) {
+    result += `\n\n👉 Bạn nào đang cần người lắng nghe hoặc nhận bài test định vị thế mạnh kín đáo thì cứ nhắn tin riêng cho mình nhé, mình hỗ trợ hoàn toàn miễn phí ạ!`;
+    explanation = 'Đã tăng cường lời mời nhận bài test và kết nối riêng chân tình.';
   } else {
     result = `${result}\n\n[Ghi chú tinh chỉnh]: Nội dung đã được tối ưu theo yêu cầu: "${instruction}".`;
     explanation = `Đã áp dụng điều chỉnh: ${instruction.slice(0, 80)}`;
@@ -465,7 +465,7 @@ export function applyLocalProgramExtraction(params: {
     targetAudience: ['Người đi làm (22-38 tuổi)', 'Nhân sự trẻ cần định vị bản thân'],
     painPoints: ['Mông lung về hướng đi', 'Áp lực công việc và kiệt sức thầm lặng'],
     coreValues: ['Thấu hiểu con người thật', 'Định vị điểm mạnh nội tại'],
-    testOrFormAngle: 'Bài test định vị năng lực và buổi trò chuyện 1-1 kín đáo',
+    testOrFormAngle: 'Bài test định vị năng lực và buổi trò chuyện riêng kín đáo',
   };
 }
 
@@ -835,7 +835,7 @@ Sứ mệnh của bạn: Trực tiếp điều phối và hợp nhất năng l�
 3. [Paradigm Shift & Reframe Specialist]:
    - Nhiệm vụ: Bẻ gãy lối mòn tư duy (reframe) bằng góc nhìn phản biện logic, chỉ ra gốc rễ vì sao càng gượng ép càng bế tắc, đưa ra giải pháp giải phóng tâm lý.
 4. [Conversion & 1-on-1 Bridge Specialist]:
-   - Nhiệm vụ: Xây dựng cầu nối chuyển đổi tự nhiên từ comment/post sang inbox/DM và bài test/template 1-1.
+   - Nhiệm vụ: Xây dựng cầu nối chuyển đổi tự nhiên từ comment/post sang inbox/DM và bài test/template tự đánh giá.
    - Nguyên tắc: Đưa ra lời mời nhẹ nhàng, tặng miễn phí 100%, tạo cảm giác được lắng nghe và an toàn tuyệt đối.
 5. [Platform Algorithm & Anti-Detection Auditor]:
    - Nhiệm vụ: Kiểm duyệt và triệt tiêu 100% từ ngữ cấm kỵ/AI fluff ("Trong cuộc sống hiện đại...", "Hãy nhớ rằng...", "Hành trình vạn dặm...", "Ngọn hải đăng...").
@@ -845,12 +845,12 @@ ${
   isTikTokComment
     ? `=== CHIẾN LƯỢC ORDER 1: COMMENT TIKTOK CHUYỂN ĐỔI COMMENT THÀNH INBOX (ĐỘ TUỔI 20-39T) ===
 - Văn phong: Tự sự, ấm áp, thủ thỉ, chân thành, hạ thấp bản thân như một người anh/chị/bạn bè từng đi qua giai đoạn khủng hoảng trải lòng.
-- Không phán xét, không giáo điều: Đồng cảm từ một chi tiết sâu sắc trong clip -> Giải phóng tâm lý tự trách -> Giới thiệu bài test/template đánh giá tính cách, con người thật hoặc sức bền tinh thần 1-1 kín đáo.
+- Không phán xét, không giáo điều: Đồng cảm từ một chi tiết sâu sắc trong clip -> Giải phóng tâm lý tự trách -> Giới thiệu bài test/template đánh giá tính cách, con người thật hoặc sức bền tinh thần kín đáo.
 - Lời mời inbox: Nhẹ nhàng, chân tình, tặng miễn phí 100% ("bạn nào đang cần người lắng nghe/soi chiếu thì nhắn mình gửi tặng free nhé ạ").
 - YÊU CẦU 4 BIẾN THỂ (VARIATIONS) PHẢI CÓ SỰ PHÂN HÓA CHIẾN LƯỢC RÕ RỆT:
   * Mẫu 1 (Tự sự - Đồng cảm sâu sắc từ chi tiết clip): Bắt trúng cảm xúc trong clip, kể lại trải nghiệm bản thân, gỡ bỏ mặc cảm so sánh ngầm tuổi 20-39.
   * Mẫu 2 (Phản biện Reframe - Bẻ khóa tư duy): Chỉ ra sự thật "không phải bạn dở hay lười, mà do đang gượng ép mình vào hệ quy chiếu không thuộc về điểm mạnh".
-  * Mẫu 3 (Trắc nghiệm Soi chiếu - Test 1-1 kín đáo): Khơi gợi điểm mù tư duy và tặng bài test trưởng thành/sức bền tinh thần có chuyên gia giải đáp 1-1.
+  * Mẫu 3 (Trắc nghiệm Soi chiếu - Tự đánh giá kín đáo): Khơi gợi điểm mù tư duy và tặng bài test trưởng thành/sức bền tinh thần có chuyên gia giải đáp chi tiết.
   * Mẫu 4 (Đúc kết khiêm nhường từ tiền bối): Chia sẻ bài học thực chiến của người đi làm nhiều năm, tặng template/bản đồ định vị bản sắc cá nhân free qua inbox.`
     : isFacebookComment
     ? `=== CHIẾN LƯỢC ORDER 2: COMMENT FACEBOOK PHÂN TÍCH ĐA CHIỀU (KHÔNG GIỚI HẠN WS/CT) ===
@@ -870,30 +870,30 @@ ${
 3. PHẢN BIỆN BẺ GÃY LỐI MÒN (PARADIGM SHIFT): Phân tích vì sao càng gượng ép càng bế tắc. Nền tảng cốt lõi của sự thăng hoa là phục hồi năng lượng thể chất và sự thấu suốt bản thân.
 4. TUYÊN BỐ DỰ ÁN CỘNG ĐỒNG PHI LỢI NHUẬN (100% MINH BẠCH TẠO NIỀM TIN): Bắt buộc có đoạn cam kết dứt khoát:
    "Mình cùng đồng đội làm một dự án cộng đồng hoàn toàn phi lợi nhuận. Mục đích thuần túy là muốn chia sẻ giá trị, đồng hành cùng anh em để giữ lửa nghề bền bỉ hơn. Mình khẳng định luôn là KHÔNG bán khóa học, KHÔNG PR lùa gà hay kinh doanh sản phẩm gì ở đây hết nhé, ai nghĩ vậy thì lướt qua giùm cho đỡ mất thời gian đôi bên ạ."
-5. CÔNG CỤ TỰ ĐÁNH GIÁ CHUẨN KHOA HỌC: Giới thiệu bài test đo lường sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 (Well-being index) hoặc bản đồ định vị thế mạnh, có bác sĩ/chuyên gia giải đáp 1-1 kín đáo.
+5. CÔNG CỤ TỰ ĐÁNH GIÁ CHUẨN KHOA HỌC: Giới thiệu bài test đo lường sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 (Well-being index) hoặc bản đồ định vị thế mạnh, có bác sĩ/chuyên gia hỗ trợ giải đáp kín đáo.
 6. CTA HƯỚNG VỀ FIRST COMMENT: Mời độc giả ghé xuống phần bình luận để nhận link (tuyệt đối không gắn link trên caption bài viết để tránh Facebook bóp reach 80%).
 7. XUẤT 'firstCommentSeed': Bình luận ghim mồi đặt link bài test chân tình, tự nhiên.
 - YÊU CẦU 4 BIẾN THỂ (VARIATIONS - MỖI BÀI 500-850 TỪ):
   * Mẫu 1 (Tự sự - Nỗi đau kiệt sức & Well-being): Khắc họa kiệt sức thầm lặng của người làm nghề, kêu gọi lắng nghe cơ thể, test WHO-5.
   * Mẫu 2 (Phản biện - Nghịch lý nghề nghiệp & Thấu suốt con người thật): Bẻ gãy bẫy so sánh và bận rộn mù quáng, tái định vị bản thân.
-  * Mẫu 3 (Dự án cộng đồng phi lợi nhuận & Khảo sát WHO-5): Cam kết đanh thép phi lợi nhuận, đồng hành gỡ rối tâm lý 1-1 cùng bác sĩ.
+  * Mẫu 3 (Dự án cộng đồng phi lợi nhuận & Khảo sát WHO-5): Cam kết đanh thép phi lợi nhuận, đồng hành gỡ rối tâm lý cùng bác sĩ.
   * Mẫu 4 (Chuyên gia thực chiến - Đúc kết chuyển hóa & Sức bền): Góc nhìn cố vấn 20 năm, giải pháp nuôi dưỡng năng lực nội tại.`
     : isThreadsComment
     ? `=== CHIẾN LƯỢC ORDER 4: COMMENT THREADS (STORYTELLING CHÂN THẬT, CHẠM VÀO TÂM SỰ NỘI TÂM) ===
 - Format: Ngắn gọn (3-5 dòng), ngắt dòng nhịp nhàng chuẩn văn hóa Threads, không hashtag, không màu mè.
 - Tone: Tự sự, thổ lộ chân thật (vulnerable confession), như một lời thì thầm đêm muộn gỡ bỏ hoàn toàn sự phòng thủ của người đọc.
-- Chuyển đổi: Gợi ý bài test/template tự soi chiếu 1-1 miễn phí giúp sáng tỏ hướng đi, mời chủ động nhắn tin.
+- Chuyển đổi: Gợi ý bài test/template tự soi chiếu miễn phí giúp sáng tỏ hướng đi, mời chủ động nhắn tin.
 - YÊU CẦU 4 BIẾN THỂ (VARIATIONS):
   * Mẫu 1 (Lời tự sự đêm muộn): Chạm vào nỗi cô đơn, lạc lõng giữa thành phố sau giờ tan sở.
   * Mẫu 2 (Lát cắt công sở chân thực): Áp lực deadline và nỗi sợ bị tụt lại phía sau dù đã nỗ lực hết sức.
-  * Mẫu 3 (Lời động viên ấm áp & Soi chiếu): Nhẹ nhàng gỡ bỏ áp lực so sánh với người khác, tặng test 1-1.
+  * Mẫu 3 (Lời động viên ấm áp & Soi chiếu): Nhẹ nhàng gỡ bỏ áp lực so sánh với người khác, tặng bài test định vị.
   * Mẫu 4 (Bẻ khóa cảm xúc giấu kín): Nói hộ tiếng lòng về sự trống rỗng bên trong dù bề ngoài vẫn ổn.`
     : isThreadsPost
     ? `=== CHIẾN LƯỢC ORDER 5: BÀI VIẾT THREADS (NGẮN GỌN, CUỐN HÚT, VIRAL INSIGHT) ===
 - Format: Chuỗi câu ngắn (1-2 câu mỗi đoạn), ngắt dòng rộng rãi, cực kỳ bắt mắt trên mobile feed.
 - Hook mở đầu: Đánh thẳng vào một nghịch lý tâm lý hoặc cảm xúc giấu kín của người đi làm tuổi 20-35.
 - Nội dung: Gãy gọn, nhịp điệu nhanh, sắc sảo, không hoa mỹ, câu trước kéo câu sau.
-- Kết bài: CTA tự nhiên mời thảo luận và nhắn tin riêng để nhận link bài test / template định vị 1-1.
+- Kết bài: CTA tự nhiên mời thảo luận và nhắn tin riêng để nhận link bài test / template định vị bản thân.
 - YÊU CẦU 4 BIẾN THỂ (VARIATIONS):
   * Mẫu 1 (Nghịch lý tuổi 20-30): Chạy theo tốc độ của người khác vs Tìm ra nhịp độ của chính mình.
   * Mẫu 2 (Bẫy chăm chỉ mù quáng): Làm việc cật lực nhưng vẫn tự ti và trống rỗng vì thiếu bản sắc riêng.
@@ -911,7 +911,7 @@ ${
 4. VĂN PHONG ĐĨNH ĐẠC, KHIÊM NHƯỜNG: Tầm vóc chuyên gia từng trải, tôn trọng con người, không sáo rỗng.
 5. CÂU HỎI MỞ KÍCH HOẠT TRANH LUẬN: Gợi mở bàn luận giữa các C-Level, HR Leader, Manager bên dưới bài viết.
 6. XUẤT 'firstCommentSeed': Bình luận ghim mồi chứa link tài liệu, framework hoặc bài test chuyên sâu (tránh LinkedIn bóp reach outlink).
-7. KÈM KỊCH BẢN INMAIL 3 BƯỚC: Lời mở đầu HRBP ấm áp -> Câu hỏi đào sâu -> Lời mời tham vấn 1-1 miễn phí.
+7. KÈM KỊCH BẢN INMAIL 3 BƯỚC: Lời mở đầu HRBP ấm áp -> Câu hỏi đào sâu -> Lời mời kết nối trao đổi miễn phí.
 - YÊU CẦU 4 BIẾN THỂ (VARIATIONS - MỖI BÀI 450-800 TỪ):
   * Mẫu 1 (Case Study Quản Trị & Lãnh Đạo Thực Chiến, 450-800 từ): Tình huống nhân viên giỏi từ chức và giải pháp lãnh đạo con người.
   * Mẫu 2 (Phản Biện Góc Khuất Quản Trị Cấp Trung, 450-800 từ): Nỗi cô đơn và áp lực kẹp giữa hai làn đạn của Middle Manager.
@@ -925,12 +925,12 @@ ${
 2. MỞ ĐẦU THÂN MẬT NHƯ NGƯỜI BẠN ĐỒNG HÀNH: Bắt đầu bằng một câu chuyện ngắn, một quan sát đời thường hoặc một sự đồng cảm ấm áp.
 3. CÂU HỎI SOI CHIẾN TRÚNG TIM ĐEN: Đặt 2-3 câu hỏi gợi mở sâu sắc giúp người nhận tự nhìn nhận lại năng lượng, mục tiêu và điểm nghẽn của mình.
 4. GIỚI THIỆU GIẢI PHÁP / WORKSHOP / CHƯƠNG TRÌNH: Dẫn dắt nhẹ nhàng, khiêm nhường, nhấn mạnh tính đồng hành và giá trị chuyển hóa bên trong.
-5. KÊU GỌI HÀNH ĐỘNG (CTA) KHÔNG ÁP LỰC: Mời bấm link đăng ký hoặc reply trực tiếp email này để chia sẻ câu chuyện và nhận tham vấn 1-1.
+5. KÊU GỌI HÀNH ĐỘNG (CTA) KHÔNG ÁP LỰC: Mời bấm link đăng ký hoặc reply trực tiếp email này để chia sẻ câu chuyện và được hỗ trợ giải đáp trực tiếp.
 6. TÁI BÚT (P.S.): Đòn bẩy tâm lý cuối cùng, nhắc lại quà tặng/suất tham vấn miễn phí hoặc một lời chúc chân thành.
 - YÊU CẦU 4 BIẾN THỂ (VARIATIONS):
   * Mẫu 1 (Email Storytelling từ người bạn đồng hành - kèm 3 Subject Lines & P.S.): Tâm sự chân thành về những ngày lạc lối và bài học tìm lại chính mình.
   * Mẫu 2 (Email Phản biện bẻ gãy bận rộn mù quáng - kèm 3 Subject Lines & P.S.): Tháo gỡ chiếc bẫy làm việc không ngừng nghỉ nhưng không thấy tiến bộ.
-  * Mẫu 3 (Email Trao giá trị bài test & Khảo sát Well-being - kèm 3 Subject Lines & P.S.): Tặng bài test định vị và lời mời tham vấn 1-1 miễn phí.
+  * Mẫu 3 (Email Trao giá trị bài test & Khảo sát Well-being - kèm 3 Subject Lines & P.S.): Tặng bài test định vị và hỗ trợ giải đáp miễn phí.
   * Mẫu 4 (Email Quyết định bước ngoặt chuyển hóa - kèm 3 Subject Lines & P.S.): Lời mời bước vào không gian Workshop/Chương trình với tâm thế chủ động.`
 }
 
@@ -941,7 +941,7 @@ ${JSON.stringify(params.programs, null, 2)}`;
     if (isTikTokComment) {
       return `"Mẫu 1 (Tự sự - Đồng cảm sâu sắc từ chi tiết clip): ...",
     "Mẫu 2 (Phản biện Reframe - Bẻ khóa tư duy): ...",
-    "Mẫu 3 (Trắc nghiệm Soi chiếu - Test 1-1 kín đáo): ...",
+    "Mẫu 3 (Trắc nghiệm Soi chiếu - Tự đánh giá kín đáo): ...",
     "Mẫu 4 (Đúc kết khiêm nhường từ tiền bối): ..."`;
     }
     if (isFacebookComment) {
@@ -1048,7 +1048,7 @@ Trả về JSON đúng cấu trúc:
         targetAudience: 'Người trẻ & nhân sự đi làm (20-39 tuổi) đang đối mặt với áp lực định vị và mong muốn tìm lại sự cân bằng.',
         emotionalTouchpoint: 'Kiệt sức thầm lặng, áp lực so sánh ngầm và nỗi sợ dậm chân tại chỗ.',
         algorithmAssessment: 'Tối ưu Dwell Time bằng cốt truyện cuốn hút, giữ trọn reach tự nhiên bằng bình luận ghim mồi.',
-        approachReason: 'Sử dụng tâm sự chân thật, cam kết phi lợi nhuận 100% để phá bỏ rào cản tâm lý và mở đường chuyển đổi 1-1.',
+        approachReason: 'Sử dụng tâm sự chân thật, cam kết phi lợi nhuận 100% để phá bỏ rào cản tâm lý và kết nối chuyển đổi tự nhiên.',
       },
       dmFollowUpScript: {
         step1_empathy: 'Chào bạn, mình thấy bạn quan tâm đến chủ đề này.',
@@ -1065,7 +1065,7 @@ Trả về JSON đúng cấu trúc:
       targetAudience: parsed.directorStrategicAnalysis?.targetAudience || 'Người đi làm & giới trẻ (20-39 tuổi) đang đối mặt với áp lực định vị và kiệt sức thầm lặng.',
       emotionalTouchpoint: parsed.directorStrategicAnalysis?.emotionalTouchpoint || 'Cảm giác chông chênh, áp lực so sánh ngầm và mong muốn tìm lại nhịp điệu nội tại.',
       algorithmAssessment: parsed.directorStrategicAnalysis?.algorithmAssessment || 'Tối ưu Dwell Time bằng cấu trúc câu chuyện chặt chẽ, né bóp reach bằng First Comment Seed ghim link.',
-      approachReason: parsed.directorStrategicAnalysis?.approachReason || 'Tiếp cận bằng sự chân thành, phi lợi nhuận 100% để phá vỡ hoài nghi và dẫn dắt tự nhiên sang đối thoại 1-1.',
+      approachReason: parsed.directorStrategicAnalysis?.approachReason || 'Tiếp cận bằng sự chân thành, phi lợi nhuận 100% để phá vỡ hoài nghi và dẫn dắt tự nhiên sang đối thoại riêng.',
     };
 
     const finalOutput: GeneratedContent = {
@@ -1078,7 +1078,7 @@ Trả về JSON đúng cấu trúc:
       programType: (parsed.selectedProgramType as ProgramType) || 'ws',
       primaryContent: parsed.primaryContent || variationsList[0] || '',
       variations: variationsList,
-      firstCommentSeed: parsed.firstCommentSeed || (isFacebookPost ? 'Link bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 ở đây nhé anh em: https://tally.so/r/wellbeing-test (Hoàn toàn miễn phí, làm xong có bác sĩ hỗ trợ giải đáp 1-1 nha mọi người ơi ❤️)' : isLinkedInPost ? 'P/S: Với anh/chị Leader hoặc HRBP đang quan tâm đến bộ chỉ số đo lường sức khỏe tổ chức & khung đánh giá Well-being nhân sự, em xin phép để link tài liệu chi tiết tại bình luận này nhé: [Link_Tài_Liệu] (Hoàn toàn mở và có hỗ trợ trao đổi 1-1 ạ).' : undefined),
+      firstCommentSeed: parsed.firstCommentSeed || (isFacebookPost ? 'Link bài test kiểm tra sức khỏe thể chất & tinh thần chuẩn y khoa WHO-5 ở đây nhé anh em: https://tally.so/r/wellbeing-test (Hoàn toàn miễn phí, làm xong có bác sĩ hỗ trợ giải đáp chi tiết nha mọi người ơi ❤️)' : isLinkedInPost ? 'P/S: Với anh/chị Leader hoặc HRBP đang quan tâm đến bộ chỉ số đo lường sức khỏe tổ chức & khung đánh giá Well-being nhân sự, em xin phép để link tài liệu chi tiết tại bình luận này nhé: [Link_Tài_Liệu] (Hoàn toàn mở và có hỗ trợ giải đáp trực tiếp ạ).' : undefined),
       dmFollowUpScript: parsed.dmFollowUpScript || {
         step1_empathy: '',
         step2_qualifyQuestion: '',
