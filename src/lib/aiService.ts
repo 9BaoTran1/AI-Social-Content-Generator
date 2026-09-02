@@ -230,7 +230,7 @@ export class SmartLocalCacheManager {
   public makeHash(orderType: string, context: string, programId?: string, options?: any): string {
     const normContext = (context || '').toLowerCase().replace(/\s+/g, ' ').trim();
     const normProg = (programId || 'auto').toLowerCase().trim();
-    const normTone = (options?.tone || '').toLowerCase().trim();
+    const normTone = (options?.tone === 'custom' ? (options?.customTone || 'custom') : (options?.tone || '')).toLowerCase().trim();
     const normLen = (options?.lengthPreference || '').toLowerCase().trim();
     const raw = `${orderType}__${normProg}__${normTone}__${normLen}__${normContext}`;
 
@@ -995,10 +995,36 @@ ${JSON.stringify(params.programs, null, 2)}`;
     "Mẫu 4 (Email Quyết định bước ngoặt chuyển hóa - kèm 3 Subject Lines & P.S.): ..."`;
   };
 
+  const getToneDescription = () => {
+    if (params.options?.tone === 'custom') {
+      return params.options?.customTone ? `Phong cách tự nhập: "${params.options.customTone}"` : 'Tự do sáng tạo theo phong cách người dùng chỉ định';
+    }
+    if (params.options?.tone === 'humorous') {
+      return 'Hài hước, hóm hỉnh, dí dỏm, duyên dáng, tự trào thông minh, bắt trend nhẹ nhàng';
+    }
+    if (params.options?.tone === 'workplace_insight') {
+      return 'Phân tích tâm lý công sở & Reframe góc nhìn mới lạ, thực tế';
+    }
+    if (params.options?.tone === 'provocative_reframe') {
+      return 'Phản biện bẻ khóa định kiến, sắc bén và độc bản';
+    }
+    if (params.options?.tone === 'assessment_test') {
+      return 'Giá trị cộng đồng, khơi gợi bài trắc nghiệm tự đánh giá phi lợi nhuận';
+    }
+    return 'Tự sự & Đồng cảm sâu sắc, kể chuyện chạm tim (Storytelling)';
+  };
+
+  const isHumorous = params.options?.tone === 'humorous' || (params.options?.tone === 'custom' && params.options?.customTone?.toLowerCase().includes('hài'));
   const promptText = `Yêu cầu thực hiện Order: ${params.orderType}
 Ý tưởng, bối cảnh & từ khóa: "${params.context}"
 ${params.selectedProgramId && params.selectedProgramId !== 'auto' ? `Dự án chỉ định ID: ${params.selectedProgramId}` : 'Hãy tự động chọn WS/CT phù hợp nhất với ngữ cảnh.'}
-Tùy chọn: Gắn link: ${params.options?.includeLink}, Giọng văn: ${params.options?.tone || 'Tự nhiên'}, Độ dài: ${isFacebookPost || isLinkedInPost ? 'Bài viết dài chuyên sâu (Long-Form)' : params.options?.lengthPreference || 'Vừa vặn'}
+Định hướng phong cách & Giọng văn: ${getToneDescription()}
+Tùy chọn: Gắn link: ${params.options?.includeLink}, Độ dài: ${isFacebookPost || isLinkedInPost ? 'Bài viết dài chuyên sâu (Long-Form)' : params.options?.lengthPreference || 'Vừa vặn'}
+
+QUY TẮC PHONG CÁCH VĂN PHONG:
+- Viết TOÀN BỘ 4 biến thể theo đúng phong cách: ${getToneDescription()}
+${isHumorous ? '- Hãy sử dụng lối hành văn hóm hỉnh, dí dỏm, ví von hài hước nhưng duyên dáng, lôi cuốn, tạo tiếng cười sảng khoái và tự nhiên cho người đọc.' : ''}
+${params.options?.tone === 'custom' && params.options?.customTone ? `- Yêu cầu phong cách riêng từ người dùng: "${params.options.customTone}". Hãy thể hiện rõ nét và xuyên suốt phong cách này trong cả bài viết, bình luận ghim và tin nhắn riêng!` : ''}
 
 Trả về JSON đúng cấu trúc:
 {

@@ -51,14 +51,17 @@ export type AIModelOption =
 
 export type WritingToneOption =
   | 'empathy_story' // Tâm sự tự sự & Đồng cảm sâu sắc
+  | 'humorous' // Hài hước, hóm hỉnh, dí dỏm
   | 'workplace_insight' // Đa chiều & Phân tích tâm lý công sở
   | 'provocative_reframe' // Phản biện bẻ khóa góc nhìn (Reframe)
-  | 'assessment_test'; // Khơi gợi bài trắc nghiệm tự đánh giá
+  | 'assessment_test' // Khơi gợi bài trắc nghiệm tự đánh giá
+  | 'custom'; // Tự nhập phong cách riêng
 
 export interface GenerationOptions {
   includeLink?: boolean;
   introduceProgram?: boolean;
   tone?: WritingToneOption;
+  customTone?: string;
   modelSelection?: AIModelOption;
   customAudience?: string;
   selectedProgramId?: string;

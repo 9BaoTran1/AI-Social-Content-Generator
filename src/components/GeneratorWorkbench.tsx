@@ -170,6 +170,7 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
 
   const [selectedProgramId, setSelectedProgramId] = useState<string>('auto');
   const [writingTone, setWritingTone] = useState<WritingToneOption>('empathy_story');
+  const [customTone, setCustomTone] = useState<string>('');
   const [modelSelection, setModelSelection] = useState<AIModelOption>('gemini-3.6-flash');
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const [includeLink, setIncludeLink] = useState<boolean>(false);
@@ -473,6 +474,7 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
         options: {
           modelSelection: actualModel,
           tone: writingTone,
+          customTone: writingTone === 'custom' ? customTone.trim() : writingTone === 'humorous' ? 'Hài hước dí dỏm, duyên dáng' : undefined,
           includeLink,
           customAudience: customAudience.trim() || undefined,
           lengthPreference,
@@ -719,7 +721,7 @@ ${
                 </label>
                 <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  Cascade Model Tự Động
+                  Tối ưu AI
                 </span>
               </div>
 
@@ -730,11 +732,71 @@ ${
                   isDark ? 'bg-slate-900 border-slate-800 text-slate-200' : 'bg-white border-slate-300 text-slate-800'
                 }`}
               >
-                <option value="empathy_story">💬 Tự sự & Đồng cảm sâu sắc (Storytelling chạm tim)</option>
-                <option value="workplace_insight">🏢 Phân tích tâm lý công sở & Reframe góc nhìn mới lạ</option>
-                <option value="provocative_reframe">⚡ Phản biện bẻ khóa định kiến (Góc nhìn độc bản)</option>
-                <option value="assessment_test">📋 Giá trị cộng đồng - Bài trắc nghiệm tự đánh giá phi lợi nhuận</option>
+                <option value="empathy_story">💬 Tự sự & Đồng cảm sâu sắc (Chạm cảm xúc)</option>
+                <option value="humorous">😂 Hài hước & Hóm hỉnh (Dí dỏm, duyên dáng, bắt trend)</option>
+                <option value="workplace_insight">🏢 Phân tích công sở & Góc nhìn thực tế</option>
+                <option value="provocative_reframe">⚡ Phản biện sắc bén (Bẻ khóa góc nhìn)</option>
+                <option value="assessment_test">📋 Giá trị cộng đồng (Khơi gợi bài test miễn phí)</option>
+                <option value="custom">✏️ Tự nhập phong cách riêng... (Ví dụ: Hài hước, châm biếm, kịch tính...)</option>
               </select>
+
+              {/* Ô Tự Nhập Phong Cách Riêng */}
+              {writingTone === 'custom' && (
+                <div className="pt-1.5 space-y-1.5">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={customTone}
+                      onChange={(e) => setCustomTone(e.target.value)}
+                      placeholder="Nhập phong cách bạn muốn (VD: Hài hước dí dỏm, châm biếm nhẹ, thơ mộng, kịch tính...)"
+                      className={`w-full border rounded-lg pl-3 pr-8 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all ${
+                        isDark
+                          ? 'bg-slate-900 border-slate-700 text-slate-100 placeholder:text-slate-500'
+                          : 'bg-white border-slate-300 text-slate-900 placeholder:text-slate-400'
+                      }`}
+                      autoFocus
+                    />
+                    {customTone && (
+                      <button
+                        type="button"
+                        onClick={() => setCustomTone('')}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs font-bold cursor-pointer"
+                        title="Xóa"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Quick suggestion chips */}
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-[10px] text-slate-400 font-medium">Gợi ý nhanh:</span>
+                    {[
+                      'Hài hước dí dỏm',
+                      'Châm biếm nhẹ nhàng',
+                      'Thơ mộng & Nhẹ nhàng',
+                      'Kịch tính & Gay cấn',
+                      'Gen Z bắt trend',
+                      'Chuyên gia cố vấn',
+                    ].map((chip) => (
+                      <button
+                        key={chip}
+                        type="button"
+                        onClick={() => setCustomTone(chip)}
+                        className={`text-[10px] px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
+                          customTone === chip
+                            ? 'bg-indigo-600 text-white border-indigo-600 font-semibold shadow-2xs'
+                            : isDark
+                            ? 'bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-600'
+                            : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 shadow-2xs'
+                        }`}
+                      >
+                        {chip}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Hộp Ý Tưởng, Từ Khóa & Bối Cảnh Toàn Năng */}
