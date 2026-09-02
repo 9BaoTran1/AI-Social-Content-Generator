@@ -8,7 +8,6 @@ import { ProgramManager } from './components/ProgramManager';
 import { AssistantView } from './components/AssistantView';
 import { BenchmarkLibrary } from './components/BenchmarkLibrary';
 import { UserGuide } from './components/UserGuide';
-import { AccessGuard } from './components/AccessGuard';
 
 export default function App() {
   const [programs, setPrograms] = useState<ProgramItem[]>(getSavedPrograms());
@@ -93,9 +92,8 @@ export default function App() {
   const isDark = theme === 'dark';
 
   return (
-    <AccessGuard theme={theme}>
-      <div
-        className={`min-h-screen flex flex-col font-sans transition-colors duration-200 selection:bg-indigo-500 selection:text-white ${
+    <div
+      className={`min-h-screen flex flex-col font-sans transition-colors duration-200 selection:bg-indigo-500 selection:text-white ${
           isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
         }`}
       >
@@ -189,6 +187,5 @@ export default function App() {
           </div>
         </footer>
       </div>
-    </AccessGuard>
   );
 }
