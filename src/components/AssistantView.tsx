@@ -208,7 +208,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
             }`}
           >
             <Bot className="w-3.5 h-3.5" />
-            <span>Chat Trợ Lý (Gõ Hi)</span>
+            <span>Trò Chuyện Trợ Lý</span>
           </button>
 
           <button
@@ -222,7 +222,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
             }`}
           >
             <Clock className="w-3.5 h-3.5" />
-            <span>Lịch Sử ({historyItems.length})</span>
+            <span>Lịch Sử Bài Viết ({historyItems.length})</span>
           </button>
 
           <button
@@ -236,7 +236,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
             }`}
           >
             <MessageSquare className="w-3.5 h-3.5" />
-            <span>Mẫu Benchmark ({BENCHMARK_TEMPLATES.length})</span>
+            <span>Mẫu Tham Khảo ({BENCHMARK_TEMPLATES.length})</span>
           </button>
         </div>
       </div>

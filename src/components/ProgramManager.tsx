@@ -328,7 +328,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
               )}
             </h2>
             <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-              Cơ sở dữ liệu kiến thức chuẩn để AI học và đối chiếu khi sản xuất content cho từng nền tảng
+              Kho thông tin các buổi Workshop và chương trình để AI tự động liên kết khi viết bài
             </p>
           </div>
 
@@ -339,7 +339,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
               className="px-3.5 py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
-              <span>Thêm Mới Bằng Link / AI</span>
+              <span>Thêm Mới</span>
             </button>
           </div>
         </div>
@@ -364,7 +364,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
           >
             <div className="flex items-center gap-2 font-bold">
               <ShieldCheck className="w-4 h-4 text-indigo-500" />
-              <span>Bảng Quản Trị Bảo Mật</span>
+              <span>Quản Trị Kho</span>
             </div>
 
             <div className="flex items-center gap-1.5 flex-wrap">

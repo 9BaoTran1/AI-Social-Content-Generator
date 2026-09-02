@@ -91,57 +91,57 @@ const QUICK_IDEAS = [
 
 const EXPERT_TIPS = [
   {
-    title: 'Quy tắc 3 Dòng Đầu (Facebook Hook)',
-    content: '80% độc giả quyết định bấm "Xem thêm" dựa vào 3 dòng đầu tiên. Hãy bắt đầu bằng một sự thật trần trụi hoặc một cảm xúc giằng xé nội tâm.',
+    title: 'Mở đầu thu hút trong 3 dòng đầu',
+    content: 'Hầu hết người đọc quyết định bấm "Xem thêm" dựa vào 3 dòng đầu. Hãy bắt đầu bằng cảm xúc chân thật hoặc một trăn trở thực tế.',
   },
   {
-    title: 'Chiến thuật Ghim Comment chống bóp Reach',
-    content: 'Thuật toán Facebook giảm 60-80% hiển thị nếu caption chứa link dẫn ra ngoài. Luôn đặt link ở bình luận đầu tiên và ghim lên vị trí nổi bật.',
+    title: 'Mẹo để link ở bình luận đầu',
+    content: 'Để link ở bình luận đầu tiên và ghim lên giúp bài viết giữ tương tác và tiếp cận được nhiều người hơn.',
   },
   {
-    title: 'Tâm lý học Độc giả Trẻ (TikTok & Threads)',
-    content: 'Người trẻ 20-39 tuổi rất dị ứng với việc bị "dạy đời" hay PR bán khóa học. Hãy chia sẻ như một người bạn đồng hành rồi gợi ý làm bài trắc nghiệm tự đánh giá.',
+    title: 'Văn phong chia sẻ chân thật',
+    content: 'Người đọc trẻ thích sự đồng cảm và chia sẻ như người bạn đồng hành hơn là những lời khuyên lý thuyết.',
   },
   {
-    title: 'LinkedIn: Giá trị của Framework & Số liệu',
-    content: 'Cộng đồng LinkedIn chuộng bài viết có cấu trúc rõ ràng, case study thực tế và các framework giải quyết vấn đề nơi công sở.',
+    title: 'Nội dung thực tế và hữu ích',
+    content: 'Ưu tiên bài viết có cấu trúc rõ ràng, kinh nghiệm thực tế và giải quyết được vấn đề công việc/cuộc sống.',
   },
   {
-    title: 'Kịch bản Nhắn Tin Riêng: Đồng cảm trước - Trao giải pháp sau',
-    content: 'Đừng vội gửi link form ngay câu chào đầu. Hãy hỏi 1-2 câu đào sâu để độc giả tự nhận ra nhu cầu, sau đó gửi link tham gia như một món quà.',
+    title: 'Nhắn tin tư vấn nhẹ nhàng',
+    content: 'Nên trò chuyện, lắng nghe nhu cầu của người đọc trước khi gửi link bài test hoặc workshop.',
   },
 ];
 
 const PRODUCTION_STEPS = [
   {
-    agent: 'Hook & Scroll-Stopper Specialist',
-    title: '1. Hook & Scroll-Stopper Specialist (Dừng cuộn 3s đầu)',
-    desc: 'Tối ưu 3 dòng đầu & tiêu đề in hoa đắt giá, giật tít không phản cảm, dừng ngón tay cuộn của độc giả.',
-    badge: '3s Hook',
+    agent: 'Mở đầu cuốn hút',
+    title: '1. Viết mở đầu thu hút 3s đầu',
+    desc: 'Soạn 3 dòng đầu cuốn hút để người đọc dừng lại xem và bấm đọc tiếp.',
+    badge: 'Mở đầu',
   },
   {
-    agent: 'Deep Storytelling & Empathy Specialist',
-    title: '2. Deep Storytelling & Empathy Specialist (Khơi mở nỗi đau)',
-    desc: 'Bóc tách nỗi đau thực tế (áp lực ngầm, kiệt sức thầm lặng), tự sự chân thật, bẻ gãy định kiến tuổi 20-39.',
-    badge: 'Empathy & Pain',
+    agent: 'Chạm cảm xúc',
+    title: '2. Xây dựng nội dung chạm cảm xúc',
+    desc: 'Đồng cảm với trăn trở của người đọc bằng câu chuyện thực tế, gần gũi.',
+    badge: 'Đồng cảm',
   },
   {
-    agent: 'Anti-BS & Trust Builder',
-    title: '3. Anti-BS & Trust Builder (Cam kết phi lợi nhuận 100%)',
-    desc: 'Thiết lập cam kết phi lợi nhuận 100% minh bạch, xóa bỏ hoài nghi bán khóa học/lùa gà.',
-    badge: '100% Trust',
+    agent: 'Tạo niềm tin',
+    title: '3. Tạo sự tin cậy & chân thành',
+    desc: 'Chia sẻ giá trị thực tế, minh bạch, không quảng cáo bán khóa học.',
+    badge: 'Tin cậy',
   },
   {
-    agent: 'Algorithm & First Comment Optimizer',
-    title: '4. Algorithm & First Comment Optimizer (Tối ưu thuật toán)',
-    desc: 'Tối ưu Dwell Time, sinh bình luận ghim mồi (First Comment Seed), câu hỏi mở kích hoạt tranh luận.',
-    badge: 'Algo & Seed',
+    agent: 'Gợi mở bình luận',
+    title: '4. Soạn bình luận gợi mở thảo luận',
+    desc: 'Tạo câu hỏi mở và bình luận đầu tiên để gắn kết người đọc tự nhiên.',
+    badge: 'Bình luận',
   },
   {
-    agent: 'Conversion DM Specialist',
-    title: '5. Conversion DM Specialist (Kịch bản tin nhắn riêng)',
-    desc: 'Soạn thảo kịch bản inbox 3 bước chuyển đổi cao: Đồng cảm sâu → Đào sâu (Qualifying) → Mời gửi link.',
-    badge: 'DM Script',
+    agent: 'Kịch bản tin nhắn',
+    title: '5. Soạn kịch bản nhắn tin tư vấn',
+    desc: 'Gợi ý các bước nhắn tin tư vấn nhẹ nhàng, chu đáo và tôn trọng.',
+    badge: 'Tin nhắn',
   },
 ];
 
@@ -572,7 +572,7 @@ ${
               }`}
             >
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Facebook không giới hạn: Rải tự do Workshop & Chương trình</span>
+              <span>Facebook: Thoải mái chia sẻ cả Workshop & Chương trình</span>
             </span>
           )}
         </div>
@@ -1120,9 +1120,9 @@ ${
               <div className="space-y-2.5 pt-1">
                 <div className="flex items-center justify-between px-1">
                   <span className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}>
-                    Quy trình điều phối 5 Tác Nhân Chuyên Trách:
+                    Quy trình biên soạn bài viết:
                   </span>
-                  <span className="text-[10px] text-slate-400 font-mono">5/5 AI Agents</span>
+                  <span className="text-[10px] text-slate-400 font-mono">5/5 Bước</span>
                 </div>
 
                 {PRODUCTION_STEPS.map((step, idx) => {
@@ -1374,195 +1374,33 @@ ${
                 </button>
               </div>
 
-              {/* System Orchestrator AI: Tư Duy Ứng Dụng Hệ Thống & Điều Phối Đa Kênh */}
+              {/* Gợi Ý Đăng Bài & Kết Nối (Đơn giản, thực dụng, không over kỹ thuật) */}
               {(() => {
-                const orch = generatedResult.systemOrchestrator || {
-                  ecosystemLink: `Kết nối chủ đề bài viết trực tiếp vào Workshop "${generatedResult.programTitle || 'Kho CRT'}" với mục tiêu giải quyết trăn trở thực tế của độc giả.`,
-                  funnelFlow: {
-                    stage1_hook: 'Hook 3s đánh trúng nỗi đau/nghịch lý nhằm tối ưu Dwell Time trên feed.',
-                    stage2_trust: 'Cam kết 100% phi lợi nhuận không bán khóa học, cởi bỏ hoàn toàn rào cản phòng thủ.',
-                    stage3_bridge: 'First Comment Seed ghim mồi link bài test/tài liệu nhằm bảo toàn reach tự nhiên.',
-                    stage4_private: 'Kịch bản tin nhắn riêng 3 bước chuyển hóa tương tác thành mối quan hệ tin cậy.',
-                    stage5_destination: `Đích đến là buổi Workshop hoặc bài trắc nghiệm tự đánh giá (${generatedResult.programTitle || 'Kho CRT'}).`,
-                  },
-                  omnichannelStrategy: 'Phân phối đa kênh: Đăng bài chính trên nền tảng chỉ định, kết hợp lấy trích đoạn ngắn làm comment dạo trên TikTok/Threads.',
-                  systemSafetyScore: {
-                    score: 98,
-                    assessment: 'Chuẩn an toàn thuật toán 98/100: Không chứa outlink trên caption, cấu trúc văn bản tự nhiên, không vi phạm chính sách cộng đồng.',
-                  },
-                };
-
-                const analysis = generatedResult.directorStrategicAnalysis || {
-                  targetAudience: 'Người đi làm & giới trẻ (20-39 tuổi) đang đối mặt với áp lực định vị và kiệt sức thầm lặng.',
-                  emotionalTouchpoint: 'Cảm giác chông chênh, áp lực so sánh ngầm và mong muốn tìm lại nhịp điệu nội tại.',
-                  algorithmAssessment: generatedResult.platformNotes || 'Tối ưu Dwell Time bằng cấu trúc câu chuyện chặt chẽ, né bóp reach bằng First Comment Seed ghim link.',
-                  approachReason: generatedResult.rationale || 'Tiếp cận bằng sự chân thành, phi lợi nhuận 100% để phá vỡ hoài nghi và dẫn dắt tự nhiên sang kết nối trực tiếp.',
-                };
+                const orch = generatedResult.systemOrchestrator;
+                const analysis = generatedResult.directorStrategicAnalysis;
+                const targetAudience = analysis?.targetAudience || 'Người trẻ & người đi làm đang tìm kiếm giải pháp và định hướng.';
+                const advice = generatedResult.platformNotes || 'Nên đặt link đăng ký ở bình luận đầu tiên và ghim lên để bài viết giữ tương tác tốt nhất.';
+                const linkInfo = orch?.ecosystemLink || `Nội dung liên kết tự nhiên với: ${generatedResult.programTitle || 'Workshop'}.`;
 
                 return (
                   <div
-                    className={`rounded-2xl border p-4 sm:p-5 transition-all shadow-xs space-y-4 ${
+                    className={`rounded-2xl border p-4 sm:p-5 transition-all shadow-xs space-y-3 ${
                       isDark
-                        ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950/40 border-indigo-500/40 ring-1 ring-indigo-500/20'
-                        : 'bg-gradient-to-br from-indigo-50/90 via-white to-sky-50/60 border-indigo-200 ring-1 ring-indigo-200/60'
+                        ? 'bg-slate-900/80 border-slate-800'
+                        : 'bg-indigo-50/40 border-indigo-100'
                     }`}
                   >
-                    {/* Orchestrator Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-3.5 dark:border-slate-800/80 border-indigo-100">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-amber-500 flex items-center justify-center text-white shadow-xs shrink-0">
-                          <Cpu className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <h3 className={`text-xs sm:text-sm font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                              🧠 AI Điều Phối Hệ Thống (System Orchestrator)
-                            </h3>
-                            <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                              <ShieldCheck className="w-3 h-3" />
-                              <span>An Toàn Thuật Toán: {orch.systemSafetyScore.score}%</span>
-                            </span>
-                          </div>
-                          <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                            Tư duy hệ thống liên kết bối cảnh bài viết, luồng phễu chuyển đổi 5 tầng & Workshop mục tiêu
-                          </p>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => setShowDirectorAnalysis(!showDirectorAnalysis)}
-                        className={`text-xs px-2.5 py-1 rounded-lg border font-semibold flex items-center gap-1 cursor-pointer transition-colors shrink-0 self-start sm:self-auto ${
-                          isDark
-                            ? 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700'
-                            : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300 shadow-2xs'
-                        }`}
-                      >
-                        <span>{showDirectorAnalysis ? 'Thu gọn sơ đồ' : 'Xem sơ đồ hệ thống'}</span>
-                        {showDirectorAnalysis ? (
-                          <ChevronUp className="w-3.5 h-3.5" />
-                        ) : (
-                          <ChevronDown className="w-3.5 h-3.5" />
-                        )}
-                      </button>
-                    </div>
-
-                    {/* Mắt Xích Kết Nối Kho CRT (Ecosystem Link) */}
-                    <div
-                      className={`p-3 rounded-xl border text-xs space-y-1 transition-all ${
-                        isDark ? 'bg-slate-950/70 border-indigo-900/40 text-slate-200' : 'bg-white border-indigo-200/90 text-slate-800 shadow-2xs'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5 font-bold text-indigo-600 dark:text-indigo-400 text-[11px] uppercase tracking-wide">
-                        <Network className="w-3.5 h-3.5" />
-                        <span>Mắt Xích Kết Nối Kho CRT (Ecosystem Link)</span>
-                      </div>
-                      <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-800 font-medium'}`}>
-                        {orch.ecosystemLink}
-                      </p>
-                    </div>
-
-                    {/* Funnel Flow Map 5 Tầng */}
-                    {showDirectorAnalysis && (
-                      <div className="space-y-3 pt-1">
-                        <div className="flex items-center justify-between">
-                          <span className={`text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${isDark ? 'text-amber-400' : 'text-amber-700'}`}>
-                            <Workflow className="w-3.5 h-3.5" />
-                            <span>Bản Đồ Luồng Chuyển Đổi Hệ Thống (5 Tầng Phễu)</span>
-                          </span>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
-                          {/* Tầng 1 */}
-                          <div className={`p-2.5 rounded-xl border space-y-1 ${
-                            isDark ? 'bg-slate-900/80 border-slate-800 text-slate-300' : 'bg-white border-slate-300 text-slate-800 shadow-2xs'
-                          }`}>
-                            <div className="flex items-center gap-1 text-[10px] font-bold text-indigo-500">
-                              <span>Tầng 1: Hook 3s</span>
-                            </div>
-                            <p className="text-[11px] leading-snug">{orch.funnelFlow.stage1_hook}</p>
-                          </div>
-
-                          {/* Tầng 2 */}
-                          <div className={`p-2.5 rounded-xl border space-y-1 ${
-                            isDark ? 'bg-slate-900/80 border-slate-800 text-slate-300' : 'bg-white border-slate-300 text-slate-800 shadow-2xs'
-                          }`}>
-                            <div className="flex items-center gap-1 text-[10px] font-bold text-emerald-500">
-                              <span>Tầng 2: Anti-BS Trust</span>
-                            </div>
-                            <p className="text-[11px] leading-snug">{orch.funnelFlow.stage2_trust}</p>
-                          </div>
-
-                          {/* Tầng 3 */}
-                          <div className={`p-2.5 rounded-xl border space-y-1 ${
-                            isDark ? 'bg-slate-900/80 border-slate-800 text-slate-300' : 'bg-white border-slate-300 text-slate-800 shadow-2xs'
-                          }`}>
-                            <div className="flex items-center gap-1 text-[10px] font-bold text-amber-500">
-                              <span>Tầng 3: Cmt Ghim Link</span>
-                            </div>
-                            <p className="text-[11px] leading-snug">{orch.funnelFlow.stage3_bridge}</p>
-                          </div>
-
-                          {/* Tầng 4 */}
-                          <div className={`p-2.5 rounded-xl border space-y-1 ${
-                            isDark ? 'bg-slate-900/80 border-slate-800 text-slate-300' : 'bg-white border-slate-300 text-slate-800 shadow-2xs'
-                          }`}>
-                            <div className="flex items-center gap-1 text-[10px] font-bold text-sky-500">
-                              <span>Tầng 4: Nhắn Tin Riêng</span>
-                            </div>
-                            <p className="text-[11px] leading-snug">{orch.funnelFlow.stage4_private}</p>
-                          </div>
-
-                          {/* Tầng 5 */}
-                          <div className={`p-2.5 rounded-xl border space-y-1 ${
-                            isDark ? 'bg-slate-900/80 border-slate-800 text-slate-300' : 'bg-white border-slate-300 text-slate-800 shadow-2xs'
-                          }`}>
-                            <div className="flex items-center gap-1 text-[10px] font-bold text-purple-500">
-                              <span>Tầng 5: Workshop Đích</span>
-                            </div>
-                            <p className="text-[11px] leading-snug">{orch.funnelFlow.stage5_destination}</p>
-                          </div>
-                        </div>
-
-                        {/* Điều Phối Đa Kênh & Khuyến Nghị An Toàn */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-                          <div className={`p-2.5 rounded-xl border text-xs ${
-                            isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-indigo-50/50 border-indigo-200 text-slate-800'
-                          }`}>
-                            <strong className="block text-[11px] font-bold text-indigo-600 dark:text-indigo-400 mb-0.5">
-                              📡 Khuyến Nghị Điều Phối Đa Kênh:
-                            </strong>
-                            <p className="text-[11px] leading-relaxed">{orch.omnichannelStrategy}</p>
-                          </div>
-
-                          <div className={`p-2.5 rounded-xl border text-xs ${
-                            isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-emerald-50/50 border-emerald-200 text-slate-800'
-                          }`}>
-                            <strong className="block text-[11px] font-bold text-emerald-600 dark:text-emerald-400 mb-0.5">
-                              🛡️ Đánh Giá An Toàn Thuật Toán:
-                            </strong>
-                            <p className="text-[11px] leading-relaxed">{orch.systemSafetyScore.assessment}</p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    {/* Header */}
                     <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center text-white shadow-xs">
-                          <Award className="w-4 h-4" />
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-xl bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-sm shrink-0">
+                          <Sparkles className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="flex items-center gap-2">
-                            <h3 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                              🎬 Phân Tích Chiến Lược Từ AI Content Director
-                            </h3>
-                            <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                              20+ Năm Kinh Nghiệm
-                            </span>
-                          </div>
-                          <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
-                            Hội đồng 5 Tác nhân AI phối hợp biên tập & đánh giá thuật toán phân phối viral
+                          <h3 className={`text-xs sm:text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                            Gợi Ý Đăng Bài & Chuyển Đổi
+                          </h3>
+                          <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                            Mẹo giúp bài viết tiếp cận tốt và tạo thiện cảm với người đọc
                           </p>
                         </div>
                       </div>
@@ -1570,7 +1408,7 @@ ${
                       <button
                         type="button"
                         onClick={() => setShowDirectorAnalysis(!showDirectorAnalysis)}
-                        className={`text-xs px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1 cursor-pointer transition-colors ${
+                        className={`text-xs px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1 cursor-pointer transition-colors shrink-0 ${
                           isDark
                             ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
                             : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
@@ -1585,96 +1423,41 @@ ${
                       </button>
                     </div>
 
-                    {/* 4 Strategic Pillars Grid */}
+                    {/* Quick 2-Column Summary */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs pt-1">
+                      <div className={`p-3 rounded-xl border space-y-1 ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-800'}`}>
+                        <span className="font-bold text-indigo-600 dark:text-indigo-400 block text-[11px]">
+                          🎯 Người đọc phù hợp:
+                        </span>
+                        <p className="text-[11px] leading-relaxed">{targetAudience}</p>
+                      </div>
+
+                      <div className={`p-3 rounded-xl border space-y-1 ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-800'}`}>
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400 block text-[11px]">
+                          📌 Mẹo đăng bài:
+                        </span>
+                        <p className="text-[11px] leading-relaxed">{advice}</p>
+                      </div>
+                    </div>
+
+                    {/* Detailed Extra Advice (Collapsible) */}
                     {showDirectorAnalysis && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-                        {/* 1. Đối tượng mục tiêu */}
-                        <div
-                          className={`p-3 rounded-xl border space-y-1.5 transition-colors ${
-                            isDark
-                              ? 'bg-slate-900/80 border-indigo-900/50 text-slate-200'
-                              : 'bg-white/90 border-indigo-100 text-slate-800'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between text-xs">
-                            <div className="flex items-center gap-1.5 font-bold text-indigo-600 dark:text-indigo-400">
-                              <Target className="w-3.5 h-3.5" />
-                              <span>Đối tượng mục tiêu</span>
-                            </div>
-                            <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-medium bg-indigo-500/10 text-indigo-500">
-                              Target Audience
-                            </span>
-                          </div>
-                          <p className="text-xs leading-relaxed opacity-90">
-                            {analysis.targetAudience}
-                          </p>
+                      <div className="space-y-2 pt-1 border-t dark:border-slate-800 border-slate-200/80">
+                        <div className={`p-3 rounded-xl border text-xs space-y-1 ${isDark ? 'bg-slate-950/40 border-slate-800/80 text-slate-300' : 'bg-white/80 border-slate-200 text-slate-700'}`}>
+                          <strong className="block text-[11px] font-bold text-indigo-600 dark:text-indigo-400">
+                            🔗 Gắn kết Workshop / Chương trình:
+                          </strong>
+                          <p className="text-[11px] leading-relaxed">{linkInfo}</p>
                         </div>
 
-                        {/* 2. Điểm chạm cảm xúc */}
-                        <div
-                          className={`p-3 rounded-xl border space-y-1.5 transition-colors ${
-                            isDark
-                              ? 'bg-slate-900/80 border-rose-900/40 text-slate-200'
-                              : 'bg-white/90 border-rose-100 text-slate-800'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between text-xs">
-                            <div className="flex items-center gap-1.5 font-bold text-rose-600 dark:text-rose-400">
-                              <HeartHandshake className="w-3.5 h-3.5" />
-                              <span>Điểm chạm cảm xúc</span>
-                            </div>
-                            <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-medium bg-rose-500/10 text-rose-500">
-                              Emotional Hook
-                            </span>
+                        {orch?.omnichannelStrategy && (
+                          <div className={`p-3 rounded-xl border text-xs space-y-1 ${isDark ? 'bg-slate-950/40 border-slate-800/80 text-slate-300' : 'bg-white/80 border-slate-200 text-slate-700'}`}>
+                            <strong className="block text-[11px] font-bold text-amber-600 dark:text-amber-400">
+                              💡 Gợi ý thêm:
+                            </strong>
+                            <p className="text-[11px] leading-relaxed">{orch.omnichannelStrategy}</p>
                           </div>
-                          <p className="text-xs leading-relaxed opacity-90">
-                            {analysis.emotionalTouchpoint}
-                          </p>
-                        </div>
-
-                        {/* 3. Đánh giá thuật toán phân phối */}
-                        <div
-                          className={`p-3 rounded-xl border space-y-1.5 transition-colors ${
-                            isDark
-                              ? 'bg-slate-900/80 border-emerald-900/40 text-slate-200'
-                              : 'bg-white/90 border-emerald-100 text-slate-800'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between text-xs">
-                            <div className="flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400">
-                              <TrendingUp className="w-3.5 h-3.5" />
-                              <span>Đánh giá thuật toán phân phối</span>
-                            </div>
-                            <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-medium bg-emerald-500/10 text-emerald-500">
-                              Algorithm
-                            </span>
-                          </div>
-                          <p className="text-xs leading-relaxed opacity-90">
-                            {analysis.algorithmAssessment}
-                          </p>
-                        </div>
-
-                        {/* 4. Lý do chọn giải pháp */}
-                        <div
-                          className={`p-3 rounded-xl border space-y-1.5 transition-colors ${
-                            isDark
-                              ? 'bg-slate-900/80 border-amber-900/40 text-slate-200'
-                              : 'bg-white/90 border-amber-100 text-slate-800'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between text-xs">
-                            <div className="flex items-center gap-1.5 font-bold text-amber-600 dark:text-amber-400">
-                              <Compass className="w-3.5 h-3.5" />
-                              <span>Lý do chọn giải pháp</span>
-                            </div>
-                            <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-medium bg-amber-500/10 text-amber-500">
-                              Strategic Rationale
-                            </span>
-                          </div>
-                          <p className="text-xs leading-relaxed opacity-90">
-                            {analysis.approachReason}
-                          </p>
-                        </div>
+                        )}
                       </div>
                     )}
                   </div>

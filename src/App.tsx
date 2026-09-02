@@ -179,10 +179,10 @@ export default function App() {
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="flex items-center gap-1.5 font-medium">
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-              PROMPT ORDER AI • Hệ thống 7 Order Chuyển Đổi Comment Thành Inbox
+              PROMPT ORDER AI • Công cụ tạo nội dung & kịch bản chuyển đổi
             </p>
             <p className="text-[11px] text-slate-400">
-              Định dạng chuẩn TikTok, Facebook Long-form, Threads, LinkedIn & Email
+              Tối ưu cho TikTok, Facebook, Threads, LinkedIn & Email
             </p>
           </div>
         </footer>

@@ -112,21 +112,21 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>Hệ Thống 7 Lệnh Chuyển Đổi Thực Chiến (10 Năm Kinh Nghiệm)</span>
+              <span>7 Dạng Nội Dung Theo Kênh</span>
             </div>
             <h1
               className={`text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight ${
                 isDark ? 'text-white' : 'text-slate-900'
               }`}
             >
-              Biến Comment Lướt Thành Đơn Đăng Ký & Khách Nhắn Tin
+              Viết Bài Thu Hút & Tạo Tương Tác Tự Nhiên
             </h1>
             <p
               className={`text-xs sm:text-sm leading-relaxed ${
                 isDark ? 'text-slate-300' : 'text-slate-700 font-medium'
               }`}
             >
-              Mỗi lệnh Order được tối ưu thuật toán riêng cho từng nền tảng (TikTok, Facebook, Threads, LinkedIn, Email). AI tự động phân tích tâm lý, bóc tách nỗi đau, đề xuất 4 phong cách viral và kịch bản tư vấn cá nhân hóa.
+              Mỗi dạng bài được thiết kế riêng cho từng mạng xã hội (TikTok, Facebook, Threads, LinkedIn, Email), kèm kịch bản nhắn tin tư vấn chu đáo.
             </p>
           </div>
 
@@ -141,9 +141,9 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
             >
               <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
               <div>
-                <strong className="block font-bold">Facebook Tự Do 100%:</strong>
+                <strong className="block font-bold">Facebook:</strong>
                 <span className="text-[11px] opacity-90">
-                  Rải tự do cả Workshop (WS) & Chương trình (CT), hỗ trợ comment ghim chống bóp reach.
+                  Thoải mái áp dụng cho cả Workshop & Chương trình, kèm mẹo ghim link ở bình luận đầu.
                 </span>
               </div>
             </div>
@@ -157,9 +157,9 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
             >
               <TrendingUp className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
               <div>
-                <strong className="block font-bold">TikTok & Threads (20-39 tuổi):</strong>
+                <strong className="block font-bold">TikTok & Threads:</strong>
                 <span className="text-[11px] opacity-90">
-                  Đồng cảm sâu sắc, không bán khóa học lộ liễu, dẫn dắt nhận bài test tự nhiên.
+                  Văn phong gần gũi, chia sẻ chân thành, gợi mở nhận bài test hoặc đăng ký tự nhiên.
                 </span>
               </div>
             </div>

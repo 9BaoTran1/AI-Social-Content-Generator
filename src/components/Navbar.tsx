@@ -69,7 +69,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'bg-slate-100 text-slate-700 border-slate-200'
                   }`}
                 >
-                  Social Conversion
+                  Tạo Content & Inbox
                 </span>
               </div>
               <p
@@ -77,7 +77,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   isDark ? 'text-slate-400' : 'text-slate-500'
                 }`}
               >
-                Hệ thống 7 Order chuyển đổi Comment thành Inbox & Đăng ký
+                Hệ thống tạo bài viết & kịch bản nhắn tin tư vấn tự nhiên
               </p>
             </div>
           </div>
@@ -101,7 +101,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <Sparkles className="w-3.5 h-3.5 shrink-0" />
-              <span>Studio Tạo Bài</span>
+              <span>Tạo Bài Viết</span>
             </button>
 
             <button
@@ -115,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <Layers className="w-3.5 h-3.5 shrink-0" />
-              <span>7 Lệnh Order</span>
+              <span>7 Dạng Bài</span>
             </button>
 
             <button
@@ -129,7 +129,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <BookmarkCheck className="w-3.5 h-3.5 shrink-0" />
-              <span>Kho Mẫu Chuẩn</span>
+              <span>Bài Mẫu</span>
             </button>
 
             <button
@@ -143,7 +143,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <BookOpen className="w-3.5 h-3.5 shrink-0" />
-              <span>Kho WS/CT ({programCount.ws + programCount.ct})</span>
+              <span>Kho Workshop ({programCount.ws + programCount.ct})</span>
             </button>
 
             <button
@@ -157,7 +157,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <Bot className="w-3.5 h-3.5 shrink-0" />
-              <span>Trợ Lý & Lịch Sử</span>
+              <span>Trợ Lý AI</span>
             </button>
 
             <button
@@ -171,7 +171,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <BookMarked className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-              <span>Cẩm Nang & HDSD</span>
+              <span>Hướng Dẫn</span>
             </button>
           </nav>
 
@@ -244,7 +244,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <Sparkles className="w-3.5 h-3.5 shrink-0" />
-            <span>Studio</span>
+            <span>Tạo Bài</span>
           </button>
 
           <button
@@ -258,7 +258,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <Layers className="w-3.5 h-3.5 shrink-0" />
-            <span>7 Lệnh Order</span>
+            <span>7 Dạng</span>
           </button>
 
           <button
@@ -272,7 +272,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <BookmarkCheck className="w-3.5 h-3.5 shrink-0" />
-            <span>Kho Mẫu</span>
+            <span>Bài Mẫu</span>
           </button>
 
           <button
@@ -286,7 +286,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <BookOpen className="w-3.5 h-3.5 shrink-0" />
-            <span>Kho ({programCount.ws + programCount.ct})</span>
+            <span>Workshop ({programCount.ws + programCount.ct})</span>
           </button>
 
           <button
@@ -300,7 +300,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <Bot className="w-3.5 h-3.5 shrink-0" />
-            <span>Trợ Lý & Lịch Sử</span>
+            <span>Trợ Lý</span>
           </button>
 
           <button
@@ -314,7 +314,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <BookMarked className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-            <span>Cẩm Nang</span>
+            <span>Hướng Dẫn</span>
           </button>
         </div>
       </div>

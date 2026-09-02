@@ -163,9 +163,9 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
         }`}
       >
         <div className="space-y-2 max-w-2xl">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>Benchmark Thực Chiến 20+ Năm Kinh Nghiệm</span>
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+            <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+            <span>Kho Bài Viết Mẫu</span>
           </div>
           <h2
             className={`text-xl sm:text-2xl font-bold tracking-tight flex items-center gap-2 ${
@@ -173,10 +173,10 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
             }`}
           >
             <BookmarkCheck className="w-6 h-6 text-indigo-600" />
-            <span>Kho Mẫu Bài Viết & Comment Chuyển Đổi Cao</span>
+            <span>Tổng Hợp Bài Viết & Bình Luận Mẫu</span>
           </h2>
           <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-            Tuyển tập các khung mẫu content chuẩn Facebook Long-Form (Dự án cộng đồng phi lợi nhuận, Talkshow HR/L&D/QA, khám sức khỏe WHO-5), TikTok, Threads và LinkedIn. Bạn cũng có thể lưu trực tiếp bất kỳ kết quả nào từ Studio vào kho này!
+            Các bài viết và bình luận mẫu chất lượng cho Facebook, TikTok, Threads và LinkedIn. Bạn có thể sao chép nhanh hoặc lưu thêm bài mẫu của riêng mình vào đây.
           </p>
         </div>
 
