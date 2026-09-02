@@ -188,7 +188,6 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEnhancing, setIsEnhancing] = useState<boolean>(false);
   const [generatedResult, setGeneratedResult] = useState<GeneratedContent | null>(null);
-  const [showDirectorAnalysis, setShowDirectorAnalysis] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [inlineApiKey, setInlineApiKey] = useState<string>('');
@@ -1373,96 +1372,6 @@ ${
                   <span>Xuất .TXT</span>
                 </button>
               </div>
-
-              {/* Gợi Ý Đăng Bài & Kết Nối (Đơn giản, thực dụng, không over kỹ thuật) */}
-              {(() => {
-                const orch = generatedResult.systemOrchestrator;
-                const analysis = generatedResult.directorStrategicAnalysis;
-                const targetAudience = analysis?.targetAudience || 'Người trẻ & người đi làm đang tìm kiếm giải pháp và định hướng.';
-                const advice = generatedResult.platformNotes || 'Nên đặt link đăng ký ở bình luận đầu tiên và ghim lên để bài viết giữ tương tác tốt nhất.';
-                const linkInfo = orch?.ecosystemLink || `Nội dung liên kết tự nhiên với: ${generatedResult.programTitle || 'Workshop'}.`;
-
-                return (
-                  <div
-                    className={`rounded-2xl border p-4 sm:p-5 transition-all shadow-xs space-y-3 ${
-                      isDark
-                        ? 'bg-slate-900/80 border-slate-800'
-                        : 'bg-indigo-50/40 border-indigo-100'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-xl bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-sm shrink-0">
-                          <Sparkles className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <h3 className={`text-xs sm:text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                            Gợi Ý Đăng Bài & Chuyển Đổi
-                          </h3>
-                          <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                            Mẹo giúp bài viết tiếp cận tốt và tạo thiện cảm với người đọc
-                          </p>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => setShowDirectorAnalysis(!showDirectorAnalysis)}
-                        className={`text-xs px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1 cursor-pointer transition-colors shrink-0 ${
-                          isDark
-                            ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
-                            : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
-                        }`}
-                      >
-                        <span>{showDirectorAnalysis ? 'Thu gọn' : 'Xem chi tiết'}</span>
-                        {showDirectorAnalysis ? (
-                          <ChevronUp className="w-3.5 h-3.5" />
-                        ) : (
-                          <ChevronDown className="w-3.5 h-3.5" />
-                        )}
-                      </button>
-                    </div>
-
-                    {/* Quick 2-Column Summary */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs pt-1">
-                      <div className={`p-3 rounded-xl border space-y-1 ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-800'}`}>
-                        <span className="font-bold text-indigo-600 dark:text-indigo-400 block text-[11px]">
-                          🎯 Người đọc phù hợp:
-                        </span>
-                        <p className="text-[11px] leading-relaxed">{targetAudience}</p>
-                      </div>
-
-                      <div className={`p-3 rounded-xl border space-y-1 ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-800'}`}>
-                        <span className="font-bold text-emerald-600 dark:text-emerald-400 block text-[11px]">
-                          📌 Mẹo đăng bài:
-                        </span>
-                        <p className="text-[11px] leading-relaxed">{advice}</p>
-                      </div>
-                    </div>
-
-                    {/* Detailed Extra Advice (Collapsible) */}
-                    {showDirectorAnalysis && (
-                      <div className="space-y-2 pt-1 border-t dark:border-slate-800 border-slate-200/80">
-                        <div className={`p-3 rounded-xl border text-xs space-y-1 ${isDark ? 'bg-slate-950/40 border-slate-800/80 text-slate-300' : 'bg-white/80 border-slate-200 text-slate-700'}`}>
-                          <strong className="block text-[11px] font-bold text-indigo-600 dark:text-indigo-400">
-                            🔗 Gắn kết Workshop / Chương trình:
-                          </strong>
-                          <p className="text-[11px] leading-relaxed">{linkInfo}</p>
-                        </div>
-
-                        {orch?.omnichannelStrategy && (
-                          <div className={`p-3 rounded-xl border text-xs space-y-1 ${isDark ? 'bg-slate-950/40 border-slate-800/80 text-slate-300' : 'bg-white/80 border-slate-200 text-slate-700'}`}>
-                            <strong className="block text-[11px] font-bold text-amber-600 dark:text-amber-400">
-                              💡 Gợi ý thêm:
-                            </strong>
-                            <p className="text-[11px] leading-relaxed">{orch.omnichannelStrategy}</p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              })()}
 
               {/* TAB 1: 4 Content Variations */}
               {resultTab === 'variations' && (
