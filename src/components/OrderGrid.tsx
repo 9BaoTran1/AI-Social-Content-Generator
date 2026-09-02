@@ -291,7 +291,7 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
                       <strong className="block font-bold text-blue-600 dark:text-blue-300">
                         ✨ Không giới hạn Facebook:
                       </strong>
-                      Rải tự do cả Workshop (WS) & Chương trình (CT), đa dạng phong cách bài viết & comment mồi.
+                      Phân phối linh hoạt cả Workshop (WS) & Chương trình CRT (CRT), đa dạng phong cách bài viết & comment mồi.
                     </div>
                   </div>
                 )}

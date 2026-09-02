@@ -43,7 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     },
     {
       id: 'programs' as const,
-      label: `Kho Workshop (${totalPrograms})`,
+      label: `Kho WS / CRT (${totalPrograms})`,
       icon: BookOpen,
       iconColor: 'text-emerald-500',
     },
@@ -122,11 +122,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Add Program Button */}
             <button
               onClick={onOpenAddProgram}
-              title="Thêm Workshop hoặc Chương Trình Mới"
+              title="Thêm Workshop (WS) hoặc Chương Trình CRT Mới"
               className="min-h-[38px] sm:min-h-[40px] px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white shadow-xs hover:shadow-indigo-500/25 flex items-center space-x-1.5 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4 shrink-0 stroke-[2.5]" />
-              <span className="hidden xs:inline sm:inline">+ Thêm WS / CT</span>
+              <span className="hidden xs:inline sm:inline">+ Thêm WS / CRT</span>
               <span className="xs:hidden sm:hidden">+ Thêm</span>
             </button>
 

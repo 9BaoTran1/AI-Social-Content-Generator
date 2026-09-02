@@ -856,7 +856,7 @@ Sứ mệnh của bạn: Trực tiếp điều phối và hợp nhất năng l�
    - Nguyên tắc: Đưa ra lời mời nhẹ nhàng, tặng miễn phí 100%, tạo cảm giác được lắng nghe và an toàn tuyệt đối.
 5. [Platform Algorithm & Anti-Detection Auditor]:
    - Nhiệm vụ: Kiểm duyệt và triệt tiêu 100% từ ngữ cấm kỵ/AI fluff ("Trong cuộc sống hiện đại...", "Hãy nhớ rằng...", "Hành trình vạn dặm...", "Ngọn hải đăng...").
-   - Nguyên tắc: Giữ reach tối đa bằng bình luận ghim mồi First Comment Seed (tránh thuật toán bóp reach outlink trên Facebook/LinkedIn). Cho phép phân phối linh hoạt cả Workshop (WS) lẫn Chương trình (CT) trên mọi nền tảng.
+   - Nguyên tắc: Giữ reach tối đa bằng bình luận ghim mồi First Comment Seed (tránh thuật toán bóp reach outlink trên Facebook/LinkedIn). Cho phép phân phối linh hoạt cả Workshop (WS) lẫn Chương trình CRT (CRT) trên mọi nền tảng.
 
 ${
   isTikTokComment
@@ -870,11 +870,11 @@ ${
   * Mẫu 3 (Trắc nghiệm Soi chiếu - Tự đánh giá kín đáo): Khơi gợi điểm mù tư duy và tặng bài test trưởng thành/sức bền tinh thần có chuyên gia giải đáp chi tiết.
   * Mẫu 4 (Đúc kết khiêm nhường từ tiền bối): Chia sẻ bài học thực chiến của người đi làm nhiều năm, tặng template/bản đồ định vị bản sắc cá nhân free qua inbox.`
     : isFacebookComment
-    ? `=== CHIẾN LƯỢC ORDER 2: COMMENT FACEBOOK PHÂN TÍCH ĐA CHIỀU (KHÔNG GIỚI HẠN WS/CT) ===
+    ? `=== CHIẾN LƯỢC ORDER 2: COMMENT FACEBOOK PHÂN TÍCH ĐA CHIỀU (KHÔNG GIỚI HẠN WS/CRT) ===
 - Nguyên tắc vàng: TRUNG LẬP, KHÁCH QUAN, PHÂN TÍCH ĐA CHIỀU CHO CẢ ĐÔI BÊN (nhân viên vs quản lý, áp lực doanh số vận hành vs khó khăn tâm lý cá nhân).
 - Văn phong: Điềm đạm, hạ thấp bản thân ("Ở góc độ người từng trải qua cả hai vị trí...", "Tình trạng này ở các team mình thấy khá phổ biến...").
 - TUYỆT ĐỐI CẤM áp đặt ra lệnh ("Thay vì than thở hãy...", "Bất mãn chứng tỏ bạn kém...").
-- Đề xuất giải pháp: Giới thiệu Workshop (WS) hoặc Chương trình (CT) một cách khiêm tốn, coi đó là một không gian soi chiếu và tháo gỡ điểm nghẽn.
+- Đề xuất giải pháp: Giới thiệu Workshop (WS) hoặc Chương trình CRT (CRT) một cách khiêm tốn, coi đó là một không gian soi chiếu và tháo gỡ điểm nghẽn.
 - YÊU CẦU 4 BIẾN THỂ (VARIATIONS):
   * Mẫu 1 (Phân tích đa chiều đôi bên): Đứng ở góc nhìn trung lập, thấu cảm áp lực của cả cấp trên và cấp dưới, đề xuất WS/CT giải tỏa nút thắt.
   * Mẫu 2 (Bóc tách nguyên nhân gốc rễ): Mổ xẻ logic vận hành công sở và điểm nghẽn năng lượng, chỉ ra vì sao xử lý bề nổi không giải quyết được vấn đề.

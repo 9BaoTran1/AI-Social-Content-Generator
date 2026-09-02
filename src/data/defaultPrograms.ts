@@ -5,7 +5,7 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
     id: 'prog-1',
     title: 'YEAR-IN-REVIEW 2025 × SELF-POSITIONING TEST 2026',
     type: 'ct',
-    description: 'Dành cho người đi làm – những người đã nỗ lực cả năm và cần một điểm dừng để nhìn rõ mình hơn, đánh giá cơ hội - thách thức, ghi nhận thành tựu và tái định vị bản thân.',
+    description: 'Chương trình CRT dành cho người đi làm – những người đã nỗ lực cả năm và cần một điểm dừng để nhìn rõ mình hơn, đánh giá cơ hội - thách thức, ghi nhận thành tựu và tái định vị bản thân.',
     targetAudience: ['Người đi làm 22-38 tuổi', 'Nhân sự trải qua 1 năm bận rộn', 'Người cần nhìn lại và tái định hướng năm mới'],
     painPoints: [
       'Cuốn theo công việc 365 ngày không có thời gian dừng lại nhìn nhận sự trưởng thành',
@@ -27,7 +27,7 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
     id: 'prog-2',
     title: 'Special 2026 – The Art of Conversation',
     type: 'ct',
-    description: 'Nghệ thuật giao tiếp và thấu hiểu chính mình trong các mối quan hệ đa tầng (sếp, đồng nghiệp, vợ chồng, con cái) thông qua tư duy giao tiếp nhạy bén và lắng nghe sâu sắc.',
+    description: 'Chương trình CRT về nghệ thuật giao tiếp và thấu hiểu chính mình trong các mối quan hệ đa tầng (sếp, đồng nghiệp, vợ chồng, con cái) thông qua tư duy giao tiếp nhạy bén và lắng nghe sâu sắc.',
     targetAudience: ['Người đi làm gặp khúc mắc giao tiếp', 'Cặp đôi/vợ chồng/cha mẹ', 'Người muốn hòa hợp các mối quan hệ mà không đánh mất sự bình an'],
     painPoints: [
       'Chưa hiểu rõ phong cách và tư duy giao tiếp cốt lõi của chính mình',

@@ -308,7 +308,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className={`text-base font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              <span>Kho Workshop & Chương Trình</span>
+              <span>Kho Workshop (WS) & Chương Trình CRT</span>
               <span
                 className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
                   isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-700 border border-slate-200'
@@ -328,7 +328,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
               )}
             </h2>
             <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-              Kho thông tin các buổi Workshop và chương trình để AI tự động liên kết khi viết bài
+              Kho tổng hợp các buổi Workshop (WS) và Chương trình CRT để AI tự động liên kết khi viết bài
             </p>
           </div>
 
@@ -464,7 +464,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Workshop (WS: {wsCount})
+              ✦ Workshop (WS: {wsCount})
             </button>
             <button
               onClick={() => setFilterType('ct')}
@@ -476,7 +476,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Chương trình (CT: {ctCount})
+              ❖ Chương trình CRT (CRT: {ctCount})
             </button>
           </div>
 
@@ -515,17 +515,17 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span
-                      className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-md border ${
+                      className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-md border flex items-center gap-1 ${
                         isWS
                           ? isDark
-                            ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                            : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                            ? 'bg-indigo-950/70 text-indigo-300 border-indigo-800/80 shadow-2xs'
+                            : 'bg-indigo-50 text-indigo-700 border-indigo-200 shadow-2xs'
                           : isDark
-                          ? 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30'
-                          : 'bg-indigo-50 text-indigo-800 border-indigo-200'
+                          ? 'bg-amber-950/70 text-amber-300 border-amber-800/80 shadow-2xs'
+                          : 'bg-amber-50 text-amber-800 border-amber-200 shadow-2xs'
                       }`}
                     >
-                      {isWS ? 'Workshop (WS)' : 'Chương trình (CT)'}
+                      <span>{isWS ? '✦ WORKSHOP (WS)' : '❖ CHƯƠNG TRÌNH (CRT)'}</span>
                     </span>
 
                     <span
@@ -861,8 +861,8 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                         isDark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
                       }`}
                     >
-                      <option value="ws">Workshop (WS - Được chạy trên Facebook)</option>
-                      <option value="ct">Chương trình (CT - Không chạy Facebook)</option>
+                      <option value="ws">✦ Workshop (WS) - Buổi chia sẻ chuyên sâu, tương tác giải đáp trực tiếp</option>
+                      <option value="ct">❖ Chương trình CRT (CRT) - Lộ trình định vị & đồng hành dài hạn</option>
                     </select>
                   </div>
                 </div>
@@ -971,8 +971,8 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                   isDark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
                 }`}
               >
-                <option value="ws">Workshop (WS)</option>
-                <option value="ct">Chương trình (CT)</option>
+                <option value="ws">✦ Workshop (WS) - Buổi chia sẻ chuyên sâu</option>
+                <option value="ct">❖ Chương trình CRT (CRT) - Lộ trình đồng hành dài hạn</option>
               </select>
             </div>
 

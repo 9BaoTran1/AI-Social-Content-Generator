@@ -675,7 +675,7 @@ ${
                   }`}
                 >
                   <Layers className="w-3.5 h-3.5 text-indigo-600" />
-                  <span>Workshop / Chương trình đích</span>
+                  <span>Workshop (WS) / Chương trình CRT đích</span>
                 </label>
                 <button
                   type="button"
@@ -697,11 +697,18 @@ ${
                       : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-indigo-600 focus:bg-white'
                   }`}
                 >
-                  <option value="auto">✨ AI tự động chọn WS/CT phù hợp nhất với ngữ cảnh</option>
-                  <optgroup label="Tất Cả Workshops & Chương Trình Khả Dụng">
-                    {filteredPrograms.map((p) => (
+                  <option value="auto">✨ AI tự động chọn WS / CRT phù hợp nhất với ngữ cảnh</option>
+                  <optgroup label="✦ Workshops (WS)">
+                    {filteredPrograms.filter(p => p.type === 'ws').map((p) => (
                       <option key={p.id} value={p.id}>
-                        [{p.type === 'ws' ? 'Workshop (WS)' : 'Chương trình (CT)'}] {p.title}
+                        [WS] {p.title}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="❖ Chương Trình CRT (CRT)">
+                    {filteredPrograms.filter(p => p.type === 'ct').map((p) => (
+                      <option key={p.id} value={p.id}>
+                        [CRT] {p.title}
                       </option>
                     ))}
                   </optgroup>
