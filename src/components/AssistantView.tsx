@@ -191,15 +191,15 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
           </p>
         </div>
 
-        {/* Sub-tab pills */}
+        {/* Sub-tab pills (Scrollable on small screens to prevent horizontal overflow) */}
         <div
-          className={`flex items-center gap-1 p-1 rounded-xl border text-xs ${
+          className={`flex items-center gap-1 p-1 rounded-xl border text-xs overflow-x-auto no-scrollbar max-w-full ${
             isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-100 border-slate-200'
           }`}
         >
           <button
             onClick={() => setSubTab('chat')}
-            className={`px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-2 sm:py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 min-h-[38px] sm:min-h-0 ${
               subTab === 'chat'
                 ? 'bg-indigo-600 text-white shadow-sm'
                 : isDark
@@ -213,7 +213,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
 
           <button
             onClick={() => setSubTab('history')}
-            className={`px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-2 sm:py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 min-h-[38px] sm:min-h-0 ${
               subTab === 'history'
                 ? 'bg-indigo-600 text-white shadow-sm'
                 : isDark
@@ -227,7 +227,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
 
           <button
             onClick={() => setSubTab('benchmark')}
-            className={`px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-2 sm:py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 min-h-[38px] sm:min-h-0 ${
               subTab === 'benchmark'
                 ? 'bg-indigo-600 text-white shadow-sm'
                 : isDark
@@ -375,7 +375,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
               <button
                 type="submit"
                 disabled={isChatLoading || !inputMessage.trim()}
-                className="p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-40 transition-colors cursor-pointer shadow-sm"
+                className="min-w-[44px] min-h-[44px] p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-40 transition-colors cursor-pointer shadow-sm flex items-center justify-center shrink-0"
               >
                 <Send className="w-4 h-4" />
               </button>

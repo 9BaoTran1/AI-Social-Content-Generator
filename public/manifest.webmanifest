@@ -1,0 +1,24 @@
+{
+  "name": "AI Social Content Generator - Order Siêu Nhàn",
+  "short_name": "Order Siêu Nhàn",
+  "description": "H? th?ng 7 Order Chuy?n Ð?i Comment Thành Inbox cho TikTok, Facebook, Threads, LinkedIn",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}

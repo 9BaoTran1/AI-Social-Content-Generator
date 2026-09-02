@@ -181,7 +181,7 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
             <button
               key={p.id}
               onClick={() => setSelectedPlatform(p.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer min-h-[38px] sm:min-h-0 ${
                 selectedPlatform === p.id
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
@@ -195,7 +195,7 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
         </div>
 
         {/* Search Input */}
-        <div className="relative min-w-[260px]">
+        <div className="relative min-w-0 w-full md:w-64">
           <input
             type="text"
             value={searchQuery}

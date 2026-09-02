@@ -1,12 +1,48 @@
 @import "tailwindcss";
 
 @layer base {
+  html {
+    max-width: 100vw;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Safe-area insets for iPhone notch & gesture bar */
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
   body {
+    max-width: 100vw;
+    min-width: 320px;
+    overflow-x: hidden;
     font-family: 'Be Vietnam Pro', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     letter-spacing: -0.01em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent text and long URLs from overflowing cards on narrow phones */
+  p, span, h1, h2, h3, h4, h5, h6, a, div {
+    overflow-wrap: break-word;
+  }
+
+  /* Prevent iOS Safari from automatically zooming in when focusing inputs */
+  @media screen and (max-width: 768px) {
+    input[type="text"],
+    input[type="password"],
+    input[type="search"],
+    input[type="number"],
+    input[type="email"],
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
   }
 
   /* High-contrast and crisp font rendering for light mode */

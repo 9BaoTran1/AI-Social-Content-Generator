@@ -232,7 +232,7 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
             <button
               key={plat}
               onClick={() => setFilterPlatform(plat)}
-              className={`px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3 py-2 sm:py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer min-h-[38px] sm:min-h-0 flex items-center justify-center ${
                 filterPlatform === plat
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
@@ -446,7 +446,7 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
           <div
-            className={`w-full max-w-xl rounded-2xl border shadow-2xl p-6 space-y-4 max-h-[90vh] overflow-y-auto ${
+            className={`w-full max-w-xl rounded-2xl border shadow-2xl p-5 sm:p-6 space-y-4 max-h-[90dvh] overflow-y-auto ${
               isDark ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
             }`}
           >
@@ -457,7 +457,7 @@ export const BenchmarkLibrary: React.FC<BenchmarkLibraryProps> = ({ onUseTemplat
               </div>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                className="w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

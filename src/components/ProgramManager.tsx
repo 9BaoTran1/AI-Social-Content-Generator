@@ -438,13 +438,13 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
           }`}
         >
           <div
-            className={`flex items-center gap-1 p-1 rounded-xl border text-xs w-full sm:w-auto ${
+            className={`flex items-center gap-1 p-1 rounded-xl border text-xs w-full sm:w-auto overflow-x-auto no-scrollbar ${
               isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-100 border-slate-200'
             }`}
           >
             <button
               onClick={() => setFilterType('all')}
-              className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+              className={`flex-1 sm:flex-none px-3 py-2 sm:py-1.5 rounded-lg font-semibold transition-all cursor-pointer whitespace-nowrap shrink-0 min-h-[38px] sm:min-h-0 flex items-center justify-center ${
                 filterType === 'all'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : isDark
@@ -456,7 +456,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
             </button>
             <button
               onClick={() => setFilterType('ws')}
-              className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+              className={`flex-1 sm:flex-none px-3 py-2 sm:py-1.5 rounded-lg font-semibold transition-all cursor-pointer whitespace-nowrap shrink-0 min-h-[38px] sm:min-h-0 flex items-center justify-center ${
                 filterType === 'ws'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : isDark
@@ -468,7 +468,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
             </button>
             <button
               onClick={() => setFilterType('ct')}
-              className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+              className={`flex-1 sm:flex-none px-3 py-2 sm:py-1.5 rounded-lg font-semibold transition-all cursor-pointer whitespace-nowrap shrink-0 min-h-[38px] sm:min-h-0 flex items-center justify-center ${
                 filterType === 'ct'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : isDark
@@ -729,7 +729,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                   setIsAddModalOpen(false);
                   setDraftProgram(null);
                 }}
-                className={`p-1 rounded-lg cursor-pointer ${
+                className={`w-9 h-9 flex items-center justify-center rounded-xl transition-colors cursor-pointer ${
                   isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'
                 }`}
               >
@@ -935,9 +935,9 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
 
       {/* Edit Existing Modal */}
       {editingProgram && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div
-            className={`border rounded-2xl w-full max-w-xl p-6 space-y-4 shadow-2xl ${
+            className={`border rounded-2xl w-full max-w-xl max-h-[90dvh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl ${
               isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
             }`}
           >
@@ -947,8 +947,8 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
               </h3>
               <button
                 onClick={() => setEditingProgram(null)}
-                className={`p-1 rounded-lg cursor-pointer ${
-                  isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-800'
+                className={`w-9 h-9 flex items-center justify-center rounded-xl transition-colors cursor-pointer ${
+                  isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'
                 }`}
               >
                 <X className="w-5 h-5" />
@@ -1019,18 +1019,18 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
               />
             </div>
 
-            <div className={`flex justify-end gap-2 pt-2 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
+            <div className={`flex items-center justify-end gap-2 pt-2 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
               <button
                 onClick={() => setEditingProgram(null)}
-                className={`px-4 py-2 text-xs cursor-pointer ${
-                  isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                className={`min-h-[40px] px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-semibold cursor-pointer ${
+                  isDark ? 'text-slate-300 hover:text-white hover:bg-slate-800' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
                 Hủy
               </button>
               <button
                 onClick={handleSaveEditing}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold cursor-pointer shadow-sm"
+                className="min-h-[40px] px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold cursor-pointer shadow-sm flex items-center justify-center"
               >
                 Cập nhật
               </button>

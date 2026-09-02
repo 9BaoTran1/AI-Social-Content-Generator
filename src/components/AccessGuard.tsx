@@ -110,13 +110,13 @@ export const AccessGuard: React.FC<AccessGuardProps> = ({ children, theme }) => 
                 }}
                 placeholder="Nhập mã truy cập..."
                 autoFocus
-                className={`w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 ${
+                className={`w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 ${
                   isDark
                     ? 'bg-slate-950 border-slate-800 text-slate-200 placeholder-slate-600'
                     : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'
                 }`}
               />
-              <Key className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
+              <Key className="w-4 h-4 text-slate-400 absolute right-3.5 top-3.5" />
             </div>
           </div>
 
@@ -129,7 +129,7 @@ export const AccessGuard: React.FC<AccessGuardProps> = ({ children, theme }) => 
 
           <button
             type="submit"
-            className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full min-h-[44px] py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <span>Mở Khóa Truy Cập</span>
             <ArrowRight className="w-3.5 h-3.5" />

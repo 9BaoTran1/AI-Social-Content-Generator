@@ -39,31 +39,31 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`sticky top-0 z-40 backdrop-blur-md transition-colors ${
         isDark
-          ? 'bg-slate-950/90 border-b border-slate-800/80 text-slate-100'
+          ? 'bg-slate-950/95 border-b border-slate-800/80 text-slate-100'
           : 'bg-white/95 border-b border-slate-200/90 text-slate-900 shadow-xs'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-2">
+        <div className="flex items-center justify-between h-14 sm:h-16 gap-2">
           {/* Logo & Clean Title */}
           <div
-            className="flex items-center space-x-3 cursor-pointer group shrink-0"
+            className="flex items-center space-x-2.5 sm:space-x-3 cursor-pointer group shrink-0"
             onClick={() => setActiveTab('workbench')}
           >
-            <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-500 transition-colors">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-500 transition-colors">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5 sm:space-x-2">
                 <span
-                  className={`font-bold text-sm sm:text-base tracking-tight font-sans ${
+                  className={`font-bold text-xs sm:text-base tracking-tight font-sans ${
                     isDark ? 'text-white' : 'text-slate-900'
                   }`}
                 >
                   PROMPT ORDER AI
                 </span>
                 <span
-                  className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border hidden sm:inline-block ${
+                  className={`text-[9px] sm:text-[10px] font-semibold px-1.5 sm:px-2 py-0.2 rounded-full border hidden sm:inline-block ${
                     isDark
                       ? 'bg-slate-800 text-slate-300 border-slate-700/60'
                       : 'bg-slate-100 text-slate-700 border-slate-200'
@@ -82,9 +82,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Navigation Tabs (Scrollable on small screens) */}
+          {/* Desktop Navigation Tabs (Hidden on mobile, displayed cleanly in center on sm+) */}
           <nav
-            className={`flex items-center space-x-1 p-1 rounded-xl border overflow-x-auto no-scrollbar max-w-[50vw] sm:max-w-none ${
+            className={`hidden sm:flex items-center space-x-1 p-1 rounded-xl border overflow-x-auto no-scrollbar ${
               isDark
                 ? 'bg-slate-900/90 border-slate-800/80'
                 : 'bg-slate-100 border-slate-200'
@@ -92,7 +92,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <button
               onClick={() => setActiveTab('workbench')}
-              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === 'workbench'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
@@ -106,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => setActiveTab('orders')}
-              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === 'orders'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
@@ -120,7 +120,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => setActiveTab('benchmark')}
-              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === 'benchmark'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
@@ -134,7 +134,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => setActiveTab('programs')}
-              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === 'programs'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
@@ -148,7 +148,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => setActiveTab('assistant')}
-              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === 'assistant'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
@@ -157,13 +157,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <Bot className="w-3.5 h-3.5 shrink-0" />
-              <span className="hidden sm:inline">Trợ Lý & Lịch Sử</span>
-              <span className="sm:hidden">Trợ Lý</span>
+              <span>Trợ Lý & Lịch Sử</span>
             </button>
 
             <button
               onClick={() => setActiveTab('guide')}
-              className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === 'guide'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : isDark
@@ -172,8 +171,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <BookMarked className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-              <span className="hidden sm:inline">Cẩm Nang & HDSD</span>
-              <span className="sm:hidden">Cẩm Nang</span>
+              <span>Cẩm Nang & HDSD</span>
             </button>
           </nav>
 
@@ -184,13 +182,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => setShowKeyModal(true)}
               title="Cài đặt Gemini API Key"
-              className={`p-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+              className={`min-h-[40px] min-w-[40px] p-2 rounded-xl border text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 isDark
                   ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80'
                   : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-2xs'
               }`}
             >
-              <Key className="w-3.5 h-3.5 text-indigo-500" />
+              <Key className="w-4 h-4 text-indigo-500" />
               <span className="hidden xl:inline text-[11px]">API Key</span>
             </button>
 
@@ -198,7 +196,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={onToggleTheme}
               title={isDark ? 'Chuyển sang giao diện Sáng' : 'Chuyển sang giao diện Tối'}
-              className={`p-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+              className={`min-h-[40px] min-w-[40px] p-2 rounded-xl border text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 isDark
                   ? 'bg-slate-900 hover:bg-slate-800 text-amber-300 border-slate-700/80'
                   : 'bg-white hover:bg-slate-50 text-indigo-600 border-slate-200 shadow-2xs'
@@ -206,12 +204,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               {isDark ? (
                 <>
-                  <Sun className="w-3.5 h-3.5 text-amber-400" />
+                  <Sun className="w-4 h-4 text-amber-400" />
                   <span className="hidden lg:inline text-[11px] text-slate-300">Bản sáng</span>
                 </>
               ) : (
                 <>
-                  <Moon className="w-3.5 h-3.5 text-indigo-600" />
+                  <Moon className="w-4 h-4 text-indigo-600" />
                   <span className="hidden lg:inline text-[11px] text-slate-700 font-semibold">Bản tối</span>
                 </>
               )}
@@ -220,16 +218,104 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Add Program Button */}
             <button
               onClick={onOpenAddProgram}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer ${
+              className={`min-h-[40px] px-3 py-2 text-xs font-semibold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer ${
                 isDark
                   ? 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80'
                   : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-2xs'
               }`}
             >
-              <Plus className="w-3.5 h-3.5 text-indigo-600" />
+              <Plus className="w-4 h-4 text-indigo-600" />
               <span className="hidden sm:inline">Thêm WS / CT</span>
+              <span className="sm:hidden text-[11px] font-bold">+ Kho</span>
             </button>
           </div>
+        </div>
+
+        {/* Mobile Full-Width Horizontal Scroll Navigation Bar (Visible only on < sm screens) */}
+        <div className="sm:hidden pb-2 pt-0.5 overflow-x-auto no-scrollbar scroll-smooth flex items-center space-x-1.5 -mx-4 px-4 border-t border-slate-200/60 dark:border-slate-800/60">
+          <button
+            onClick={() => setActiveTab('workbench')}
+            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+              activeTab === 'workbench'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : isDark
+                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
+                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 shrink-0" />
+            <span>Studio</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('orders')}
+            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+              activeTab === 'orders'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : isDark
+                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
+                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5 shrink-0" />
+            <span>7 Lệnh Order</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('benchmark')}
+            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+              activeTab === 'benchmark'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : isDark
+                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
+                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
+            }`}
+          >
+            <BookmarkCheck className="w-3.5 h-3.5 shrink-0" />
+            <span>Kho Mẫu</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('programs')}
+            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+              activeTab === 'programs'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : isDark
+                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
+                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
+            }`}
+          >
+            <BookOpen className="w-3.5 h-3.5 shrink-0" />
+            <span>Kho ({programCount.ws + programCount.ct})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('assistant')}
+            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+              activeTab === 'assistant'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : isDark
+                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
+                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
+            }`}
+          >
+            <Bot className="w-3.5 h-3.5 shrink-0" />
+            <span>Trợ Lý & Lịch Sử</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('guide')}
+            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+              activeTab === 'guide'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : isDark
+                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
+                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
+            }`}
+          >
+            <BookMarked className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+            <span>Cẩm Nang</span>
+          </button>
         </div>
       </div>
 
@@ -237,7 +323,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {showKeyModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
           <div
-            className={`w-full max-w-md rounded-2xl p-5 border shadow-xl space-y-4 ${
+            className={`w-full max-w-md max-h-[90dvh] overflow-y-auto rounded-2xl p-5 sm:p-6 border shadow-xl space-y-4 ${
               isDark ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
             }`}
           >
@@ -248,7 +334,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
               <button
                 onClick={() => setShowKeyModal(false)}
-                className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                className="w-9 h-9 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-base cursor-pointer"
               >
                 ✕
               </button>
@@ -263,7 +349,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 value={apiKeyInput}
                 onChange={(e) => setApiKeyInput(e.target.value)}
                 placeholder="Nhập AIzaSy... hoặc khóa API của bạn"
-                className="w-full border rounded-xl p-2.5 text-xs font-mono bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full border rounded-xl p-3 text-xs font-mono bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
               />
               <p className="text-[10px] text-slate-400">
                 Khóa API được lưu an toàn trong trình duyệt của bạn (Local Storage) và không bị gửi ra ngoài.
@@ -274,14 +360,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 type="button"
                 onClick={() => setShowKeyModal(false)}
-                className="px-3 py-1.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+                className="min-h-[40px] px-4 py-2 text-xs font-semibold rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
               >
                 Hủy
               </button>
               <button
                 type="button"
                 onClick={handleSaveKey}
-                className="px-4 py-1.5 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-1.5 shadow-sm cursor-pointer"
+                className="min-h-[40px] px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-1.5 shadow-sm cursor-pointer"
               >
                 {keySavedFeedback ? (
                   <>

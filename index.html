@@ -1,20 +1,76 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
     <title>AI Social Content Generator - Order Siêu Nhàn</title>
     <meta name="description" content="Chuyên gia Social Media & Content Chuyển Đổi Comment thành Inbox cho TikTok, Facebook, Threads, LinkedIn với hệ thống Order tự động và bóc tách thông tin Workshop/Chương trình." />
+    
+    <!-- Mobile Web App & PWA Capabilities -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Order Siêu Nhàn" />
+    <meta name="application-name" content="Order Siêu Nhàn" />
+    
+    <!-- Theme Colors (Responsive for light & dark mode) -->
+    <meta name="theme-color" content="#4f46e5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#4f46e5" />
+    
+    <!-- Prevent Unwanted Formatting Auto-detection in Mobile Browsers (Zalo, Messenger, Safari) -->
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+    
+    <!-- Favicon & Mobile Touch Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Open Graph & Social Sharing -->
     <meta property="og:title" content="AI Social Content Generator - Order Siêu Nhàn" />
     <meta property="og:description" content="Chuyên gia Social Media & Content Chuyển Đổi Comment thành Inbox cho TikTok, Facebook, Threads, LinkedIn với hệ thống Order tự động và bóc tách thông tin Workshop/Chương trình." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Typography Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Friendly Offline / Weak Network Notification -->
+    <div id="network-offline-banner" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:9999; background:rgba(15,23,42,0.95); color:#f8fafc; border:1px solid rgba(239,68,68,0.4); padding:10px 18px; border-radius:9999px; font-family:system-ui,-apple-system,sans-serif; font-size:12px; font-weight:600; box-shadow:0 10px 25px -5px rgba(0,0,0,0.5); backdrop-filter:blur(8px); align-items:center; gap:8px; pointer-events:none; max-width:90vw; text-align:center;">
+      <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#ef4444; box-shadow:0 0 8px #ef4444; flex-shrink:0;"></span>
+      <span>Mạng chập chờn / Ngoại tuyến • Dữ liệu đã lưu cục bộ an toàn</span>
+    </div>
+
+    <!-- NoScript Fallback -->
+    <noscript>
+      <div style="padding: 20px; text-align: center; font-family: sans-serif; background: #fee2e2; color: #991b1b;">
+        Ứng dụng yêu cầu JavaScript để chạy. Vui lòng bật JavaScript trong cài đặt trình duyệt của bạn.
+      </div>
+    </noscript>
+
+    <script>
+      (function() {
+        function updateNetworkStatus() {
+          var banner = document.getElementById('network-offline-banner');
+          if (!banner) return;
+          if (!navigator.onLine) {
+            banner.style.display = 'flex';
+          } else {
+            banner.style.display = 'none';
+          }
+        }
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
+        if (!navigator.onLine) {
+          updateNetworkStatus();
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

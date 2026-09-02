@@ -895,7 +895,7 @@ ${
                           key={l.id}
                           type="button"
                           onClick={() => setLengthPreference(l.id as any)}
-                          className={`py-1 text-xs rounded-lg border transition-all cursor-pointer ${
+                          className={`py-2 text-xs rounded-lg border transition-all cursor-pointer min-h-[38px] flex items-center justify-center ${
                             lengthPreference === l.id
                               ? 'bg-indigo-600 text-white border-indigo-600 font-semibold shadow-2xs'
                               : isDark
@@ -980,13 +980,13 @@ ${
 
                 {(error.includes('API_KEY') || error.includes('403') || error.includes('unregistered')) ? (
                   <div className="space-y-2 pt-1">
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <input
                         type="password"
                         value={inlineApiKey}
                         onChange={(e) => setInlineApiKey(e.target.value)}
                         placeholder="Dán Gemini API Key (AIzaSy...)"
-                        className="flex-1 border rounded-lg px-3 py-1.5 text-xs font-mono bg-white dark:bg-slate-900 border-amber-300 dark:border-amber-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                        className="flex-1 border rounded-xl px-3 py-2.5 text-xs font-mono bg-white dark:bg-slate-900 border-amber-300 dark:border-amber-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-500"
                       />
                       <button
                         type="button"
@@ -997,13 +997,13 @@ ${
                             handleGenerate();
                           }
                         }}
-                        className="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs cursor-pointer whitespace-nowrap shadow-xs"
+                        className="min-h-[40px] px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs cursor-pointer whitespace-nowrap shadow-xs flex items-center justify-center"
                       >
                         Lưu & Tạo Ngay
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] pt-1">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px] pt-1">
                       <span className="text-amber-800 dark:text-amber-300">Chưa có key? Nhận miễn phí vĩnh viễn:</span>
                       <a
                         href="https://aistudio.google.com/app/apikey"
@@ -1245,15 +1245,15 @@ ${
                   </p>
                 </div>
 
-                {/* Clean View Tabs */}
+                {/* Clean View Tabs (Scrollable on small screens to prevent horizontal overflow) */}
                 <div
-                  className={`flex p-1 rounded-xl border text-xs ${
+                  className={`flex items-center gap-1 p-1 rounded-xl border text-xs overflow-x-auto no-scrollbar max-w-full ${
                     isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-100 border-slate-200'
                   }`}
                 >
                   <button
                     onClick={() => setResultTab('variations')}
-                    className={`px-3 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
+                    className={`px-3 py-2 sm:py-1 rounded-lg font-semibold whitespace-nowrap shrink-0 transition-all cursor-pointer min-h-[38px] sm:min-h-0 flex items-center justify-center ${
                       resultTab === 'variations'
                         ? 'bg-indigo-600 text-white shadow-xs'
                         : isDark
@@ -1265,7 +1265,7 @@ ${
                   </button>
                   <button
                     onClick={() => setResultTab('dm_script')}
-                    className={`px-3 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
+                    className={`px-3 py-2 sm:py-1 rounded-lg font-semibold whitespace-nowrap shrink-0 transition-all cursor-pointer min-h-[38px] sm:min-h-0 flex items-center justify-center ${
                       resultTab === 'dm_script'
                         ? 'bg-indigo-600 text-white shadow-xs'
                         : isDark
@@ -1277,7 +1277,7 @@ ${
                   </button>
                   <button
                     onClick={() => setResultTab('preview')}
-                    className={`px-3 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
+                    className={`px-3 py-2 sm:py-1 rounded-lg font-semibold whitespace-nowrap shrink-0 transition-all cursor-pointer min-h-[38px] sm:min-h-0 flex items-center justify-center ${
                       resultTab === 'preview'
                         ? 'bg-indigo-600 text-white shadow-xs'
                         : isDark
@@ -1834,7 +1834,7 @@ ${
                             </div>
 
                             {/* Action Buttons for this card */}
-                            <div className="flex items-center gap-1.5 self-start sm:self-auto" onClick={(e) => e.stopPropagation()}>
+                            <div className="flex flex-wrap items-center gap-1.5 self-start sm:self-auto" onClick={(e) => e.stopPropagation()}>
                               {/* Combo Button */}
                               {generatedResult.firstCommentSeed && (
                                 <button
@@ -1846,7 +1846,7 @@ ${
                                     )
                                   }
                                   title="Sao chép bài viết kèm comment ghim mồi để đăng ngay"
-                                  className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-1 cursor-pointer transition-all shadow-2xs"
+                                  className="min-h-[36px] sm:min-h-0 px-2.5 py-1.5 sm:py-1 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-1 cursor-pointer transition-all shadow-2xs"
                                 >
                                   {copiedId === `combo-${idx}` ? (
                                     <>
@@ -1865,7 +1865,7 @@ ${
                               {/* Fast Copy Individual Variation */}
                               <button
                                 onClick={() => copyWithFeedback(variation, `var-${idx}`)}
-                                className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all flex items-center gap-1 cursor-pointer ${
+                                className={`min-h-[36px] sm:min-h-0 px-2.5 py-1.5 sm:py-1 rounded-lg text-xs font-medium border transition-all flex items-center gap-1 cursor-pointer ${
                                   isDark
                                     ? 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80'
                                     : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300 shadow-2xs'
@@ -1888,7 +1888,7 @@ ${
                               <button
                                 onClick={() => handleSaveToBenchmark(variation, idx)}
                                 title="Lưu bài viết này vào Kho Mẫu Chuẩn"
-                                className={`p-1.5 rounded-lg border transition-all flex items-center gap-1 cursor-pointer ${
+                                className={`min-h-[36px] min-w-[36px] sm:min-h-0 sm:min-w-0 p-2 sm:p-1.5 rounded-lg border transition-all flex items-center justify-center gap-1 cursor-pointer ${
                                   savedBenchmarkIdx === idx
                                     ? 'bg-amber-500 text-white border-amber-500'
                                     : isDark
