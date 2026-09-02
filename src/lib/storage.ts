@@ -30,7 +30,6 @@ export function getSavedPrograms(): ProgramItem[] {
             type: def.type, // Enforce correct official type (WS vs CRT)
             title: def.title,
             description: def.description,
-            formatNote: def.formatNote,
             isCore: true,
           };
         }

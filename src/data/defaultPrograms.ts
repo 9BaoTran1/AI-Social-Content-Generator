@@ -184,7 +184,6 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
     title: 'STORYTELLING – NGHỆ THUẬT KỂ CHUYỆN & CHẠM CẢM XÚC',
     type: 'ws',
     description: 'Workshop/Talkshow Storytelling - Nghệ thuật kể chuyện và chạm cảm xúc. Dành cho người làm sáng tạo, freelancer, người đi làm và quản lý muốn nâng cao năng lực truyền cảm hứng và kết nối chân thật.',
-    formatNote: 'Ở các tỉnh thành khác Online qua Zoom • Tại TP.HCM đến Talkshow Offline',
     targetAudience: ['Người làm sáng tạo nội dung, Freelancer', 'Người đi làm muốn nâng cao năng lực giao tiếp & storytelling', 'Học viên tại TP.HCM (Offline) & toàn quốc (Online)'],
     painPoints: [
       'Viết bài hay nói chuyện bị khô cứng, thiếu cảm xúc và khó chạm đến người nghe',

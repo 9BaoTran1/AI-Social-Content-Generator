@@ -26,7 +26,6 @@ import {
   Lock,
   Unlock,
   Key,
-  MapPin,
 } from 'lucide-react';
 import { extractProgramAI } from '../lib/aiService';
 import {
@@ -540,19 +539,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                       <span>Chạy tự do mọi nền tảng</span>
                     </span>
 
-                    {program.formatNote && (
-                      <span
-                        className={`text-[10px] font-semibold px-2 py-0.5 rounded-md flex items-center gap-1 border ${
-                          isDark
-                            ? 'bg-rose-950/40 text-rose-300 border-rose-800/60'
-                            : 'bg-rose-50 text-rose-700 border-rose-200'
-                        }`}
-                        title="Hình thức tổ chức"
-                      >
-                        <MapPin className="w-3 h-3 text-rose-500 shrink-0" />
-                        <span>{program.formatNote}</span>
-                      </span>
-                    )}
+
 
                     {!program.isCore && (
                       <span
@@ -1023,22 +1010,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
               />
             </div>
 
-            <div>
-              <label className={`text-xs font-semibold block mb-1 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                Hình thức & Địa điểm (Online / Offline)
-              </label>
-              <input
-                type="text"
-                placeholder="Ở các tỉnh thành khác Online qua Zoom • Tại TP.HCM Talkshow Offline..."
-                value={editingProgram.formatNote || ''}
-                onChange={(e) =>
-                  setEditingProgram({ ...editingProgram, formatNote: e.target.value })
-                }
-                className={`w-full border rounded-xl px-3 py-2 text-xs ${
-                  isDark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                }`}
-              />
-            </div>
+
 
             <div className={`flex items-center justify-end gap-2 pt-2 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
               <button

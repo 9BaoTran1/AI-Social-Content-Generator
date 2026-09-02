@@ -730,11 +730,7 @@ ${
                     >
                       {sel.type === 'ws' ? '✦ Workshop (WS)' : '❖ Chương Trình CRT'}
                     </span>
-                    {sel.formatNote && (
-                      <span className="text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1">
-                        📍 {sel.formatNote}
-                      </span>
-                    )}
+
                     <span className="text-slate-500 dark:text-slate-400 truncate max-w-xs">
                       {sel.testOrFormAngle}
                     </span>
