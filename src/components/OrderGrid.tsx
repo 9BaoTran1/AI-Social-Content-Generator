@@ -123,7 +123,7 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
             </h1>
             <p
               className={`text-xs sm:text-sm leading-relaxed ${
-                isDark ? 'text-slate-300' : 'text-slate-600'
+                isDark ? 'text-slate-300' : 'text-slate-700 font-medium'
               }`}
             >
               Mỗi lệnh Order được tối ưu thuật toán riêng cho từng nền tảng (TikTok, Facebook, Threads, LinkedIn, Email). AI tự động phân tích tâm lý, bóc tách nỗi đau, đề xuất 4 phong cách viral và kịch bản tư vấn cá nhân hóa.
@@ -271,7 +271,7 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
                 {/* Description */}
                 <p
                   className={`text-xs leading-relaxed mb-3.5 line-clamp-3 ${
-                    isDark ? 'text-slate-400' : 'text-slate-600'
+                    isDark ? 'text-slate-400' : 'text-slate-700 font-medium'
                   }`}
                 >
                   {order.description}
@@ -283,7 +283,7 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
                     className={`mb-3.5 p-2.5 rounded-xl border text-[11px] leading-tight flex items-start gap-1.5 ${
                       isDark
                         ? 'bg-blue-950/40 border-blue-800/40 text-blue-200/90'
-                        : 'bg-blue-50/70 border-blue-200 text-blue-800'
+                        : 'bg-blue-50/90 border-blue-200 text-blue-950 font-medium'
                     }`}
                   >
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
@@ -301,10 +301,10 @@ export const OrderGrid: React.FC<OrderGridProps> = ({ onSelectOrder, theme = 'li
                   className={`p-2.5 rounded-xl border text-[11px] mb-4 ${
                     isDark
                       ? 'bg-slate-950/70 border-slate-800/80 text-slate-300'
-                      : 'bg-slate-50 border-slate-200 text-slate-700'
+                      : 'bg-slate-50 border-slate-300 text-slate-800 font-medium'
                   }`}
                 >
-                  <span className="text-slate-400 dark:text-slate-500 font-semibold block text-[10px] uppercase mb-0.5">
+                  <span className="text-slate-600 dark:text-slate-400 font-bold block text-[10px] uppercase mb-0.5">
                     Tone & Mood chuẩn:
                   </span>
                   <span className="italic line-clamp-2">"{order.toneGuideline}"</span>

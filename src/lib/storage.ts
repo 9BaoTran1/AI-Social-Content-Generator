@@ -14,18 +14,22 @@ export function getSavedPrograms(): ProgramItem[] {
   try {
     const saved = localStorage.getItem(STORAGE_KEYS.PROGRAMS);
     if (!saved) {
-      localStorage.setItem(STORAGE_KEYS.PROGRAMS, JSON.stringify(DEFAULT_PROGRAMS));
-      return DEFAULT_PROGRAMS;
+      const initial = DEFAULT_PROGRAMS.map((p) => ({ ...p, isCore: true }));
+      localStorage.setItem(STORAGE_KEYS.PROGRAMS, JSON.stringify(initial));
+      return initial;
     }
     const parsed = JSON.parse(saved);
-    // Ensure all default programs are present if missing
     if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed;
+      const coreIds = new Set(DEFAULT_PROGRAMS.map((p) => p.id));
+      return parsed.map((p: ProgramItem) => ({
+        ...p,
+        isCore: p.isCore ?? coreIds.has(p.id) ?? p.isBuiltin ?? false,
+      }));
     }
-    return DEFAULT_PROGRAMS;
+    return DEFAULT_PROGRAMS.map((p) => ({ ...p, isCore: true }));
   } catch (e) {
     console.error('Failed to load saved programs:', e);
-    return DEFAULT_PROGRAMS;
+    return DEFAULT_PROGRAMS.map((p) => ({ ...p, isCore: true }));
   }
 }
 
@@ -34,6 +38,68 @@ export function savePrograms(programs: ProgramItem[]): void {
     localStorage.setItem(STORAGE_KEYS.PROGRAMS, JSON.stringify(programs));
   } catch (e) {
     console.error('Failed to save programs:', e);
+  }
+}
+
+export function resetProgramsToDefault(): ProgramItem[] {
+  try {
+    const reset = DEFAULT_PROGRAMS.map((p) => ({ ...p, isCore: true }));
+    savePrograms(reset);
+    return reset;
+  } catch (e) {
+    console.error('Failed to reset programs:', e);
+    return DEFAULT_PROGRAMS;
+  }
+}
+
+export function exportProgramsToJson(): string {
+  const current = getSavedPrograms();
+  const exportPayload = {
+    app: 'AI-Social-Content-Generator',
+    version: '2026.1',
+    exportedAt: new Date().toISOString(),
+    totalCount: current.length,
+    programs: current,
+  };
+  return JSON.stringify(exportPayload, null, 2);
+}
+
+export function importProgramsFromJson(jsonString: string): { success: boolean; count?: number; error?: string } {
+  try {
+    const parsed = JSON.parse(jsonString);
+    const rawList = Array.isArray(parsed) ? parsed : parsed.programs;
+    if (!Array.isArray(rawList) || rawList.length === 0) {
+      return { success: false, error: 'Định dạng JSON không chứa danh sách chương trình hợp lệ.' };
+    }
+
+    const validated: ProgramItem[] = rawList
+      .filter((item: any) => item && typeof item.title === 'string' && item.title.trim())
+      .map((item: any, idx: number) => ({
+        id: item.id || `custom-${Date.now()}-${idx}`,
+        title: String(item.title).trim(),
+        type: item.type === 'ct' ? 'ct' : 'ws',
+        description: item.description || '',
+        targetAudience: Array.isArray(item.targetAudience) ? item.targetAudience : [],
+        painPoints: Array.isArray(item.painPoints) ? item.painPoints : [],
+        coreValues: Array.isArray(item.coreValues) ? item.coreValues : [],
+        testOrFormAngle: item.testOrFormAngle || '',
+        imageUrl: item.imageUrl,
+        tallyUrl: item.tallyUrl,
+        isBuiltin: Boolean(item.isBuiltin),
+        isCore: Boolean(item.isCore),
+        isActive: item.isActive !== false,
+        notes: item.notes,
+        createdAt: item.createdAt || new Date().toISOString(),
+      }));
+
+    if (validated.length === 0) {
+      return { success: false, error: 'Không tìm thấy mục chương trình nào có tiêu đề hợp lệ.' };
+    }
+
+    savePrograms(validated);
+    return { success: true, count: validated.length };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Lỗi khi phân tích cú pháp JSON.' };
   }
 }
 
@@ -139,5 +205,16 @@ export function verifyCrtAdmin(passcode: string): boolean {
 export function logoutCrtAdmin(): void {
   sessionStorage.removeItem(STORAGE_KEYS.CRT_ADMIN_AUTH);
   notifyAdminStatusChanged();
+}
+
+export function changeCrtAdminKey(newKey: string): { success: boolean; message: string } {
+  const trimmed = newKey.trim();
+  if (trimmed.length < 6) {
+    return { success: false, message: 'Mật mã quản trị mới phải có ít nhất 6 ký tự.' };
+  }
+  localStorage.setItem('crt_custom_admin_key', trimmed);
+  sessionStorage.setItem(STORAGE_KEYS.CRT_ADMIN_AUTH, 'true');
+  notifyAdminStatusChanged();
+  return { success: true, message: 'Đã cập nhật mật mã Admin thành công!' };
 }
 

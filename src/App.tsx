@@ -82,6 +82,11 @@ export default function App() {
     }
   };
 
+  const handleReloadPrograms = (newPrograms: ProgramItem[]) => {
+    setPrograms(newPrograms);
+    savePrograms(newPrograms);
+  };
+
   const wsCount = programs.filter((p) => p.type === 'ws').length;
   const ctCount = programs.filter((p) => p.type === 'ct').length;
 
@@ -139,6 +144,7 @@ export default function App() {
               onAddProgram={handleAddProgram}
               onUpdateProgram={handleUpdateProgram}
               onDeleteProgram={handleDeleteProgram}
+              onReloadPrograms={handleReloadPrograms}
               isAddModalOpen={isAddModalOpen}
               setIsAddModalOpen={setIsAddModalOpen}
               theme={theme}

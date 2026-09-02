@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ProgramItem, ProgramType, ThemeMode } from '../types';
 import {
   Plus,
@@ -7,6 +7,11 @@ import {
   Sparkles,
   Link as LinkIcon,
   Upload,
+  Download,
+  RotateCcw,
+  Shield,
+  KeyRound,
+  FileText,
   Trash2,
   Edit2,
   Check,
@@ -23,13 +28,23 @@ import {
   Key,
 } from 'lucide-react';
 import { extractProgramAI } from '../lib/aiService';
-import { isCrtAdmin, verifyCrtAdmin, logoutCrtAdmin } from '../lib/storage';
+import {
+  isCrtAdmin,
+  verifyCrtAdmin,
+  logoutCrtAdmin,
+  changeCrtAdminKey,
+  exportProgramsToJson,
+  importProgramsFromJson,
+  resetProgramsToDefault,
+  getSavedPrograms,
+} from '../lib/storage';
 
 interface ProgramManagerProps {
   programs: ProgramItem[];
   onAddProgram: (program: ProgramItem) => void;
   onUpdateProgram: (program: ProgramItem) => void;
   onDeleteProgram: (id: string) => void;
+  onReloadPrograms?: (programs: ProgramItem[]) => void;
   isAddModalOpen: boolean;
   setIsAddModalOpen: (open: boolean) => void;
   theme?: ThemeMode;
@@ -40,6 +55,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
   onAddProgram,
   onUpdateProgram,
   onDeleteProgram,
+  onReloadPrograms,
   isAddModalOpen,
   setIsAddModalOpen,
   theme = 'light',
@@ -91,13 +107,91 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
         setPendingAdminAction(null);
       }
     } else {
-      setAdminError('Mã bảo mật Admin không chính xác (Mặc định: admincrt2026)');
+      setAdminError('Mã bảo mật Admin không chính xác. Vui lòng thử lại.');
     }
   };
 
   const handleLogoutAdmin = () => {
     logoutCrtAdmin();
     setIsAdmin(false);
+  };
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isChangePassModalOpen, setIsChangePassModalOpen] = useState<boolean>(false);
+  const [newPasscode, setNewPasscode] = useState<string>('');
+  const [changePassFeedback, setChangePassFeedback] = useState<{ success: boolean; message: string } | null>(null);
+
+  // Shortcut Ctrl + Shift + A to open Admin modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        setIsAdminModalOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const handleExportJson = () => {
+    try {
+      const jsonStr = exportProgramsToJson();
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `kho-crt-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e: any) {
+      alert('Lỗi khi xuất file: ' + e.message);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target?.result as string;
+        const res = importProgramsFromJson(text);
+        if (res.success) {
+          const fresh = getSavedPrograms();
+          onReloadPrograms?.(fresh);
+          alert(`Đã khôi phục thành công ${res.count} Workshop/Chương trình vào kho!`);
+        } else {
+          alert('Lỗi khi nhập dữ liệu: ' + res.error);
+        }
+      } catch (err: any) {
+        alert('Lỗi đọc file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
+  const handleResetDefault = () => {
+    if (confirm('Khôi phục toàn bộ Kho Workshop & Chương trình về danh mục gốc ban đầu? Các chương trình tùy chỉnh có thể bị thay thế.')) {
+      const reset = resetProgramsToDefault();
+      onReloadPrograms?.(reset);
+      alert('Đã khôi phục trọn vẹn danh mục Workshop gốc của hệ thống!');
+    }
+  };
+
+  const handleChangePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = changeCrtAdminKey(newPasscode);
+    setChangePassFeedback(res);
+    if (res.success) {
+      setTimeout(() => {
+        setIsChangePassModalOpen(false);
+        setNewPasscode('');
+        setChangePassFeedback(null);
+      }, 1500);
+    }
   };
 
   // Extract Modal state
@@ -222,21 +316,120 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
               >
                 {programs.length} mục
               </span>
+              {!isAdmin && (
+                <button
+                  type="button"
+                  onClick={() => setIsAdminModalOpen(true)}
+                  title="Mở bảng quản trị Admin (Ctrl + Shift + A)"
+                  className="opacity-40 hover:opacity-100 transition-opacity p-1 text-slate-400 hover:text-indigo-500 cursor-pointer"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                </button>
+              )}
             </h2>
-            <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-              Cơ sở dữ liệu kiến thức để AI học và đối chiếu khi sản xuất content cho từng nền tảng
+            <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              Cơ sở dữ liệu kiến thức chuẩn để AI học và đối chiếu khi sản xuất content cho từng nền tảng
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => requireAdmin(() => setIsAddModalOpen(true))}
-            className="px-3.5 py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Thêm Mới Bằng Link / AI</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => requireAdmin(() => setIsAddModalOpen(true))}
+              className="px-3.5 py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Thêm Mới Bằng Link / AI</span>
+            </button>
+          </div>
         </div>
+
+        {/* Hidden input file for JSON import */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept=".json"
+          className="hidden"
+        />
+
+        {/* Admin Secure Toolbar */}
+        {isAdmin && (
+          <div
+            className={`p-3 rounded-xl border flex flex-wrap items-center justify-between gap-2 text-xs transition-all ${
+              isDark
+                ? 'bg-indigo-950/30 border-indigo-800/50 text-indigo-200'
+                : 'bg-indigo-50/80 border-indigo-200 text-indigo-950'
+            }`}
+          >
+            <div className="flex items-center gap-2 font-bold">
+              <ShieldCheck className="w-4 h-4 text-indigo-500" />
+              <span>Bảng Quản Trị Bảo Mật</span>
+            </div>
+
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <button
+                type="button"
+                onClick={handleExportJson}
+                className={`px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1 transition-all cursor-pointer ${
+                  isDark ? 'bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-200' : 'bg-white border-slate-300 hover:bg-slate-100 text-slate-800 shadow-2xs'
+                }`}
+                title="Tải về file JSON sao lưu toàn bộ Workshop"
+              >
+                <Download className="w-3.5 h-3.5 text-indigo-500" />
+                <span>Sao Lưu JSON</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className={`px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1 transition-all cursor-pointer ${
+                  isDark ? 'bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-200' : 'bg-white border-slate-300 hover:bg-slate-100 text-slate-800 shadow-2xs'
+                }`}
+                title="Nhập file JSON để khôi phục dữ liệu"
+              >
+                <Upload className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Khôi Phục JSON</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleResetDefault}
+                className={`px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1 transition-all cursor-pointer ${
+                  isDark ? 'bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-200' : 'bg-white border-slate-300 hover:bg-slate-100 text-slate-800 shadow-2xs'
+                }`}
+                title="Đặt lại toàn bộ kho về mặc định ban đầu"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-amber-500" />
+                <span>Khôi Phục Gốc</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsChangePassModalOpen(true)}
+                className={`px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1 transition-all cursor-pointer ${
+                  isDark ? 'bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-200' : 'bg-white border-slate-300 hover:bg-slate-100 text-slate-800 shadow-2xs'
+                }`}
+                title="Đổi mật mã truy cập quản trị"
+              >
+                <Key className="w-3.5 h-3.5 text-sky-500" />
+                <span>Đổi Mã Admin</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleLogoutAdmin}
+                className={`px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1 transition-all cursor-pointer ${
+                  isDark ? 'bg-rose-950/40 border-rose-800 text-rose-300 hover:bg-rose-900/50' : 'bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100'
+                }`}
+                title="Khóa quyền quản trị ngay"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                <span>Khóa Quyền</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Filter Tabs & Search Box */}
         <div
@@ -346,15 +539,26 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                       <span>Chạy tự do mọi nền tảng</span>
                     </span>
 
-                    {program.isBuiltin && (
+                    {program.isCore ? (
                       <span
-                        className={`text-[10px] px-1.5 py-0.5 rounded border ${
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 border ${
                           isDark
-                            ? 'bg-slate-950 text-slate-400 border-slate-800'
-                            : 'bg-slate-100 text-slate-500 border-slate-200'
+                            ? 'bg-emerald-950/40 text-emerald-300 border-emerald-800/60'
+                            : 'bg-emerald-100/90 text-emerald-950 border-emerald-300'
                         }`}
                       >
-                        Hệ thống
+                        <Shield className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                        <span>Hệ Thống Gốc (Bảo Vệ)</span>
+                      </span>
+                    ) : (
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${
+                          isDark
+                            ? 'bg-sky-950/40 text-sky-300 border-sky-800/60'
+                            : 'bg-sky-100/80 text-sky-950 border-sky-300'
+                        }`}
+                      >
+                        🏷️ Tùy Chỉnh Đội Ngũ
                       </span>
                     )}
                   </div>
@@ -392,22 +596,33 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                   >
                     <Edit2 className="w-3.5 h-3.5" />
                   </button>
-                  <button
-                    onClick={() => requireAdmin(() => onDeleteProgram(program.id))}
-                    title="Xóa (Yêu cầu Admin)"
-                    className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
-                      isDark
-                        ? 'text-slate-400 hover:text-rose-400 hover:bg-slate-800 border-slate-800 bg-slate-950'
-                        : 'text-slate-500 hover:text-rose-600 hover:bg-rose-50 border-slate-200 bg-slate-50'
-                    }`}
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  {program.isCore ? (
+                    <span
+                      title="Chương trình gốc của hệ thống được bảo vệ chống xóa nhầm. Bạn có thể tạm ngắt kích hoạt."
+                      className={`p-1.5 rounded-lg border opacity-40 cursor-not-allowed ${
+                        isDark ? 'bg-slate-950 border-slate-800 text-slate-600' : 'bg-slate-100 border-slate-300 text-slate-400'
+                      }`}
+                    >
+                      <Shield className="w-3.5 h-3.5" />
+                    </span>
+                  ) : (
+                    <button
+                      onClick={() => requireAdmin(() => onDeleteProgram(program.id))}
+                      title="Xóa mục tùy chỉnh này khỏi kho"
+                      className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                        isDark
+                          ? 'text-slate-300 hover:text-rose-400 hover:bg-slate-800 border-slate-800 bg-slate-950'
+                          : 'text-slate-700 hover:text-rose-600 hover:bg-rose-50 border-slate-300 bg-white'
+                      }`}
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
               </div>
 
               {/* Description */}
-              <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+              <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-800 font-medium'}`}>
                 {program.description}
               </p>
 
@@ -505,7 +720,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                 <h3 className={`font-bold text-base ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Thêm Workshop / Chương Trình
                 </h3>
-                <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                   Dán link Tally, Form hoặc text mô tả để AI tự động bóc tách kiến thức
                 </p>
               </div>
@@ -865,8 +1080,8 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                     isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
                   }`}
                 />
-                <span className="text-[10px] text-slate-400 block mt-1">
-                  Mã mặc định: <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded">admincrt2026</code>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 block mt-1">
+                  Nhập mã quản trị bảo mật của bạn. Nhấn Enter để xác nhận.
                 </span>
               </div>
 

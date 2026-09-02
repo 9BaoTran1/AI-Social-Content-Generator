@@ -14,6 +14,7 @@ export interface ProgramItem {
   imageUrl?: string;
   tallyUrl?: string;
   isBuiltin?: boolean;
+  isCore?: boolean; // Chương trình gốc của hệ thống (được bảo vệ, chống xóa nhầm)
   isActive?: boolean;
   notes?: string;
   createdAt: string;
@@ -79,6 +80,22 @@ export interface DirectorStrategicAnalysis {
   approachReason: string; // Lý do chọn giải pháp & góc tiếp cận
 }
 
+export interface SystemOrchestratorAnalysis {
+  ecosystemLink: string; // Mắt xích kết nối giữa bối cảnh bài viết với Workshop mục tiêu trong Kho CRT
+  funnelFlow: {
+    stage1_hook: string; // Điểm chạm ban đầu (Hook 3s & Dwell Time)
+    stage2_trust: string; // Giải phóng tâm lý (Cam kết phi lợi nhuận & Thấu cảm)
+    stage3_bridge: string; // Cầu nối qua First Comment (Tránh bóp reach outlink)
+    stage4_private: string; // Hội thoại riêng tư (Đồng cảm -> Gợi mở -> Mời link)
+    stage5_destination: string; // Đích đến chuyển hóa (Workshop / Bài trắc nghiệm tự đánh giá)
+  };
+  omnichannelStrategy: string; // Khuyến nghị điều phối phân phối đa kênh (TikTok, FB, LinkedIn, Threads)
+  systemSafetyScore: {
+    score: number; // 90-100%
+    assessment: string; // Đánh giá an toàn thuật toán, cảnh báo rủi ro spam
+  };
+}
+
 export interface GeneratedContent {
   id: string;
   orderId: OrderType;
@@ -94,6 +111,7 @@ export interface GeneratedContent {
   rationale: string;
   platformNotes: string;
   directorStrategicAnalysis?: DirectorStrategicAnalysis;
+  systemOrchestrator?: SystemOrchestratorAnalysis;
   createdAt: string;
 }
 

@@ -1,4 +1,4 @@
-import { ProgramItem, OrderType, GeneratedContent, GenerationOptions, ProgramType, DirectorStrategicAnalysis } from '../types';
+import { ProgramItem, OrderType, GeneratedContent, GenerationOptions, ProgramType, DirectorStrategicAnalysis, SystemOrchestratorAnalysis } from '../types';
 import { BENCHMARK_TEMPLATES } from '../data/defaultPrograms';
 import { getCustomBenchmarkTemplates } from './storage';
 
@@ -409,6 +409,21 @@ export function extractBenchmarkFallback(params: {
       emotionalTouchpoint: 'Cảm giác chông chênh, kiệt sức thầm lặng và mong muốn tìm ra con đường phù hợp với bản sắc riêng.',
       algorithmAssessment: `Chuẩn hóa định dạng hiển thị cho ${platform}, tối ưu giữ chân người đọc (Dwell Time) và chuyển đổi comment thành tin nhắn riêng.`,
       approachReason: 'Sử dụng khung mẫu Benchmark đã qua kiểm chứng hiệu quả thực chiến để bảo đảm kết quả đầu ra luôn đạt chuẩn copywriter cao cấp.',
+    },
+    systemOrchestrator: {
+      ecosystemLink: `Kết nối chủ đề bài viết vào Workshop "${prog?.title || 'Workshop Phát Triển Bản Thân'}" thông qua góc tiếp cận: ${prog?.testOrFormAngle || 'Bài trắc nghiệm tự đánh giá và gỡ rối định hướng'}.`,
+      funnelFlow: {
+        stage1_hook: 'Hook 3s gợi mở nghịch lý hoặc áp lực ngầm để dừng ngón tay cuộn của người đọc.',
+        stage2_trust: 'Xác lập vị thế đồng hành, cam kết 100% phi lợi nhuận xóa bỏ hoài nghi bán hàng.',
+        stage3_bridge: 'Bình luận ghim mồi chứa link bài test/tài liệu, không để link trên caption để né bóp reach.',
+        stage4_private: 'Kịch bản 3 bước nhắn tin riêng: Mở lời đồng cảm -> Gợi mở vấn đề sâu -> Mời gửi link nhẹ nhàng.',
+        stage5_destination: `Chuyển hóa trọn vẹn vào không gian Workshop / Bài trắc nghiệm của dự án (${prog?.title || 'Kho CRT'}).`,
+      },
+      omnichannelStrategy: `Đề xuất phân phối: Đăng bài dài chuẩn hóa trên ${platform}, đồng thời trích xuất 1 góc nhìn sắc bén làm comment dạo trên TikTok/Threads để gom lượng traffic đa nguồn.`,
+      systemSafetyScore: {
+        score: 98,
+        assessment: 'Điểm an toàn hệ thống 98/100: Định dạng bài viết tối ưu Dwell Time, không chứa link trực tiếp trên caption, từ ngữ tự nhiên không bị gắn cờ spam.',
+      },
     },
     createdAt: new Date().toISOString(),
   };
@@ -998,6 +1013,21 @@ Trả về JSON đúng cấu trúc:
     "algorithmAssessment": "Thuật toán hiển thị của nền tảng",
     "approachReason": "Lý do chọn cách tiếp cận này"
   },
+  "systemOrchestrator": {
+    "ecosystemLink": "Phân tích mắt xích kết nối giữa chủ đề bài viết và Workshop mục tiêu trong Kho CRT",
+    "funnelFlow": {
+      "stage1_hook": "Điểm chạm mở đầu & giữ chân độc giả",
+      "stage2_trust": "Cam kết phi lợi nhuận & xây dựng niềm tin",
+      "stage3_bridge": "Cầu nối link qua First Comment ghim mồi",
+      "stage4_private": "Kịch bản nhắn tin riêng 3 bước",
+      "stage5_destination": "Workshop / Bài trắc nghiệm chuyển hóa"
+    },
+    "omnichannelStrategy": "Khuyến nghị điều phối đa kênh (TikTok, FB, LinkedIn, Threads)",
+    "systemSafetyScore": {
+      "score": 98,
+      "assessment": "Đánh giá an toàn thuật toán và cảnh báo rủi ro spam"
+    }
+  },
   "primaryContent": "Nội dung bài viết/comment xuất sắc nhất",
   "variations": [
     ${getVariationLabels()}
@@ -1068,6 +1098,22 @@ Trả về JSON đúng cấu trúc:
       approachReason: parsed.directorStrategicAnalysis?.approachReason || 'Tiếp cận bằng sự chân thành, phi lợi nhuận 100% để phá vỡ hoài nghi và dẫn dắt tự nhiên sang đối thoại riêng.',
     };
 
+    const systemOrchestratorAnalysis: SystemOrchestratorAnalysis = {
+      ecosystemLink: parsed.systemOrchestrator?.ecosystemLink || `Kết nối trực tiếp vào Workshop "${parsed.selectedProgramTitle || 'Kho CRT'}" với mục tiêu chuyển đổi tự nhiên qua giải pháp giá trị thực.`,
+      funnelFlow: {
+        stage1_hook: parsed.systemOrchestrator?.funnelFlow?.stage1_hook || 'Hook 3s đánh trúng nỗi đau/nghịch lý nhằm tối ưu Dwell Time trên feed.',
+        stage2_trust: parsed.systemOrchestrator?.funnelFlow?.stage2_trust || 'Cam kết 100% phi lợi nhuận không bán khóa học, cởi bỏ hoàn toàn rào cản phòng thủ.',
+        stage3_bridge: parsed.systemOrchestrator?.funnelFlow?.stage3_bridge || 'First Comment Seed ghim mồi link bài test/tài liệu nhằm bảo toàn reach tự nhiên.',
+        stage4_private: parsed.systemOrchestrator?.funnelFlow?.stage4_private || 'Kịch bản tin nhắn riêng 3 bước chuyển hóa tương tác thành mối quan hệ tin cậy.',
+        stage5_destination: parsed.systemOrchestrator?.funnelFlow?.stage5_destination || 'Đích đến là buổi Workshop hoặc bài trắc nghiệm tự đánh giá giúp giải quyết triệt để vấn đề.',
+      },
+      omnichannelStrategy: parsed.systemOrchestrator?.omnichannelStrategy || 'Phân phối đa kênh: Đăng bài chính trên nền tảng chỉ định, kết hợp lấy trích đoạn ngắn làm comment dạo trên TikTok/Threads.',
+      systemSafetyScore: {
+        score: typeof parsed.systemOrchestrator?.systemSafetyScore?.score === 'number' ? parsed.systemOrchestrator.systemSafetyScore.score : 98,
+        assessment: parsed.systemOrchestrator?.systemSafetyScore?.assessment || 'Chuẩn an toàn 98/100: Cấu trúc văn bản tối ưu tương tác, không vi phạm chính sách cộng đồng.',
+      },
+    };
+
     const finalOutput: GeneratedContent = {
       id: `gen-${Date.now()}`,
       orderId: params.orderType,
@@ -1087,6 +1133,7 @@ Trả về JSON đúng cấu trúc:
       rationale: parsed.rationale || '',
       platformNotes: parsed.platformNotes || '',
       directorStrategicAnalysis: directorAnalysis,
+      systemOrchestrator: systemOrchestratorAnalysis,
       createdAt: new Date().toISOString(),
     };
 

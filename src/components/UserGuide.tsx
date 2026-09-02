@@ -94,7 +94,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
               <span className="font-bold text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5">B1:</span>
               <div>
                 <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>Chọn Order phù hợp:</strong>
-                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                   Comment dạo kéo tương tác (Order 1, 2, 4) hoặc Bài viết dài xây uy tín cá nhân (Order 3, 6).
                 </p>
               </div>
@@ -104,7 +104,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
               <span className="font-bold text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5">B2:</span>
               <div>
                 <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>Dán bối cảnh & Tạo bài:</strong>
-                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                   Dán link bài hoặc ý tưởng vào ô Studio ➔ Bấm <span className="font-semibold text-indigo-500">"Tạo Nội Dung Ngay"</span>. AI sẽ xuất ra 4 biến thể phong cách.
                 </p>
               </div>
@@ -114,7 +114,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
               <span className="font-bold text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5">B3:</span>
               <div>
                 <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>Copy Combo & Đăng:</strong>
-                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                   Bấm <span className="font-semibold text-emerald-500">"Copy Bài + Cmt Ghim Mồi"</span>. Đăng bài lên feed và thả ngay comment mồi bên dưới.
                 </p>
               </div>
@@ -136,7 +136,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
               <h2 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 3 Quy Tắc Thuật Toán Sống Còn
               </h2>
-              <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                 Để bài viết được phân phối mạnh nhất
               </p>
             </div>
@@ -157,7 +157,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
               <span className="font-bold text-amber-500 shrink-0 mt-0.5">⚡ 2.</span>
               <div>
                 <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>Hook 3 giây đầu quyết định 90%:</strong>
-                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                   1–2 dòng đầu phải viết hoa hoặc đánh trúng nỗi đau/nghịch lý để người đọc dừng ngón tay cuộn và bấm <em>"...Xem thêm"</em>.
                 </p>
               </div>
@@ -167,7 +167,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
               <span className="font-bold text-emerald-500 shrink-0 mt-0.5">🤝 3.</span>
               <div>
                 <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>Cam kết phi lợi nhuận minh bạch:</strong>
-                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                   Nhấn mạnh rõ: <em>"100% phi lợi nhuận, không bán khóa học, không lùa gà"</em> để xóa tan hoài nghi của người đọc.
                 </p>
               </div>
@@ -190,7 +190,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
                 <h2 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Kịch Bản Tin Nhắn Chuyển Đổi
                 </h2>
-                <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                   Biến comment thành đăng ký giữ chỗ
                 </p>
               </div>
@@ -222,22 +222,22 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
           </div>
 
           <div className="space-y-2.5 text-xs">
-            <div className={`p-2.5 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
-              <span className="font-bold text-indigo-500 block mb-0.5">Bước 1: Mở lời đồng cảm</span>
+            <div className={`p-2.5 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-300 text-slate-900 font-medium'}`}>
+              <span className="font-bold text-indigo-600 dark:text-indigo-400 block mb-0.5">Bước 1: Mở lời đồng cảm</span>
               <p className="text-[11px] italic">
                 "Chào bạn [Tên], mình vừa đọc cmt của bạn thấy rất đồng cảm vì mình cũng từng quá tải như vậy..."
               </p>
             </div>
 
-            <div className={`p-2.5 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
-              <span className="font-bold text-amber-500 block mb-0.5">Bước 2: Gợi mở vấn đề sâu</span>
+            <div className={`p-2.5 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-300 text-slate-900 font-medium'}`}>
+              <span className="font-bold text-amber-600 dark:text-amber-400 block mb-0.5">Bước 2: Gợi mở vấn đề sâu</span>
               <p className="text-[11px] italic">
                 "Không biết đợt này điều làm bạn băn khoăn nhất là áp lực công việc hay chưa rõ định hướng tiếp theo vậy bạn?"
               </p>
             </div>
 
-            <div className={`p-2.5 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
-              <span className="font-bold text-emerald-500 block mb-0.5">Bước 3: Mời nhận link nhẹ nhàng</span>
+            <div className={`p-2.5 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-300 text-slate-900 font-medium'}`}>
+              <span className="font-bold text-emerald-600 dark:text-emerald-400 block mb-0.5">Bước 3: Mời nhận link nhẹ nhàng</span>
               <p className="text-[11px] italic">
                 "Cuối tuần này bên tụi mình có buổi Workshop / Bài test miễn phí 100%, gửi bạn link tham khảo nhé: [Link]"
               </p>
@@ -259,7 +259,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
               <h2 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 Mẹo An Toàn Cho Tài Khoản
               </h2>
-              <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                 Tránh checkpoint và chống spam
               </p>
             </div>
@@ -270,7 +270,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
               <span className="text-base leading-none">⏱️</span>
               <div>
                 <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>Giãn cách thời gian:</strong>
-                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                   Mỗi comment hoặc bài đăng cách nhau ít nhất 10–15 phút. Nick mới nên đăng 3–5 bài/ngày, nick lâu năm 8–10 bài/ngày.
                 </p>
               </div>
@@ -280,7 +280,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
               <span className="text-base leading-none">🔄</span>
               <div>
                 <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>Luân phiên nội dung:</strong>
-                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                   Sử dụng linh hoạt 4 biến thể AI tạo ra. Tuyệt đối không copy-paste 1 nội dung lặp lại trên nhiều bài viết khác nhau.
                 </p>
               </div>
@@ -290,7 +290,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ theme = 'light', onNavigat
               <span className="text-base leading-none">💬</span>
               <div>
                 <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>Tương tác lại nhiệt tình:</strong>
-                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <p className={`mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-700 font-medium'}`}>
                   Khi có ai phản hồi comment của bạn, hãy reply lại ngay để thuật toán nhận diện thảo luận sôi nổi và đẩy comment lên Top 1.
                 </p>
               </div>
