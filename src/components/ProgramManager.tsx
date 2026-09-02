@@ -539,18 +539,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                       <span>Chạy tự do mọi nền tảng</span>
                     </span>
 
-                    {program.isCore ? (
-                      <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 border ${
-                          isDark
-                            ? 'bg-emerald-950/40 text-emerald-300 border-emerald-800/60'
-                            : 'bg-emerald-100/90 text-emerald-950 border-emerald-300'
-                        }`}
-                      >
-                        <Shield className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                        <span>Hệ Thống Gốc (Bảo Vệ)</span>
-                      </span>
-                    ) : (
+                    {!program.isCore && (
                       <span
                         className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${
                           isDark
@@ -558,7 +547,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                             : 'bg-sky-100/80 text-sky-950 border-sky-300'
                         }`}
                       >
-                        🏷️ Tùy Chỉnh Đội Ngũ
+                        🏷️ Đội Ngũ Thêm
                       </span>
                     )}
                   </div>
@@ -598,7 +587,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                   </button>
                   {program.isCore ? (
                     <span
-                      title="Chương trình gốc của hệ thống được bảo vệ chống xóa nhầm. Bạn có thể tạm ngắt kích hoạt."
+                      title="Mục mặc định trong kho. Bạn có thể tạm ngắt kích hoạt khi cần."
                       className={`p-1.5 rounded-lg border opacity-40 cursor-not-allowed ${
                         isDark ? 'bg-slate-950 border-slate-800 text-slate-600' : 'bg-slate-100 border-slate-300 text-slate-400'
                       }`}
