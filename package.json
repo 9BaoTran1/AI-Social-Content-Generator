@@ -10,6 +10,8 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "deploy:free": "npm run build && node scripts/deploy.mjs",
+    "deploy:ship": "npm run build && npx @shipstatic/ship ./dist",
+    "deploy:all": "npm run build && node scripts/deploy.mjs && npx @shipstatic/ship ./dist",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
