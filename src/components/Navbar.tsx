@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, Key, Check, BookmarkCheck, Layers, BookMarked } from 'lucide-react';
+import React from 'react';
+import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, BookmarkCheck, Layers, BookMarked } from 'lucide-react';
 import { ThemeMode } from '../types';
-import { getApiKey, setApiKey } from '../lib/aiService';
 
 interface NavbarProps {
   activeTab: 'workbench' | 'orders' | 'benchmark' | 'programs' | 'assistant' | 'guide';
@@ -21,19 +20,46 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleTheme,
 }) => {
   const isDark = theme === 'dark';
+  const totalPrograms = programCount.ws + programCount.ct;
 
-  const [showKeyModal, setShowKeyModal] = useState<boolean>(false);
-  const [apiKeyInput, setApiKeyInput] = useState<string>(getApiKey());
-  const [keySavedFeedback, setKeySavedFeedback] = useState<boolean>(false);
-
-  const handleSaveKey = () => {
-    setApiKey(apiKeyInput.trim());
-    setKeySavedFeedback(true);
-    setTimeout(() => {
-      setKeySavedFeedback(false);
-      setShowKeyModal(false);
-    }, 1200);
-  };
+  const navTabs = [
+    {
+      id: 'workbench' as const,
+      label: 'Tạo Bài Viết',
+      icon: Sparkles,
+      iconColor: 'text-indigo-500',
+    },
+    {
+      id: 'orders' as const,
+      label: '7 Dạng Bài',
+      icon: Layers,
+      iconColor: 'text-violet-500',
+    },
+    {
+      id: 'benchmark' as const,
+      label: 'Bài Mẫu',
+      icon: BookmarkCheck,
+      iconColor: 'text-amber-500',
+    },
+    {
+      id: 'programs' as const,
+      label: `Kho Workshop (${totalPrograms})`,
+      icon: BookOpen,
+      iconColor: 'text-emerald-500',
+    },
+    {
+      id: 'assistant' as const,
+      label: 'Trợ Lý AI',
+      icon: Bot,
+      iconColor: 'text-cyan-500',
+    },
+    {
+      id: 'guide' as const,
+      label: 'Hướng Dẫn',
+      icon: BookMarked,
+      iconColor: 'text-amber-400',
+    },
+  ];
 
   return (
     <header
@@ -43,35 +69,44 @@ export const Navbar: React.FC<NavbarProps> = ({
           : 'bg-white/95 border-b border-slate-200/90 text-slate-900 shadow-xs'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14 sm:h-16 gap-2">
-          {/* Logo & Clean Title */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        {/* Row 1: Logo & Brand + Action Buttons */}
+        <div className="flex items-center justify-between h-14 sm:h-16 gap-3">
+          {/* Logo & Brand Info */}
           <div
             className="flex items-center space-x-2.5 sm:space-x-3 cursor-pointer group shrink-0"
             onClick={() => setActiveTab('workbench')}
+            title="Về trang Tạo Bài Viết"
           >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-500 transition-colors">
-              <Sparkles className="w-4 h-4" />
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-500 transition-colors shrink-0">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
               <div className="flex items-center space-x-1.5 sm:space-x-2">
                 <span
-                  className={`font-bold text-xs sm:text-base tracking-tight font-sans ${
+                  className={`font-black text-sm sm:text-base tracking-tight font-sans ${
                     isDark ? 'text-white' : 'text-slate-900'
                   }`}
                 >
                   PROMPT ORDER AI
                 </span>
                 <span
-                  className={`text-[9px] sm:text-[10px] font-semibold px-1.5 sm:px-2 py-0.2 rounded-full border hidden sm:inline-block ${
+                  className={`text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-full border hidden md:inline-block ${
                     isDark
-                      ? 'bg-slate-800 text-slate-300 border-slate-700/60'
-                      : 'bg-slate-100 text-slate-700 border-slate-200'
+                      ? 'bg-indigo-950/60 text-indigo-300 border-indigo-800/60'
+                      : 'bg-indigo-50 text-indigo-700 border-indigo-200'
                   }`}
                 >
-                  Tạo Content & Inbox
+                  Tạo Content & Kịch Bản Nhắn Tin
                 </span>
               </div>
+              <p
+                className={`text-[10px] sm:text-xs font-medium md:hidden ${
+                  isDark ? 'text-indigo-400' : 'text-indigo-600'
+                }`}
+              >
+                Tạo Content & Kịch Bản Nhắn Tin
+              </p>
               <p
                 className={`text-[10px] sm:text-[11px] hidden md:block ${
                   isDark ? 'text-slate-400' : 'text-slate-500'
@@ -82,130 +117,33 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Desktop Navigation Tabs (Hidden on mobile, displayed cleanly in center on sm+) */}
-          <nav
-            className={`hidden sm:flex items-center space-x-1 p-1 rounded-xl border overflow-x-auto no-scrollbar ${
-              isDark
-                ? 'bg-slate-900/90 border-slate-800/80'
-                : 'bg-slate-100 border-slate-200'
-            }`}
-          >
+          {/* Action Buttons: Add WS/CT (Prominent Indigo) & Theme Toggle */}
+          <div className="flex items-center space-x-2 shrink-0">
+            {/* Add Program Button */}
             <button
-              onClick={() => setActiveTab('workbench')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
-                activeTab === 'workbench'
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : isDark
-                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white'
-              }`}
+              onClick={onOpenAddProgram}
+              title="Thêm Workshop hoặc Chương Trình Mới"
+              className="min-h-[38px] sm:min-h-[40px] px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white shadow-xs hover:shadow-indigo-500/25 flex items-center space-x-1.5 transition-all cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5 shrink-0" />
-              <span>Tạo Bài Viết</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('orders')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
-                activeTab === 'orders'
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : isDark
-                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white'
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5 shrink-0" />
-              <span>7 Dạng Bài</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('benchmark')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
-                activeTab === 'benchmark'
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : isDark
-                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white'
-              }`}
-            >
-              <BookmarkCheck className="w-3.5 h-3.5 shrink-0" />
-              <span>Bài Mẫu</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('programs')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
-                activeTab === 'programs'
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : isDark
-                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white'
-              }`}
-            >
-              <BookOpen className="w-3.5 h-3.5 shrink-0" />
-              <span>Kho Workshop ({programCount.ws + programCount.ct})</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('assistant')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
-                activeTab === 'assistant'
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : isDark
-                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white'
-              }`}
-            >
-              <Bot className="w-3.5 h-3.5 shrink-0" />
-              <span>Trợ Lý AI</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('guide')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap cursor-pointer ${
-                activeTab === 'guide'
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : isDark
-                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white'
-              }`}
-            >
-              <BookMarked className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-              <span>Hướng Dẫn</span>
-            </button>
-          </nav>
-
-          {/* Actions: Theme Toggle, Private Link & Add Button */}
-          <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
-
-            {/* API Key Modal Button */}
-            <button
-              onClick={() => setShowKeyModal(true)}
-              title="Cài đặt Gemini API Key"
-              className={`min-h-[40px] min-w-[40px] p-2 rounded-xl border text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                isDark
-                  ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80'
-                  : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-2xs'
-              }`}
-            >
-              <Key className="w-4 h-4 text-indigo-500" />
-              <span className="hidden xl:inline text-[11px]">API Key</span>
+              <Plus className="w-4 h-4 shrink-0 stroke-[2.5]" />
+              <span className="hidden xs:inline sm:inline">+ Thêm WS / CT</span>
+              <span className="xs:hidden sm:hidden">+ Thêm</span>
             </button>
 
             {/* Theme Toggle Button */}
             <button
               onClick={onToggleTheme}
               title={isDark ? 'Chuyển sang giao diện Sáng' : 'Chuyển sang giao diện Tối'}
-              className={`min-h-[40px] min-w-[40px] p-2 rounded-xl border text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`min-h-[38px] sm:min-h-[40px] min-w-[38px] sm:min-w-[40px] p-2 rounded-xl border text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 isDark
-                  ? 'bg-slate-900 hover:bg-slate-800 text-amber-300 border-slate-700/80'
+                  ? 'bg-slate-900 hover:bg-slate-800 text-amber-300 border-slate-700/80 shadow-2xs'
                   : 'bg-white hover:bg-slate-50 text-indigo-600 border-slate-200 shadow-2xs'
               }`}
             >
               {isDark ? (
                 <>
                   <Sun className="w-4 h-4 text-amber-400" />
-                  <span className="hidden lg:inline text-[11px] text-slate-300">Bản sáng</span>
+                  <span className="hidden lg:inline text-[11px] text-slate-300 font-medium">Bản sáng</span>
                 </>
               ) : (
                 <>
@@ -214,174 +152,42 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </>
               )}
             </button>
-
-            {/* Add Program Button */}
-            <button
-              onClick={onOpenAddProgram}
-              className={`min-h-[40px] px-3 py-2 text-xs font-semibold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer ${
-                isDark
-                  ? 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80'
-                  : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-2xs'
-              }`}
-            >
-              <Plus className="w-4 h-4 text-indigo-600" />
-              <span className="hidden sm:inline">Thêm WS / CT</span>
-              <span className="sm:hidden text-[11px] font-bold">+ Kho</span>
-            </button>
           </div>
         </div>
 
-        {/* Mobile Full-Width Horizontal Scroll Navigation Bar (Visible only on < sm screens) */}
-        <div className="sm:hidden pb-2 pt-0.5 overflow-x-auto no-scrollbar scroll-smooth flex items-center space-x-1.5 -mx-4 px-4 border-t border-slate-200/60 dark:border-slate-800/60">
-          <button
-            onClick={() => setActiveTab('workbench')}
-            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'workbench'
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : isDark
-                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
-                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
-            }`}
+        {/* Row 2: Navigation Tabs Bar (Grid 3 cols on mobile, 6 cols on sm+ tablet/desktop. NO overflow-x-auto, 100% visible) */}
+        <div className="pb-2 pt-0.5 sm:pb-2.5 sm:pt-1 border-t border-slate-200/70 dark:border-slate-800/70">
+          <nav
+            aria-label="Thanh điều hướng chức năng"
+            className="grid grid-cols-3 sm:grid-cols-6 gap-1.5 sm:gap-2"
           >
-            <Sparkles className="w-3.5 h-3.5 shrink-0" />
-            <span>Tạo Bài</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('orders')}
-            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'orders'
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : isDark
-                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
-                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
-            }`}
-          >
-            <Layers className="w-3.5 h-3.5 shrink-0" />
-            <span>7 Dạng</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('benchmark')}
-            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'benchmark'
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : isDark
-                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
-                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
-            }`}
-          >
-            <BookmarkCheck className="w-3.5 h-3.5 shrink-0" />
-            <span>Bài Mẫu</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('programs')}
-            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'programs'
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : isDark
-                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
-                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
-            }`}
-          >
-            <BookOpen className="w-3.5 h-3.5 shrink-0" />
-            <span>Workshop ({programCount.ws + programCount.ct})</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('assistant')}
-            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'assistant'
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : isDark
-                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
-                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
-            }`}
-          >
-            <Bot className="w-3.5 h-3.5 shrink-0" />
-            <span>Trợ Lý</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('guide')}
-            className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'guide'
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : isDark
-                ? 'text-slate-300 bg-slate-900/80 border border-slate-800'
-                : 'text-slate-700 bg-slate-100/90 border border-slate-200'
-            }`}
-          >
-            <BookMarked className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-            <span>Hướng Dẫn</span>
-          </button>
+            {navTabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`min-h-[40px] px-2 sm:px-3 py-2 rounded-xl text-[11px] sm:text-xs font-semibold flex items-center justify-center space-x-1.5 transition-all cursor-pointer select-none ${
+                    isActive
+                      ? 'bg-indigo-600 text-white shadow-xs font-bold ring-2 ring-indigo-400/40 dark:ring-indigo-600/60'
+                      : isDark
+                      ? 'text-slate-300 bg-slate-900/80 hover:text-white hover:bg-slate-800 border border-slate-800'
+                      : 'text-slate-700 bg-slate-100/90 hover:text-slate-900 hover:bg-white border border-slate-200 shadow-2xs'
+                  }`}
+                >
+                  <Icon
+                    className={`w-3.5 h-3.5 shrink-0 ${
+                      isActive ? 'text-white' : tab.iconColor || 'text-slate-400'
+                    }`}
+                  />
+                  <span className="truncate">{tab.label}</span>
+                </button>
+              );
+            })}
+          </nav>
         </div>
       </div>
-
-      {/* API Key Settings Modal */}
-      {showKeyModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
-          <div
-            className={`w-full max-w-md max-h-[90dvh] overflow-y-auto rounded-2xl p-5 sm:p-6 border shadow-xl space-y-4 ${
-              isDark ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
-            }`}
-          >
-            <div className="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-slate-800">
-              <div className="flex items-center gap-2">
-                <Key className="w-4 h-4 text-indigo-600" />
-                <h3 className="text-sm font-bold">Cài đặt Gemini API Key</h3>
-              </div>
-              <button
-                onClick={() => setShowKeyModal(false)}
-                className="w-9 h-9 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-base cursor-pointer"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-2 text-xs">
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                Ứng dụng có thể chạy trực tiếp trên trình duyệt hoặc qua server. Nhập Gemini API Key của bạn để sử dụng độc lập mọi lúc mọi nơi:
-              </p>
-              <input
-                type="password"
-                value={apiKeyInput}
-                onChange={(e) => setApiKeyInput(e.target.value)}
-                placeholder="Nhập AIzaSy... hoặc khóa API của bạn"
-                className="w-full border rounded-xl p-3 text-xs font-mono bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-              />
-              <p className="text-[10px] text-slate-400">
-                Khóa API được lưu an toàn trong trình duyệt của bạn (Local Storage) và không bị gửi ra ngoài.
-              </p>
-            </div>
-
-            <div className="flex items-center justify-end gap-2 pt-2">
-              <button
-                type="button"
-                onClick={() => setShowKeyModal(false)}
-                className="min-h-[40px] px-4 py-2 text-xs font-semibold rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
-              >
-                Hủy
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveKey}
-                className="min-h-[40px] px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-1.5 shadow-sm cursor-pointer"
-              >
-                {keySavedFeedback ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-white" />
-                    <span>Đã lưu!</span>
-                  </>
-                ) : (
-                  <span>Lưu Cài Đặt</span>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 };

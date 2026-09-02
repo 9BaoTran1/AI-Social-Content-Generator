@@ -36,15 +36,15 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
     {
       id: 'msg-init',
       role: 'assistant',
-      content: `Xin chào! Mình là Trợ lý AI Content 10 năm kinh nghiệm & Social Media Manager.
+      content: `Xin chào! Mình là Trợ lý AI hỗ trợ sáng tạo nội dung & kịch bản nhắn tin tư vấn tự nhiên.
 
-💡 Bạn có thể hỏi bất kỳ thắc mắc nào, gõ **"Hi"** để mở nhanh 7 Lệnh Order, hoặc gõ **"Order 1 [nội dung clip]"** để mình trực tiếp phân tích & tạo content ngay trong chat!`,
+💡 Bạn có thể hỏi bất kỳ thắc mắc nào, gõ **"Hi"** để mở nhanh 7 Dạng Bài, hoặc gõ **"Order 1 [nội dung clip]"** để mình trực tiếp phân tích & tạo nội dung ngay trong chat!`,
       timestamp: new Date().toISOString(),
       suggestedActions: [
-        { label: 'Gõ "Hi" mở Menu 7 Order', action: 'Hi' },
-        { label: '🎬 Order 1: Comment TikTok', action: 'Order 1: Clip nói về loay hoay tuổi 25' },
-        { label: '💬 Order 2: Phân tích Facebook', action: 'Order 2: Bài viết về văn hóa sếp và nhân viên' },
-        { label: '🧵 Order 4: Rải Comment Threads', action: 'Order 4: Tâm sự người đi làm kiệt sức' },
+        { label: 'Gõ "Hi" mở 7 Dạng Bài', action: 'Hi' },
+        { label: '🎬 Order 1: Bình luận TikTok', action: 'Order 1: Clip chia sẻ về áp lực đồng trang lứa và mất định hướng' },
+        { label: '💬 Order 2: Bài viết Facebook', action: 'Order 2: Bài viết về người trẻ đi làm kiệt sức' },
+        { label: '🧵 Order 4: Bình luận Threads', action: 'Order 4: Tâm sự chuyện công sở và mất cân bằng cuộc sống' },
       ],
     },
   ]);
@@ -158,7 +158,12 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
         {
           id: `asst-err-${Date.now()}`,
           role: 'assistant',
-          content: `⚠️ Xin lỗi, đã có lỗi xảy ra: ${err.message || 'Vui lòng thử lại.'}`,
+          content: `Chào bạn, hệ thống đang bận hoặc kết nối mạng tạm thời gián đoạn. Bạn có thể bấm thử lại hoặc chọn nhanh các gợi ý bên dưới nhé!`,
+          suggestedActions: [
+            { label: 'Gõ "Hi" mở 7 Dạng Bài', action: 'Hi' },
+            { label: '🎬 Order 1: Bình luận TikTok', action: 'Order 1', orderType: 'order_1' },
+            { label: '💬 Order 2: Bài viết Facebook', action: 'Order 2', orderType: 'order_2' },
+          ],
           timestamp: new Date().toISOString(),
         },
       ]);
@@ -333,14 +338,21 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
                         {msg.suggestedActions.map((action, idx) => (
                           <button
                             key={idx}
-                            onClick={() => handleSendMessage(action.action)}
-                            className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer ${
+                            onClick={() => {
+                              if (action.orderType) {
+                                onSelectOrder(action.orderType);
+                              } else {
+                                handleSendMessage(action.action);
+                              }
+                            }}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer flex items-center gap-1.5 ${
                               isDark
                                 ? 'bg-slate-900 hover:bg-slate-800 text-indigo-300 hover:text-white border-slate-700/80'
                                 : 'bg-white hover:bg-indigo-50 text-indigo-700 border-indigo-200 shadow-2xs'
                             }`}
                           >
-                            {action.label}
+                            <span>{action.label}</span>
+                            {action.orderType && <ChevronRight className="w-3 h-3 opacity-60" />}
                           </button>
                         ))}
                       </div>
@@ -349,6 +361,34 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
                 </div>
               );
             })}
+
+            {/* Typing Indicator khi trợ lý đang suy nghĩ */}
+            {isChatLoading && (
+              <div className="flex justify-start">
+                <div
+                  className={`max-w-md rounded-2xl px-4 py-3 text-xs leading-relaxed border shadow-xs flex items-center gap-3 transition-all animate-fadeIn ${
+                    isDark
+                      ? 'bg-slate-950 border-slate-800/90 text-slate-300'
+                      : 'bg-slate-50 border-slate-200 text-slate-700'
+                  }`}
+                >
+                  <div
+                    className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
+                      isDark ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30' : 'bg-indigo-100 text-indigo-600'
+                    }`}
+                  >
+                    <Bot className="w-4 h-4 animate-pulse" />
+                  </div>
+                  <span className="font-medium">Trợ lý AI đang suy nghĩ và chuẩn bị nội dung...</span>
+                  <div className="flex items-center gap-1 pl-1 shrink-0">
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce [animation-delay:-0.3s]"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce [animation-delay:-0.15s]"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce"></span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div ref={messagesEndRef} />
           </div>
 

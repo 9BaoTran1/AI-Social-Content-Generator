@@ -31,7 +31,7 @@ export const AIChatDrawer: React.FC<AIChatDrawerProps> = ({
     {
       id: 'msg-init',
       role: 'assistant',
-      content: `Xin chào! Mình là Trợ lý AI Content 10 năm kinh nghiệm & Social Media Manager.
+      content: `Xin chào! Mình là Trợ lý AI hỗ trợ sáng tạo nội dung & kịch bản nhắn tin tư vấn tự nhiên.
 
 💡 Bạn có thể gõ **"Hi"** bất cứ lúc nào để mở Menu 7 Order tự động, hoặc gõ trực tiếp **"Order 1 [mô tả clip]"** để mình sản xuất content và kịch bản nhắn tin riêng ngay nhé!`,
       timestamp: new Date().toISOString(),

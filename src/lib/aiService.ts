@@ -1,5 +1,5 @@
 import { ProgramItem, OrderType, GeneratedContent, GenerationOptions, ProgramType, DirectorStrategicAnalysis, SystemOrchestratorAnalysis } from '../types';
-import { BENCHMARK_TEMPLATES } from '../data/defaultPrograms';
+import { BENCHMARK_TEMPLATES, DEFAULT_PROGRAMS } from '../data/defaultPrograms';
 import { getCustomBenchmarkTemplates } from './storage';
 
 const DEFAULT_ENCODED_KEY = 'QVEuQWI4Uk42SjFESlV0SDFYRXBsRVFWMU5nZHRSY3pxb3JUa3JuS1JfbFJhSHhFYzJwNnc=';
@@ -1319,65 +1319,367 @@ Xuất JSON:
   }));
 }
 
+// ============================================================================
+// 10. INSTANT SMART ASSISTANT & CHAT ENGINE
+// ============================================================================
+
+const ORDER_GUIDES: Record<number, { title: string; orderType: OrderType; reply: string; suggestedActions: any[] }> = {
+  1: {
+    title: 'Order 1: Bình luận TikTok',
+    orderType: 'order_1',
+    reply: `🎬 **HƯỚNG DẪN CHI TIẾT ORDER 1: BÌNH LUẬN TIKTOK**
+
+🎯 **Mục tiêu:** Chuyển đổi người xem video ngắn (20-39 tuổi) thành cuộc trò chuyện inbox riêng tư để nhận bài test tự đánh giá cá nhân.
+
+📝 **Công thức viết 3 bước:**
+1. **Hook đồng cảm:** Bắt nhịp ngay chủ đề của clip, công nhận cảm xúc/áp lực mà người trẻ đang đối mặt (áp lực đồng trang lứa, mệt mỏi, mất phương hướng).
+2. **Insight soi chiếu:** Nhấn mạnh việc chưa dám bứt phá không phải do kém cỏi, mà vì chưa thật sự hiểu rõ bản thân và thiếu người soi chiếu khách quan.
+3. **CTA tự nhiên:** Tặng bài test review hoặc định vị bản thân ("Mình có bài test nhỏ soi chiếu năng lực, bạn nào cần thì mình gửi tặng free nhé ạ").
+
+💡 **Mẹo phân phối:**
+• Comment sớm ở các video có tệp người xem trùng khớp (tâm lý, nghề nghiệp, phát triển bản thân).
+• **Không gắn link trực tiếp** trong bình luận để tránh thuật toán TikTok bóp tương tác.
+• Khi có người thả tim hoặc phản hồi, rep lại thân thiện và mời nhắn tin qua tin nhắn riêng.`,
+    suggestedActions: [
+      { label: '🚀 Mở Studio tạo Order 1 ngay', action: 'Workbench Order 1', orderType: 'order_1' },
+      { label: '🎬 Thử tạo: Order 1 về áp lực đồng trang lứa', action: 'Order 1: Clip chia sẻ về áp lực đồng trang lứa và mông lung sự nghiệp' },
+      { label: '📋 Xem Menu 7 Order', action: 'Hi' },
+    ],
+  },
+  2: {
+    title: 'Order 2: Bình luận Facebook',
+    orderType: 'order_2',
+    reply: `💬 **HƯỚNG DẪN CHI TIẾT ORDER 2: BÌNH LUẬN FACEBOOK**
+
+🎯 **Mục tiêu:** Bình luận đa chiều, thấu hiểu thực tế cho các bên, tạo thảo luận văn minh và gợi ý Workshop/Chương trình tự nhiên, không giáo điều.
+
+📝 **Công thức viết 3 bước:**
+1. **Góc nhìn đa chiều:** Nhìn nhận từ nhiều phía (ví dụ sếp & nhân sự, cha mẹ & con cái), hạ thấp cái tôi, tránh tranh cãi gay gắt.
+2. **Đồng cảm & Tháo gỡ:** Chỉ ra nguyên nhân gốc rễ (áp lực mục tiêu, khoảng cách thế hệ hoặc cách giao tiếp).
+3. **Cầu nối tinh tế:** Chia sẻ trải nghiệm cá nhân từng tham gia một workshop/chương trình cộng đồng hữu ích giúp thay đổi tư duy.
+
+💡 **Mẹo phân phối:**
+• Tham gia bình luận tại các bài viết thảo luận sôi nổi trong group chuyên môn hoặc fanpage uy tín.
+• Giữ văn phong khách quan, khiêm tốn, không xưng là người bán khóa học hay chuyên gia dạy đời.
+• Khơi gợi để người khác chủ động phản hồi hoặc inbox hỏi thêm kinh nghiệm.`,
+    suggestedActions: [
+      { label: '🚀 Mở Studio tạo Order 2 ngay', action: 'Workbench Order 2', orderType: 'order_2' },
+      { label: '💬 Thử tạo: Order 2 về văn hóa công sở', action: 'Order 2: Bài viết thảo luận về mối quan hệ giữa sếp và nhân viên trẻ' },
+      { label: '📋 Xem Menu 7 Order', action: 'Hi' },
+    ],
+  },
+  3: {
+    title: 'Order 3: Bài viết Facebook (Long-Form)',
+    orderType: 'order_3',
+    reply: `📝 **HƯỚNG DẪN CHI TIẾT ORDER 3: BÀI VIẾT FACEBOOK LONG-FORM**
+
+🎯 **Mục tiêu:** Bài viết chuyên sâu có chiều sâu cảm xúc, xây dựng thương hiệu cá nhân uy tín, khẳng định cam kết phi lợi nhuận và chuyển đổi bằng First Comment mồi link.
+
+📝 **Công thức viết 4 phần:**
+1. **3 Dòng Hook đầu tiên:** Đánh trúng nỗi trăn trở ngầm, kích thích bấm nút "...Xem thêm".
+2. **Storytelling / Case study:** Đưa dẫn chứng trải nghiệm thực tế hoặc câu chuyện thật, bóc tách tâm lý sâu sắc.
+3. **Cam kết minh bạch:** Khẳng định dự án cộng đồng phi lợi nhuận, không bán khóa học/lùa gà, xuất phát từ mong muốn hỗ trợ thực tâm.
+4. **First Comment Seed:** Kêu gọi độc giả xem bình luận đầu tiên được ghim để nhận link đăng ký hoặc bài test.
+
+💡 **Mẹo phân phối:**
+• Đăng vào khung giờ vàng có thời gian đọc sâu (11h30 - 13h00 hoặc 20h00 - 21h30).
+• **Tuyệt đối không để link ngoài trong bài viết**, chỉ thả link ở Comment 1 (First Comment) ngay sau khi đăng.
+• Tương tác trả lời 100% comment trong 60 phút đầu tiên để đẩy bài lên top feed.`,
+    suggestedActions: [
+      { label: '🚀 Mở Studio tạo Order 3 ngay', action: 'Workbench Order 3', orderType: 'order_3' },
+      { label: '📝 Thử tạo: Order 3 về vượt qua bế tắc', action: 'Order 3: Chia sẻ hành trình vượt qua giai đoạn mất phương hướng nghề nghiệp' },
+      { label: '📋 Xem Menu 7 Order', action: 'Hi' },
+    ],
+  },
+  4: {
+    title: 'Order 4: Bình luận Threads',
+    orderType: 'order_4',
+    reply: `🧵 **HƯỚNG DẪN CHI TIẾT ORDER 4: BÌNH LUẬN THREADS**
+
+🎯 **Mục tiêu:** Bình luận ngắn gọn, giàu cảm xúc tự sự (storytelling), chạm vào nỗi đau nội tâm của người đọc để họ chủ động nhắn tin kết nối.
+
+📝 **Công thức viết 3 bước:**
+1. **Văn phong thủ thỉ:** Viết như đang tâm sự với người bạn thân, giọng điệu gần gũi, ấm áp, không đao to búa lớn.
+2. **Đồng cảm trăn trở:** Nói hộ cảm giác kiệt sức, hoang mang hoặc cảm giác phải gồng gánh một mình.
+3. **Gợi mở kết nối riêng:** Nhẹ nhàng mở lời hỗ trợ ("Nếu bạn cũng đang thấy trống trải, cứ nhắn mình nhé, mình có một góc nhìn nhỏ có thể giúp bạn nhẹ lòng hơn...").
+
+💡 **Mẹo phân phối:**
+• Bình luận dưới các bài viết tâm sự viral trên Threads về công việc, cuộc sống, tình cảm.
+• Ngắt dòng thông thoáng, dùng từ ngữ tự nhiên của thế hệ trẻ, không spam từ khóa hay link ngoài.`,
+    suggestedActions: [
+      { label: '🚀 Mở Studio tạo Order 4 ngay', action: 'Workbench Order 4', orderType: 'order_4' },
+      { label: '🧵 Thử tạo: Order 4 về kiệt sức đi làm', action: 'Order 4: Tâm sự về cảm giác kiệt sức và mất lửa với công việc hiện tại' },
+      { label: '📋 Xem Menu 7 Order', action: 'Hi' },
+    ],
+  },
+  5: {
+    title: 'Order 5: Viết bài Threads',
+    orderType: 'order_5',
+    reply: `✍️ **HƯỚNG DẪN CHI TIẾT ORDER 5: BÀI VIẾT THREADS**
+
+🎯 **Mục tiêu:** Bài đăng ngắn gọn, nhịp điệu nhanh, insight sắc bén, tạo độ lan tỏa tự nhiên và khơi gợi độc giả hành động.
+
+📝 **Công thức viết 3 bước:**
+1. **One-liner Hook:** Câu mở đầu giật mình hoặc chạm đúng tâm trạng ("Có những ngày đi làm về chỉ muốn ngồi yên trong bóng tối...").
+2. **Nhịp ngắt dòng thoáng:** Mỗi ý 1-2 câu ngắn, cách dòng rõ ràng, giúp mắt đọc lướt trên điện thoại cực mượt.
+3. **Điểm rơi suy ngẫm / CTA:** Đặt một câu hỏi gợi mở hoặc nhắc đến bài test soi chiếu tính cách ở phần comment.
+
+💡 **Mẹo phân phối:**
+• Đăng đều đặn 1-2 bài mỗi ngày; Threads ưu tiên nội dung chân thực và đối thoại thật.
+• Kèm 1 ảnh tối giản hoặc ảnh chụp màn hình ghi chú nếu cần tăng dwell-time (thời gian dừng màn hình).`,
+    suggestedActions: [
+      { label: '🚀 Mở Studio tạo Order 5 ngay', action: 'Workbench Order 5', orderType: 'order_5' },
+      { label: '✍️ Thử tạo: Order 5 về bài học tuổi 25', action: 'Order 5: 3 bài học đắt giá mình nhận ra khi bước sang tuổi 25' },
+      { label: '📋 Xem Menu 7 Order', action: 'Hi' },
+    ],
+  },
+  6: {
+    title: 'Order 6: Bài viết & InMail LinkedIn',
+    orderType: 'order_6',
+    reply: `💼 **HƯỚNG DẪN CHI TIẾT ORDER 6: BÀI VIẾT & INMAIL LINKEDIN**
+
+🎯 **Mục tiêu:** Xây dựng vị thế chuyên gia (Thought Leadership), tiếp cận nhân sự chất lượng cao, quản lý cấp trung, HRBP với phong thái đĩnh đạc, chuẩn mực.
+
+📝 **Cấu trúc hoàn chỉnh:**
+1. **Hook 3 dòng chuyên sâu:** Khởi đầu bằng một nghịch lý trong quản trị hoặc vấn đề nhân sự nóng hổi.
+2. **Framework 3-4 điểm:** Bóc tách giải pháp mạch lạc, có căn cứ tâm lý/quản trị thực chiến.
+3. **Kịch bản InMail 3 bước tiếp cận:**
+   • Bước 1: Thấu cảm bối cảnh & khen ngợi chân thành công việc của đối phương.
+   • Bước 2: Đặt câu hỏi gợi mở về điểm nghẽn mà họ có thể đang đối mặt.
+   • Bước 3: Gửi lời mời tham gia chương trình hoặc trải nghiệm bài test trắc nghiệm khách quan.
+
+💡 **Mẹo phân phối:**
+• Khung giờ đăng tốt nhất: Thứ 3 đến Thứ 5 lúc 8h30 - 10h00 sáng.
+• Tương tác vào bài viết của đối tác tiềm năng trước khi gửi tin nhắn InMail để tăng tỷ lệ mở thư.`,
+    suggestedActions: [
+      { label: '🚀 Mở Studio tạo Order 6 ngay', action: 'Workbench Order 6', orderType: 'order_6' },
+      { label: '💼 Thử tạo: Order 6 về giữ chân nhân tài', action: 'Order 6: Bài viết về nghệ thuật giữ chân nhân tài trẻ và lắng nghe sâu sắc' },
+      { label: '📋 Xem Menu 7 Order', action: 'Hi' },
+    ],
+  },
+  7: {
+    title: 'Order 7: Content Email Chăm Sóc / Nurturing',
+    orderType: 'order_7',
+    reply: `📧 **HƯỚNG DẪN CHI TIẾT ORDER 7: CONTENT EMAIL**
+
+🎯 **Mục tiêu:** Nuôi dưỡng mối quan hệ bền vững với học viên tiềm năng, dẫn dắt họ qua câu chuyện truyền cảm hứng và lời mời hành động nhẹ nhàng.
+
+📝 **Cấu trúc email 4 bước:**
+1. **Tiêu đề (Subject Line):** Kích thích tò mò, mang tính cá nhân, tránh các từ ngữ giật gân spam.
+2. **Mở đầu bằng câu chuyện:** Chia sẻ một câu chuyện nhỏ chân thật để tạo sự gần gũi.
+3. **Bài học & Câu hỏi soi chiếu:** Đúc kết giá trị cốt lõi và đặt câu hỏi giúp người nhận tự soi chiếu bản thân.
+4. **Call to Action (CTA):** Lời mời phản hồi thư hoặc bấm vào đường link đăng ký tham gia chương trình.
+
+💡 **Mẹo phân phối:**
+• Gửi với tên cá nhân (không dùng tên chung chung vô hồn).
+• Soạn nội dung ngắn gọn, súc tích, định dạng tương thích hoàn hảo trên thiết bị di động.`,
+    suggestedActions: [
+      { label: '🚀 Mở Studio tạo Order 7 ngay', action: 'Workbench Order 7', orderType: 'order_7' },
+      { label: '📧 Thử tạo: Order 7 về rèn luyện sức bền', action: 'Order 7: Email gửi học viên về sức bền tinh thần trong thời đại số' },
+      { label: '📋 Xem Menu 7 Order', action: 'Hi' },
+    ],
+  },
+};
+
+function detectOrderInquiry(lower: string): number | null {
+  if (/(order\s*1\b|lệnh\s*1\b|dạng\s*1\b|bình\s*luận\s*tiktok|comment\s*tiktok)/i.test(lower)) return 1;
+  if (/(order\s*2\b|lệnh\s*2\b|dạng\s*2\b|bình\s*luận\s*facebook|comment\s*facebook|comment\s*fb)/i.test(lower)) return 2;
+  if (/(order\s*3\b|lệnh\s*3\b|dạng\s*3\b|bài\s*viết\s*facebook|post\s*facebook|facebook\s*long)/i.test(lower)) return 3;
+  if (/(order\s*4\b|lệnh\s*4\b|dạng\s*4\b|bình\s*luận\s*threads|comment\s*threads)/i.test(lower)) return 4;
+  if (/(order\s*5\b|lệnh\s*5\b|dạng\s*5\b|bài\s*viết\s*threads|post\s*threads)/i.test(lower)) return 5;
+  if (/(order\s*6\b|lệnh\s*6\b|dạng\s*6\b|linkedin|inmail)/i.test(lower)) return 6;
+  if (/(order\s*7\b|lệnh\s*7\b|dạng\s*7\b|content\s*email|viết\s*email|email\s*nurturing)/i.test(lower)) return 7;
+  return null;
+}
+
+function isGreetingQuery(lower: string): boolean {
+  return (
+    /^(hi|hello|xin\s*chào|chào|chao|halo|menu|help|giúp|tro\s*giup|trợ\s*giúp|bắt\s*đầu|start|hướng\s*dẫn|huong\s*dan|7\s*order|7\s*dạng\s*bài|7\s*lệnh)$/i.test(lower) ||
+    lower === '?' ||
+    /^(menu|help|bắt đầu|start|xin chào)\b/i.test(lower)
+  );
+}
+
+function isProgramsInquiry(lower: string): boolean {
+  return /(workshop|chương\s*trình|chuong\s*trinh|kho\s*crt|kho\s*chương\s*trình|dự\s*án|danh\s*sách\s*chương\s*trình|danh\s*sách\s*workshop|các\s*workshop)/i.test(lower);
+}
+
 export async function chatAI(params: {
   message: string;
   history?: any[];
   programs: ProgramItem[];
 }): Promise<{ reply: string; suggestedActions?: any[] }> {
-  // 1. Thử server backend trước
+  const cleanQuery = (params.message || '').trim();
+  const lower = cleanQuery.toLowerCase();
+
+  // ==========================================================================
+  // PHASE 1: PHẢN HỒI THÔNG MINH TỨC THÌ (INSTANT SMART ASSISTANT < 0.05S)
+  // Không cần gọi mạng, phản hồi tức thì và chính xác 100% trên mọi môi trường
+  // ==========================================================================
+
+  // 1. Lời chào & Menu 7 Order
+  if (isGreetingQuery(lower)) {
+    return {
+      reply: `Xin chào! Mình là **Trợ lý AI hỗ trợ sáng tạo nội dung & kịch bản nhắn tin tư vấn tự nhiên**.
+
+Dưới đây là **7 Dạng Bài (Order)** được tối ưu chuyên biệt cho từng nền tảng:
+
+1. 🎬 **Order 1: Bình luận TikTok** – Đồng cảm sâu sắc, chạm trăn trở người trẻ 20-39t, khơi gợi nhận bài test free.
+2. 💬 **Order 2: Bình luận Facebook** – Đa chiều, khách quan, tinh tế gợi ý Workshop/Chương trình không áp đặt.
+3. 📝 **Order 3: Bài viết Facebook (Long-Form)** – Chiều sâu, hook giữ chân, cam kết phi lợi nhuận & First Comment mồi link.
+4. 🧵 **Order 4: Bình luận Threads** – Phong cách thủ thỉ, giàu tính tự sự (storytelling), kích thích chủ động inbox.
+5. ✍️ **Order 5: Bài viết Threads** – Ngắn gọn, ngắt dòng nhịp nhàng, insight chạm đúng điểm nghẽn.
+6. 💼 **Order 6: Bài viết & InMail LinkedIn** – Chuẩn phong thái chuyên gia, góc nhìn quản trị & kịch bản InMail lịch thiệp.
+7. 📧 **Order 7: Content Email** – Email nuôi dưỡng đồng hành, câu hỏi soi chiếu giá trị chuyển đổi cao.
+
+💡 **Mẹo:** Bạn có thể bấm vào các nút bên dưới để chuyển sang Studio tạo bài ngay, hoặc gõ theo cú pháp: \`Order [số] [nội dung clip/chủ đề]\` (Ví dụ: \`Order 1: Clip chia sẻ về mất định hướng tuổi 25\`).`,
+      suggestedActions: [
+        { label: '🎬 Order 1: Bình luận TikTok', action: 'Order 1', orderType: 'order_1' },
+        { label: '💬 Order 2: Bình luận Facebook', action: 'Order 2', orderType: 'order_2' },
+        { label: '📝 Order 3: Bài viết Facebook', action: 'Order 3', orderType: 'order_3' },
+        { label: '🧵 Order 4: Bình luận Threads', action: 'Order 4', orderType: 'order_4' },
+        { label: '✍️ Order 5: Bài viết Threads', action: 'Order 5', orderType: 'order_5' },
+        { label: '💼 Order 6: Bài viết LinkedIn', action: 'Order 6', orderType: 'order_6' },
+        { label: '📧 Order 7: Content Email', action: 'Order 7', orderType: 'order_7' },
+      ],
+    };
+  }
+
+  // 2. Tra cứu chi tiết từng Order (Order 1 -> 7)
+  const orderNum = detectOrderInquiry(lower);
+  if (orderNum && ORDER_GUIDES[orderNum]) {
+    const guide = ORDER_GUIDES[orderNum];
+    return {
+      reply: guide.reply,
+      suggestedActions: guide.suggestedActions,
+    };
+  }
+
+  // 3. Tra cứu Kho Chương trình / Workshop CRT
+  if (isProgramsInquiry(lower)) {
+    const availablePrograms =
+      params.programs && params.programs.length > 0 ? params.programs : DEFAULT_PROGRAMS;
+    const wsList = availablePrograms.filter((p) => p.type === 'ws');
+    const ctList = availablePrograms.filter((p) => p.type === 'ct');
+
+    let reply = `📚 **TỔNG HỢP KHO DỰ ÁN & WORKSHOP CRT HIỆN CÓ (${availablePrograms.length} Chương trình)**\n\n`;
+
+    if (wsList.length > 0) {
+      reply += `### 🎯 Các Workshop Chuyên Sâu (${wsList.length} Workshop):\n`;
+      wsList.forEach((p, idx) => {
+        reply += `${idx + 1}. **${p.title}**\n`;
+        reply += `   • **Đối tượng:** ${p.targetAudience?.slice(0, 2).join(', ') || 'Người trẻ & người đi làm'}\n`;
+        reply += `   • **Điểm nghẽn giải quyết:** ${p.painPoints?.[0] || p.description}\n`;
+        reply += `   • **Góc tiếp cận / Test:** ${p.testOrFormAngle || 'Bài test định vị cá nhân'}\n\n`;
+      });
+    }
+
+    if (ctList.length > 0) {
+      reply += `### 🌟 Các Chương Trình Dài Hạn (${ctList.length} Chương trình):\n`;
+      ctList.forEach((p, idx) => {
+        reply += `${idx + 1}. **${p.title}**\n`;
+        reply += `   • **Đối tượng:** ${p.targetAudience?.slice(0, 2).join(', ') || 'Người đi làm 22-38 tuổi'}\n`;
+        reply += `   • **Điểm nghẽn giải quyết:** ${p.painPoints?.[0] || p.description}\n`;
+        reply += `   • **Góc tiếp cận / Test:** ${p.testOrFormAngle || 'Đánh giá & soi chiếu'}\n\n`;
+      });
+    }
+
+    reply += `💡 **Mẹo:** Bạn có thể chọn bất kỳ Order nào dưới đây để AI tự động ghép với Workshop phù hợp và tạo bài viết ngay nhé!`;
+
+    return {
+      reply,
+      suggestedActions: [
+        { label: '🎬 Order 1: Bình luận TikTok', action: 'Order 1', orderType: 'order_1' },
+        { label: '💬 Order 2: Bình luận Facebook', action: 'Order 2', orderType: 'order_2' },
+        { label: '📝 Order 3: Bài viết Facebook', action: 'Order 3', orderType: 'order_3' },
+        { label: '🧵 Order 4: Bình luận Threads', action: 'Order 4', orderType: 'order_4' },
+        { label: '📋 Xem Menu 7 Order', action: 'Hi' },
+      ],
+    };
+  }
+
+  // ==========================================================================
+  // PHASE 2: THỬ SERVER BACKEND VỚI ABORTCONTROLLER (TIMEOUT 500MS)
+  // Ngăn tình trạng treo đơ trên môi trường tĩnh (Vercel, Surge, GitHub Pages)
+  // ==========================================================================
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 500);
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
+      signal: controller.signal,
     });
+    clearTimeout(timeoutId);
     if (res.ok) {
       const data = await res.json();
-      if (data.success) {
+      if (data.success && data.reply) {
         return {
           reply: data.reply,
           suggestedActions: data.suggestedActions,
         };
       }
     }
-  } catch (e) {
-    console.warn('[AI Service] Fallback to direct client chat.');
+  } catch {
+    // Expected on static hosting without /api/chat server, continue immediately
   }
 
-  // 2. Direct Gemini Fallback
-  const lower = params.message.toLowerCase().trim();
-  if (lower === 'hi' || lower === 'hello' || lower === 'xin chào' || lower === 'chào') {
-    return {
-      reply: `Xin chào bạn! Mình là Trợ lý AI Content & Social Media Manager. Hãy gõ Order [số] kèm mô tả clip/post để mình sản xuất content ngay nhé!`,
-      suggestedActions: [
-        { label: '🎬 Order 1: Comment TikTok', action: 'Order 1', orderType: 'order_1' },
-        { label: '💬 Order 2: Comment Facebook', action: 'Order 2', orderType: 'order_2' },
-        { label: '📝 Order 3: Bài viết Facebook', action: 'Order 3', orderType: 'order_3' },
-        { label: '🧵 Order 4: Comment Threads', action: 'Order 4', orderType: 'order_4' },
-        { label: '✍️ Order 5: Bài viết Threads', action: 'Order 5', orderType: 'order_5' },
-        { label: '💼 Order 6: Bài viết & InMail LinkedIn', action: 'Order 6', orderType: 'order_6' },
-        { label: '📧 Order 7: Content Email', action: 'Order 7', orderType: 'order_7' },
-      ],
-    };
-  }
-
+  // ==========================================================================
+  // PHASE 3: DIRECT GEMINI API VỚI TIMEOUT 8000MS & FALLBACK THÔNG MINH
+  // ==========================================================================
   const apiKey = getApiKey();
-  const systemInstruction = `Bạn là Content Master 10 năm kinh nghiệm hỗ trợ chuyển đổi comment thành inbox.
-Dự án khả dụng: ${JSON.stringify(params.programs)}`;
+  const availablePrograms =
+    params.programs && params.programs.length > 0 ? params.programs : DEFAULT_PROGRAMS;
 
-  const result = await callGeminiApiWithRetry(
-    {
-      parts: [{ text: params.message }],
-      systemInstruction,
-      temperature: 0.7,
-      preferredModel: 'gemini-3.6-flash',
-      timeoutMs: 25000,
-      maxRetriesPerModel: 2,
-    },
-    apiKey
-  );
+  const systemInstruction = `Bạn là Trợ lý AI hỗ trợ sáng tạo nội dung & kịch bản nhắn tin tư vấn tự nhiên, am hiểu sâu sắc tâm lý người đọc và cơ chế phân phối của các mạng xã hội (TikTok, Facebook, Threads, LinkedIn, Email).
+Hãy trả lời cô đọng, tự nhiên, thân thiện và hướng dẫn hành động rõ ràng.
+Các dự án/workshop khả dụng trong kho CRT:
+${availablePrograms.map((p) => `- ${p.title} (${p.type === 'ws' ? 'Workshop' : 'Chương trình'}): ${p.description}`).join('\n')}`;
 
+  try {
+    const result = await callGeminiApiWithRetry(
+      {
+        parts: [{ text: cleanQuery }],
+        systemInstruction,
+        temperature: 0.7,
+        preferredModel: 'gemini-3.6-flash',
+        timeoutMs: 8000, // Tối ưu tốc độ phản hồi 8s thay vì 25s
+        maxRetriesPerModel: 2,
+      },
+      apiKey
+    );
+
+    if (result.text && result.text.trim()) {
+      return {
+        reply: result.text.trim(),
+        suggestedActions: [
+          { label: '📋 Xem Menu 7 Order', action: 'Hi' },
+          { label: '🎬 Order 1: Bình luận TikTok', action: 'Order 1', orderType: 'order_1' },
+          { label: '💬 Order 2: Bài viết Facebook', action: 'Order 2', orderType: 'order_2' },
+        ],
+      };
+    }
+  } catch (geminiErr) {
+    console.warn('[AI Service] Gemini chat query error, using graceful fallback:', geminiErr);
+  }
+
+  // Fallback thông minh lịch sự & chu đáo khi Gemini bị chậm hoặc hết quota
   return {
-    reply: result.text || 'Đã xử lý xong.',
+    reply: `Chào bạn! Mình đã ghi nhận yêu cầu của bạn: "${cleanQuery}".
+
+Hiện tại lưu lượng xử lý AI đang cao hoặc kết nối đang được tối ưu. Mình gợi ý các giải pháp nhanh cho bạn:
+
+• **Tạo bài viết ngay:** Gõ cú pháp \`Order [1-7] [chủ đề clip/bài viết]\` (Ví dụ: \`Order 1: Clip chia sẻ về mất định hướng tuổi 25\`).
+• **Tra cứu hướng dẫn:** Gõ tên Order (ví dụ \`Order 1\`, \`Order 2\`, \`Order 4\`) để xem công thức viết và mẹo phân phối.
+• **Xem kho CRT:** Gõ "Workshop" hoặc "Chương trình" để xem danh sách các dự án khả dụng.
+• Hoặc bấm các nút bên dưới để vào thẳng **Studio Tạo Bài** nhé!`,
+    suggestedActions: [
+      { label: '📋 Mở Menu 7 Order', action: 'Hi' },
+      { label: '🎬 Order 1: Bình luận TikTok', action: 'Order 1', orderType: 'order_1' },
+      { label: '💬 Order 2: Bài viết Facebook', action: 'Order 2', orderType: 'order_2' },
+      { label: '🧵 Order 4: Bình luận Threads', action: 'Order 4', orderType: 'order_4' },
+      { label: '📚 Kho Chương Trình CRT', action: 'Danh sách Workshop trong kho CRT' },
+    ],
   };
 }
