@@ -715,6 +715,32 @@ ${
                 </select>
                 <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-2.5 pointer-events-none" />
               </div>
+
+              {selectedProgramId !== 'auto' && (() => {
+                const sel = programs.find((p) => p.id === selectedProgramId);
+                if (!sel) return null;
+                return (
+                  <div className="mt-2 text-[11px] p-2 rounded-lg bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 flex flex-wrap items-center gap-2">
+                    <span
+                      className={`px-2 py-0.5 rounded font-bold text-[10px] border ${
+                        sel.type === 'ws'
+                          ? 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800'
+                          : 'bg-amber-50 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800'
+                      }`}
+                    >
+                      {sel.type === 'ws' ? '✦ Workshop (WS)' : '❖ Chương Trình CRT'}
+                    </span>
+                    {sel.formatNote && (
+                      <span className="text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1">
+                        📍 {sel.formatNote}
+                      </span>
+                    )}
+                    <span className="text-slate-500 dark:text-slate-400 truncate max-w-xs">
+                      {sel.testOrFormAngle}
+                    </span>
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Tone & Writing Style */}

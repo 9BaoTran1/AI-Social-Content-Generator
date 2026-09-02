@@ -17,6 +17,7 @@ export interface ProgramItem {
   isCore?: boolean; // Chương trình gốc của hệ thống (được bảo vệ, chống xóa nhầm)
   isActive?: boolean;
   notes?: string;
+  formatNote?: string; // e.g. Tỉnh thành khác Online qua Zoom • Tại TP.HCM Talkshow Offline
   createdAt: string;
 }
 

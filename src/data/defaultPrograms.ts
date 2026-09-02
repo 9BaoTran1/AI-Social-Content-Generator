@@ -49,8 +49,8 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
   {
     id: 'prog-3',
     title: 'SPOT ON - BẠN MẠNH Ở ĐÂU?',
-    type: 'ws',
-    description: 'Workshop khám phá và định vị đúng điểm mạnh thực sự của bản thân, tháo gỡ tâm lý "ai cũng làm được vậy thôi" và xây dựng sự tự tin từ gốc rễ nội tại.',
+    type: 'ct',
+    description: 'Chương trình CRT khám phá và định vị đúng điểm mạnh thực sự của bản thân, tháo gỡ tâm lý "ai cũng làm được vậy thôi" và xây dựng sự tự tin từ gốc rễ nội tại.',
     targetAudience: ['Người chăm chỉ nỗ lực nhưng chưa dám khẳng định thế mạnh', 'Người tự ti so sánh', 'Độ tuổi 20-35 tuổi'],
     painPoints: [
       'Làm được nhiều việc nhưng coi là điều bình thường ("Ai cũng làm được vậy thôi")',
@@ -71,8 +71,8 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
   {
     id: 'prog-4',
     title: 'NEW CHAPTER – BƯỚC NGOẶT SỰ NGHIỆP',
-    type: 'ws',
-    description: 'Talkshow/Workshop dành cho những người mong muốn nhìn lại hành trình nghề nghiệp, khám phá thế mạnh, hiểu góc nhìn nhà tuyển dụng để ra quyết định chuyển hướng phù hợp.',
+    type: 'ct',
+    description: 'Chương trình CRT dành cho những người mong muốn nhìn lại hành trình nghề nghiệp, khám phá thế mạnh, hiểu góc nhìn nhà tuyển dụng để ra quyết định chuyển hướng phù hợp.',
     targetAudience: ['Người đi làm đang băn khoăn gắn bó hay chuyển hướng', 'Người muốn tìm môi trường phù hợp với giá trị cá nhân', 'Senior/Junior 23-35 tuổi'],
     painPoints: [
       'Đi làm mỗi ngày nhưng tự hỏi có phù hợp với công việc hiện tại không',
@@ -94,8 +94,8 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
   {
     id: 'prog-5',
     title: 'FOCUS MASTERY - LÀM CHỦ NĂNG LƯỢNG VÀ SỰ TẬP TRUNG',
-    type: 'ws',
-    description: 'Làm chủ sự tập trung từ 3 trụ cột: Sức khỏe thể chất, Dũng khí dám cắt bỏ mục tiêu phụ, và Sự thấu hiểu sâu sắc chính mình.',
+    type: 'ct',
+    description: 'Chương trình CRT làm chủ sự tập trung từ 3 trụ cột: Sức khỏe thể chất, Dũng khí dám cắt bỏ mục tiêu phụ, và Sự thấu hiểu sâu sắc chính mình.',
     targetAudience: ['Người hay bị xao nhãng, trì hoãn', 'Người quá tải công việc, năng lượng thất thường', 'Người liên tục đổi mục tiêu'],
     painPoints: [
       'Dễ mất tập trung, thiếu kiên nhẫn, phân tán năng lượng vào nhiều việc nhỏ nhặt',
@@ -115,8 +115,8 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
   {
     id: 'prog-6',
     title: 'LIFE ACTION – ĐẠO DIỄN CHÍNH MÌNH',
-    type: 'ws',
-    description: 'Hành trình cùng bạn nhìn lại những gì đã qua, thay đổi góc nhìn và chủ động viết tiếp kịch bản cuộc đời mình thay vì sống theo mong đợi của người khác.',
+    type: 'ct',
+    description: 'Chương trình CRT cùng bạn nhìn lại những gì đã qua, thay đổi góc nhìn và chủ động viết tiếp kịch bản cuộc đời mình thay vì sống theo mong đợi của người khác.',
     targetAudience: ['Người từng trải qua thất bại hoặc mất phương hướng', 'Người cảm thấy đang sống theo kịch bản của người khác', 'Độ tuổi 20-35 tuổi'],
     painPoints: [
       'Cảm giác bế tắc khi cuộc đời không diễn ra như kịch bản mong muốn',
@@ -137,8 +137,8 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
   {
     id: 'prog-7',
     title: 'SỨC BỀN THỜI ĐẠI SỐ - RÈN LUYỆN CƠ BẮP NÃO BỘ',
-    type: 'ws',
-    description: 'Rèn luyện sức bền tinh thần, tính kiên định và năng lực suy nghĩ sâu sắc, phân tích vấn đề trong thời đại tiện nghi nhanh chóng.',
+    type: 'ct',
+    description: 'Chương trình CRT rèn luyện sức bền tinh thần, tính kiên định và năng lực suy nghĩ sâu sắc, phân tích vấn đề trong thời đại tiện nghi nhanh chóng.',
     targetAudience: ['Người dễ bỏ cuộc trước khó khăn', 'Người bị ảnh hưởng bởi thói quen mì ăn liền', 'Sinh viên và người trẻ 20-30 tuổi'],
     painPoints: [
       'Mọi thứ có sẵn trong một cú chạm khiến sức chịu đựng, nghị lực giảm đi',
@@ -178,7 +178,30 @@ export const DEFAULT_PROGRAMS: ProgramItem[] = [
     isActive: true,
     isBuiltin: true,
     createdAt: '2026-02-05'
-  }
+  },
+  {
+    id: 'prog-9',
+    title: 'STORYTELLING – NGHỆ THUẬT KỂ CHUYỆN & CHẠM CẢM XÚC',
+    type: 'ws',
+    description: 'Workshop/Talkshow Storytelling - Nghệ thuật kể chuyện và chạm cảm xúc. Dành cho người làm sáng tạo, freelancer, người đi làm và quản lý muốn nâng cao năng lực truyền cảm hứng và kết nối chân thật.',
+    formatNote: 'Ở các tỉnh thành khác Online qua Zoom • Tại TP.HCM đến Talkshow Offline',
+    targetAudience: ['Người làm sáng tạo nội dung, Freelancer', 'Người đi làm muốn nâng cao năng lực giao tiếp & storytelling', 'Học viên tại TP.HCM (Offline) & toàn quốc (Online)'],
+    painPoints: [
+      'Viết bài hay nói chuyện bị khô cứng, thiếu cảm xúc và khó chạm đến người nghe',
+      'Có nhiều trải nghiệm nhưng không biết cách đóng gói thành câu chuyện truyền cảm hứng',
+      'Ngại chia sẻ hoặc chưa biết cách kể chuyện chân thật (vulnerable storytelling) tự nhiên'
+    ],
+    coreValues: [
+      'Khai mở chất liệu đời thường: Biến trải nghiệm cá nhân thành câu chuyện cuốn hút',
+      'Nghệ thuật chạm cảm xúc: Kể chuyện bằng sự chân thành, không giáo điều',
+      'Hình thức linh hoạt: Tại TP.HCM tham gia Talkshow Offline trải nghiệm tương tác trực tiếp; các tỉnh thành khác tham gia Online qua Zoom tiện lợi',
+      'Thực hành kết nối và nhận góp ý trực tiếp từ chuyên gia'
+    ],
+    testOrFormAngle: 'Đăng ký tham gia Workshop Storytelling (Online qua Zoom cho các tỉnh thành khác / Talkshow Offline trực tiếp tại TP.HCM) & nhận bộ công cụ khai mở chất liệu kể chuyện',
+    isActive: true,
+    isBuiltin: true,
+    createdAt: '2026-02-10'
+  },
 ];
 
 export const ORDERS_METADATA: OrderMeta[] = [

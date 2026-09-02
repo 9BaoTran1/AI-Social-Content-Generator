@@ -20,11 +20,35 @@ export function getSavedPrograms(): ProgramItem[] {
     }
     const parsed = JSON.parse(saved);
     if (Array.isArray(parsed) && parsed.length > 0) {
-      const coreIds = new Set(DEFAULT_PROGRAMS.map((p) => p.id));
-      return parsed.map((p: ProgramItem) => ({
-        ...p,
-        isCore: p.isCore ?? coreIds.has(p.id) ?? p.isBuiltin ?? false,
-      }));
+      const defaultMap = new Map(DEFAULT_PROGRAMS.map((p) => [p.id, p]));
+      // Update core programs with official types and details from DEFAULT_PROGRAMS
+      const updated = parsed.map((p: ProgramItem) => {
+        const def = defaultMap.get(p.id);
+        if (def) {
+          return {
+            ...p,
+            type: def.type, // Enforce correct official type (WS vs CRT)
+            title: def.title,
+            description: def.description,
+            formatNote: def.formatNote,
+            isCore: true,
+          };
+        }
+        return {
+          ...p,
+          isCore: false,
+        };
+      });
+
+      // Ensure any new default programs (like prog-9 Storytelling) are automatically added
+      DEFAULT_PROGRAMS.forEach((dp) => {
+        if (!updated.some((p) => p.id === dp.id)) {
+          updated.push({ ...dp, isCore: true });
+        }
+      });
+
+      localStorage.setItem(STORAGE_KEYS.PROGRAMS, JSON.stringify(updated));
+      return updated;
     }
     return DEFAULT_PROGRAMS.map((p) => ({ ...p, isCore: true }));
   } catch (e) {

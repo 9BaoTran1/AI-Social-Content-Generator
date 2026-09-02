@@ -1571,6 +1571,9 @@ Dưới đây là **7 Dạng Bài (Order)** được tối ưu chuyên biệt ch
         reply += `${idx + 1}. **${p.title}**\n`;
         reply += `   • **Đối tượng:** ${p.targetAudience?.slice(0, 2).join(', ') || 'Người trẻ & người đi làm'}\n`;
         reply += `   • **Điểm nghẽn giải quyết:** ${p.painPoints?.[0] || p.description}\n`;
+        if (p.formatNote) {
+          reply += `   • **Hình thức:** ${p.formatNote}\n`;
+        }
         reply += `   • **Góc tiếp cận / Test:** ${p.testOrFormAngle || 'Bài test định vị cá nhân'}\n\n`;
       });
     }
