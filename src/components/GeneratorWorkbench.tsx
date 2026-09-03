@@ -52,6 +52,7 @@ import {
 import { saveHistoryItem, saveCustomBenchmarkTemplate } from '../lib/storage';
 import { generateOrderAI, refineContentAI } from '../lib/aiService';
 import { InspirationBanner } from './InspirationBanner';
+import { TypewriterText } from './TypewriterText';
 import { playClickSound, playCopySound, playSuccessChime } from '../lib/audioService';
 import { triggerCelebration, triggerCopySparkle } from '../lib/celebration';
 
@@ -193,6 +194,19 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
   const [generatedResult, setGeneratedResult] = useState<GeneratedContent | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [isTypewriterEnabled, setIsTypewriterEnabled] = useState<boolean>(() => {
+    const saved = localStorage.getItem('order_ai_typewriter_enabled');
+    return saved === null ? true : saved === 'true';
+  });
+
+  const toggleTypewriter = () => {
+    playClickSound();
+    setIsTypewriterEnabled((prev) => {
+      const next = !prev;
+      localStorage.setItem('order_ai_typewriter_enabled', String(next));
+      return next;
+    });
+  };
 
   // Interactive Refinement state
   const [refineInstruction, setRefineInstruction] = useState<string>('');
@@ -1397,6 +1411,24 @@ ${
                     )}
                   </button>
 
+                  {/* Typewriter Toggle Button */}
+                  <button
+                    type="button"
+                    onClick={toggleTypewriter}
+                    title={isTypewriterEnabled ? 'Tắt hiệu ứng gõ chữ để hiện văn bản tức thì' : 'Bật hiệu ứng gõ chữ mượt mà'}
+                    className={`px-2.5 py-1.5 text-xs font-semibold rounded-xl border transition-all flex items-center gap-1 cursor-pointer ${
+                      isTypewriterEnabled
+                        ? isDark
+                          ? 'bg-indigo-950/70 text-indigo-300 border-indigo-700/80 shadow-2xs'
+                          : 'bg-indigo-50 text-indigo-700 border-indigo-200 shadow-2xs'
+                        : isDark
+                        ? 'bg-slate-950 hover:bg-slate-800 text-slate-400 border-slate-800'
+                        : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
+                    }`}
+                  >
+                    <span>⌨️ Hiệu ứng gõ chữ: {isTypewriterEnabled ? 'Bật' : 'Tắt'}</span>
+                  </button>
+
                   {/* Remix Thinking Button */}
                   <button
                     type="button"
@@ -1744,13 +1776,11 @@ ${
                           </div>
 
                           {/* Variation Text */}
-                          <p
-                            className={`text-xs leading-relaxed whitespace-pre-line font-sans select-all ${
-                              isDark ? 'text-slate-200' : 'text-slate-800'
-                            }`}
-                          >
-                            {variation}
-                          </p>
+                          <TypewriterText
+                            text={variation}
+                            isDark={isDark}
+                            enabled={isTypewriterEnabled && activeVariationIndex === idx}
+                          />
 
                           {/* Footer Metrics */}
                           <div
