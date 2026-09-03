@@ -8,6 +8,7 @@ import { ProgramManager } from './components/ProgramManager';
 import { AssistantView } from './components/AssistantView';
 import { BenchmarkLibrary } from './components/BenchmarkLibrary';
 import { UserGuide } from './components/UserGuide';
+import { CommandPalette } from './components/CommandPalette';
 
 export default function App() {
   const [programs, setPrograms] = useState<ProgramItem[]>(getSavedPrograms());
@@ -15,6 +16,7 @@ export default function App() {
   const [selectedOrderType, setSelectedOrderType] = useState<OrderType>('order_1');
   const [prefillContext, setPrefillContext] = useState<string>('');
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
 
   // Theme State (stored preference or default 'light')
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -49,6 +51,12 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('order_ai_theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    const handleOpenPalette = () => setIsCommandPaletteOpen(true);
+    window.addEventListener('open_command_palette', handleOpenPalette);
+    return () => window.removeEventListener('open_command_palette', handleOpenPalette);
+  }, []);
 
   const handleUseTemplate = (templateContent: string) => {
     setPrefillContext(templateContent);
@@ -108,6 +116,7 @@ export default function App() {
           programCount={{ ws: wsCount, ct: ctCount }}
           theme={theme}
           onToggleTheme={toggleTheme}
+          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
         />
 
         {/* Main Content Area */}
@@ -186,6 +195,18 @@ export default function App() {
             </p>
           </div>
         </footer>
+        <CommandPalette
+          isOpen={isCommandPaletteOpen}
+          onClose={() => setIsCommandPaletteOpen(false)}
+          onSelectTab={setActiveTab}
+          onSelectOrder={(order) => {
+            setSelectedOrderType(order);
+            setActiveTab('workbench');
+          }}
+          programs={programs}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
       </div>
   );
 }

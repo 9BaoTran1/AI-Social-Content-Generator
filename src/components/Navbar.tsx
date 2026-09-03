@@ -1,6 +1,7 @@
-import React from 'react';
-import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, BookmarkCheck, Layers, BookMarked } from 'lucide-react';
+import React, { useState } from 'react';
+import { Sparkles, BookOpen, Bot, Plus, Sun, Moon, BookmarkCheck, Layers, BookMarked, Search, Volume2, VolumeX } from 'lucide-react';
 import { ThemeMode } from '../types';
+import { isSoundEnabled, toggleSound, playClickSound } from '../lib/audioService';
 
 interface NavbarProps {
   activeTab: 'workbench' | 'orders' | 'benchmark' | 'programs' | 'assistant' | 'guide';
@@ -9,6 +10,7 @@ interface NavbarProps {
   programCount: { ws: number; ct: number };
   theme: ThemeMode;
   onToggleTheme: () => void;
+  onOpenCommandPalette?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -18,9 +20,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   programCount,
   theme,
   onToggleTheme,
+  onOpenCommandPalette,
 }) => {
   const isDark = theme === 'dark';
   const totalPrograms = programCount.ws + programCount.ct;
+  const [soundOn, setSoundOn] = useState(isSoundEnabled());
+  const handleToggleSound = () => {
+    const next = toggleSound();
+    setSoundOn(next);
+  };
 
   const navTabs = [
     {
@@ -117,11 +125,51 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Action Buttons: Add WS/CT (Prominent Indigo) & Theme Toggle */}
-          <div className="flex items-center space-x-2 shrink-0">
+          {/* Action Buttons: Command Palette, Sound Toggle, Add WS/CRT, Theme Toggle */}
+          <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+            {/* Command Palette (Ctrl+K) Button */}
+            <button
+              onClick={() => {
+                playClickSound();
+                onOpenCommandPalette?.();
+              }}
+              title="Tìm kiếm nhanh & gõ lệnh (Ctrl + K / ⌘K)"
+              className={`min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                isDark
+                  ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80 shadow-2xs'
+                  : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700 border-slate-200 shadow-2xs'
+              }`}
+            >
+              <Search className="w-3.5 h-3.5 text-indigo-500" />
+              <span className="hidden md:inline text-[11px] text-slate-400">Tìm nhanh...</span>
+              <span className="hidden sm:inline font-mono text-[9px] px-1 py-0.2 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                ⌘K
+              </span>
+            </button>
+
+            {/* Sound Toggle Button */}
+            <button
+              onClick={handleToggleSound}
+              title={soundOn ? 'Tắt âm thanh tương tác' : 'Bật âm thanh tương tác'}
+              className={`min-h-[38px] sm:min-h-[40px] p-2 sm:px-2.5 rounded-xl border text-xs font-medium transition-all flex items-center justify-center cursor-pointer ${
+                isDark
+                  ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80 shadow-2xs'
+                  : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-2xs'
+              }`}
+            >
+              {soundOn ? (
+                <Volume2 className="w-4 h-4 text-emerald-500" />
+              ) : (
+                <VolumeX className="w-4 h-4 text-slate-400" />
+              )}
+            </button>
+
             {/* Add Program Button */}
             <button
-              onClick={onOpenAddProgram}
+              onClick={() => {
+                playClickSound();
+                onOpenAddProgram();
+              }}
               title="Thêm Workshop (WS) hoặc Chương Trình CRT Mới"
               className="min-h-[38px] sm:min-h-[40px] px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white shadow-xs hover:shadow-indigo-500/25 flex items-center space-x-1.5 transition-all cursor-pointer"
             >
@@ -132,7 +180,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Theme Toggle Button */}
             <button
-              onClick={onToggleTheme}
+              onClick={() => {
+                playClickSound();
+                onToggleTheme();
+              }}
               title={isDark ? 'Chuyển sang giao diện Sáng' : 'Chuyển sang giao diện Tối'}
               className={`min-h-[38px] sm:min-h-[40px] min-w-[38px] sm:min-w-[40px] p-2 rounded-xl border text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 isDark
