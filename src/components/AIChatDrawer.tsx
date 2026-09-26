@@ -11,7 +11,8 @@ import {
   Zap,
   Layers,
   FileText,
-  UserCheck
+  UserCheck,
+  RotateCcw
 } from 'lucide-react';
 import { saveHistoryItem } from '../lib/storage';
 import { generateOrderAI, chatAI } from '../lib/aiService';
@@ -66,6 +67,24 @@ export const AIChatDrawer: React.FC<AIChatDrawerProps> = ({
     }
   }, [externalTriggerHi]);
 
+  const handleResetChat = () => {
+    setMessages([
+      {
+        id: `msg-init-${Date.now()}`,
+        role: 'assistant',
+        content: `Xin chào! Bộ nhớ phiên trò chuyện đã được làm mới sạch sẽ. Bạn có thể bắt đầu phiên làm việc mới với độ chính xác cao nhất.\n\n💡 Bạn có thể gõ **"Hi"** bất cứ lúc nào để mở Menu 7 Order tự động, hoặc gõ trực tiếp **"Order 1 [mô tả clip]"** để mình sản xuất content ngay nhé!`,
+        timestamp: new Date().toISOString(),
+        suggestedActions: [
+          { label: 'Gõ "Hi" mở 7 Order', action: 'Hi' },
+          { label: '🎬 Order 1: Comment TikTok', action: 'Order 1', orderType: 'order_1' },
+          { label: '💬 Order 2: Comment Facebook', action: 'Order 2', orderType: 'order_2' },
+          { label: '🧵 Order 4: Comment Threads', action: 'Order 4', orderType: 'order_4' },
+          { label: '💼 Order 6: Bài viết & InMail LinkedIn', action: 'Order 6', orderType: 'order_6' },
+        ],
+      },
+    ]);
+  };
+
   const handleSendMessage = async (textToSend?: string) => {
     const query = (textToSend || inputMessage).trim();
     if (!query || isLoading) return;
@@ -95,6 +114,7 @@ export const AIChatDrawer: React.FC<AIChatDrawerProps> = ({
           orderType: orderKey,
           context: orderContext,
           programs,
+          options: { forceRefresh: true }, // Luôn tạo mới không lấy cache cũ
         });
 
         generatedObj.orderTitle = `Order ${orderNum}`;
@@ -124,10 +144,16 @@ export const AIChatDrawer: React.FC<AIChatDrawerProps> = ({
         return;
       }
 
+      // Compact history to only latest 4 messages and cap length at 250 chars to avoid memory pollution
+      const cleanHistory = messages.slice(-4).map((m) => ({
+        role: m.role,
+        content: m.content.length > 250 ? m.content.slice(0, 250) + '...' : m.content,
+      }));
+
       // Normal chat via aiService
       const chatRes = await chatAI({
         message: query,
-        history: messages.map((m) => ({ role: m.role, content: m.content })),
+        history: cleanHistory,
         programs,
       });
 
@@ -178,13 +204,24 @@ export const AIChatDrawer: React.FC<AIChatDrawerProps> = ({
           </div>
         </div>
 
-        <button
-          onClick={() => handleSendMessage('Hi')}
-          className="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 transition-all flex items-center gap-1.5"
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Gõ "Hi"</span>
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={handleResetChat}
+            title="Làm mới bộ nhớ phiên chat (xóa ngữ cảnh cũ để tránh sai lệch)"
+            className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 transition-all flex items-center gap-1 cursor-pointer"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Làm mới</span>
+          </button>
+          <button
+            onClick={() => handleSendMessage('Hi')}
+            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 transition-all flex items-center gap-1.5 cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Gõ "Hi"</span>
+          </button>
+        </div>
       </div>
 
       {/* Messages Scroll Area */}

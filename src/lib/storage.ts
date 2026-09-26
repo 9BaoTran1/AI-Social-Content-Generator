@@ -139,10 +139,22 @@ export function getSavedHistory(): GeneratedContent[] {
 export function saveHistoryItem(item: GeneratedContent): void {
   try {
     const existing = getSavedHistory();
-    const updated = [item, ...existing.slice(0, 49)]; // keep latest 50
+    const updated = [item, ...existing.slice(0, 19)]; // Giới hạn 20 mục gần nhất thay vì 50 để tránh làm phình bộ nhớ người dùng
     localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(updated));
   } catch (e) {
     console.error('Failed to save history:', e);
+  }
+}
+
+export function clearAllUserMemory(): void {
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(STORAGE_KEYS.HISTORY);
+      localStorage.removeItem('order_ai_smart_cache_v1');
+      window.dispatchEvent(new CustomEvent('ai_memory_cleared'));
+    }
+  } catch (e) {
+    console.error('Failed to clear memory:', e);
   }
 }
 

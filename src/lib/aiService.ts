@@ -187,8 +187,8 @@ export interface SmartCacheEntry<T = any> {
 }
 
 const SMART_CACHE_KEY = 'order_ai_smart_cache_v1';
-const MAX_CACHE_ITEMS = 80;
-const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const MAX_CACHE_ITEMS = 15; // Giảm xuống 15 mục để không làm phình dung lượng bộ nhớ người dùng
+const CACHE_TTL_MS = 15 * 60 * 1000; // 15 phút (thay vì 24 tiếng) để tránh lưu đè dữ liệu cũ làm sai lệch kết quả
 
 export class SmartLocalCacheManager {
   private memCache = new Map<string, SmartCacheEntry>();
@@ -227,12 +227,22 @@ export class SmartLocalCacheManager {
     }
   }
 
-  public makeHash(orderType: string, context: string, programId?: string, options?: any): string {
+  public makeHash(
+    orderType: string,
+    context: string,
+    programId?: string,
+    options?: any,
+    hasImage?: boolean
+  ): string {
     const normContext = (context || '').toLowerCase().replace(/\s+/g, ' ').trim();
     const normProg = (programId || 'auto').toLowerCase().trim();
     const normTone = (options?.tone === 'custom' ? (options?.customTone || 'custom') : (options?.tone || '')).toLowerCase().trim();
     const normLen = (options?.lengthPreference || '').toLowerCase().trim();
-    const raw = `${orderType}__${normProg}__${normTone}__${normLen}__${normContext}`;
+    const normModel = (options?.modelSelection || 'default').toLowerCase().trim();
+    const normLink = options?.includeLink ? 'link_yes' : 'link_no';
+    const normAudience = (options?.customAudience || '').toLowerCase().trim();
+    const normImage = hasImage ? 'img_yes' : 'img_no';
+    const raw = `${orderType}__${normProg}__${normTone}__${normLen}__${normModel}__${normLink}__${normAudience}__${normImage}__${normContext}`;
 
     // FNV-1a 32-bit Hash
     let h = 2166136261;
@@ -240,7 +250,7 @@ export class SmartLocalCacheManager {
       h ^= raw.charCodeAt(i);
       h = Math.imul(h, 16777619);
     }
-    return `sc_${(h >>> 0).toString(16)}_${raw.slice(0, 24).replace(/[^a-z0-9]/gi, '_')}`;
+    return `sc_${(h >>> 0).toString(16)}_${raw.length}_${raw.slice(0, 16).replace(/[^a-z0-9]/gi, '_')}`;
   }
 
   public get<T = any>(hash: string): T | null {
@@ -776,7 +786,8 @@ export async function generateOrderAI(params: {
     params.orderType,
     params.context,
     params.selectedProgramId,
-    params.options
+    params.options,
+    Boolean(params.screenshotBase64)
   );
 
   if (!params.options?.forceRefresh) {
@@ -1169,7 +1180,7 @@ Trả về JSON đúng cấu trúc:
   } catch (err: any) {
     console.warn('[AI Service] Gemini call failed or quota limited, activating Template Fallback Engine:', err);
     const fallbackOutput = extractBenchmarkFallback(params);
-    smartCache.set(cacheHash, fallbackOutput, params.orderType);
+    // KHÔNG lưu kết quả fallback vào smartCache để tránh đầu độc cache làm các lần tạo sau bị kẹt trong mẫu tĩnh
     return fallbackOutput;
   }
 }
@@ -1599,6 +1610,15 @@ Dưới đây là **7 Dạng Bài (Order)** được tối ưu chuyên biệt ch
     };
   }
 
+  // Chuẩn hóa và làm gọn lịch sử hội thoại trước khi gửi (lấy tối đa 3 lượt gần nhất, cắt ngắn mỗi tin nhắn)
+  const sanitizedHistory = (params.history || [])
+    .slice(-3)
+    .map((h: any) => ({
+      role: h.role === 'user' ? 'user' : 'model',
+      content: typeof h.content === 'string' ? h.content.trim().slice(0, 250) : '',
+    }))
+    .filter((h: any) => Boolean(h.content));
+
   // ==========================================================================
   // PHASE 2: THỬ SERVER BACKEND VỚI ABORTCONTROLLER (TIMEOUT 500MS)
   // Ngăn tình trạng treo đơ trên môi trường tĩnh (Vercel, Surge, GitHub Pages)
@@ -1609,7 +1629,10 @@ Dưới đây là **7 Dạng Bài (Order)** được tối ưu chuyên biệt ch
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(params),
+      body: JSON.stringify({
+        ...params,
+        history: sanitizedHistory,
+      }),
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
@@ -1638,10 +1661,18 @@ Hãy trả lời cô đọng, tự nhiên, thân thiện và hướng dẫn hàn
 Các dự án/workshop khả dụng trong kho CRT:
 ${availablePrograms.map((p) => `- ${p.title} (${p.type === 'ws' ? 'Workshop' : 'Chương trình'}): ${p.description}`).join('\n')}`;
 
+  const promptParts: any[] = [];
+  if (sanitizedHistory.length > 0) {
+    const contextSummary = sanitizedHistory.map((h: any) => `${h.role === 'user' ? 'Người dùng' : 'Trợ lý'}: ${h.content}`).join('\n');
+    promptParts.push({ text: `[Ngữ cảnh tóm tắt cuộc trò chuyện gần đây]:\n${contextSummary}\n\n[Câu hỏi hiện tại của người dùng]:\n${cleanQuery}` });
+  } else {
+    promptParts.push({ text: cleanQuery });
+  }
+
   try {
     const result = await callGeminiApiWithRetry(
       {
-        parts: [{ text: cleanQuery }],
+        parts: promptParts,
         systemInstruction,
         temperature: 0.7,
         preferredModel: 'gemini-3.6-flash',

@@ -643,16 +643,20 @@ ${JSON.stringify(programs || [], null, 2)}`;
 
     const contents = [];
     if (history && Array.isArray(history)) {
-      for (const h of history.slice(-6)) {
+      // Giới hạn 4 tin nhắn gần nhất và cắt ngắn max 300 ký tự để không làm phình context và sai lệch câu trả lời AI
+      for (const h of history.slice(-4)) {
+        if (!h.content || typeof h.content !== 'string') continue;
+        const cleanText = h.content.trim().slice(0, 300);
+        if (!cleanText) continue;
         contents.push({
           role: h.role === 'user' ? 'user' : 'model',
-          parts: [{ text: h.content }],
+          parts: [{ text: cleanText }],
         });
       }
     }
     contents.push({
       role: 'user',
-      parts: [{ text: message }],
+      parts: [{ text: (message || '').trim().slice(0, 1000) }],
     });
 
     const response = await generateContentWithRetry({

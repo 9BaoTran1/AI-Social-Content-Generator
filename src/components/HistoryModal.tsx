@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GeneratedContent } from '../types';
-import { getSavedHistory } from '../lib/storage';
+import { getSavedHistory, clearAllUserMemory } from '../lib/storage';
+import { clearSmartCache } from '../lib/aiService';
 import {
   Clock,
   Trash2,
@@ -21,8 +22,9 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ onUseContent }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const clearHistory = () => {
-    if (confirm('Bạn có chắc muốn xóa toàn bộ lịch sử tạo content không?')) {
-      localStorage.removeItem('order_ai_history_v1');
+    if (confirm('Bạn có chắc muốn xóa toàn bộ lịch sử và dọn sạch bộ nhớ đệm AI (Cache & Context) không?')) {
+      clearAllUserMemory();
+      clearSmartCache();
       setHistoryItems([]);
     }
   };

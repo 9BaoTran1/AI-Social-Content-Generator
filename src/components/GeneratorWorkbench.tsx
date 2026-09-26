@@ -50,7 +50,7 @@ import {
   Award,
 } from 'lucide-react';
 import { saveHistoryItem, saveCustomBenchmarkTemplate } from '../lib/storage';
-import { generateOrderAI, refineContentAI } from '../lib/aiService';
+import { generateOrderAI, refineContentAI, clearSmartCache } from '../lib/aiService';
 import { InspirationBanner } from './InspirationBanner';
 import { TypewriterText } from './TypewriterText';
 import { playClickSound, playCopySound, playSuccessChime } from '../lib/audioService';
@@ -489,6 +489,7 @@ export const GeneratorWorkbench: React.FC<GeneratorWorkbenchProps> = ({
         selectedProgramId: selectedProgramId === 'auto' ? undefined : selectedProgramId,
         programs: filteredPrograms,
         options: {
+          forceRefresh: true, // Luôn tạo mới từ AI, không lưu đè bộ nhớ cũ làm sai lệch kết quả
           modelSelection: actualModel,
           tone: writingTone,
           customTone: writingTone === 'custom' ? customTone.trim() : writingTone === 'humorous' ? 'Hài hước dí dỏm, duyên dáng' : undefined,
@@ -1443,6 +1444,24 @@ ${
                   >
                     <Brain className="w-3.5 h-3.5 text-amber-500" />
                     <span>Đổi góc nhìn (Remix)</span>
+                  </button>
+
+                  {/* Clear Cache / Fresh Memory Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      clearSmartCache();
+                      alert('Đã dọn sạch bộ nhớ đệm AI. Các lần tạo nội dung tiếp theo sẽ hoàn toàn mới!');
+                    }}
+                    title="Xóa bộ nhớ đệm tạm thời để AI luôn xử lý mới nhất"
+                    className={`px-2.5 py-1.5 text-xs font-semibold rounded-xl border transition-all flex items-center gap-1.5 cursor-pointer ${
+                      isDark
+                        ? 'bg-slate-950 hover:bg-slate-800 text-slate-300 border-slate-800'
+                        : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                    }`}
+                  >
+                    <RefreshCw className="w-3.5 h-3.5 text-indigo-400" />
+                    <span>Làm mới bộ nhớ</span>
                   </button>
                 </div>
 
