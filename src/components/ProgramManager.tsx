@@ -52,6 +52,8 @@ import {
   saveCloudSyncConfig,
   publishProgramsToCloud,
   syncProgramsFromCloud,
+  getAdminSyncToken,
+  saveAdminSyncToken,
   CloudSyncConfig,
 } from '../lib/syncService';
 import { playCopySound, playSuccessChime } from '../lib/audioService';
@@ -217,6 +219,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
   const [cloudConfig, setCloudConfig] = useState<CloudSyncConfig>(() => getCloudSyncConfig());
   const [isSyncingCloud, setIsSyncingCloud] = useState<boolean>(false);
   const [syncStatusMsg, setSyncStatusMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [adminTokenInput, setAdminTokenInput] = useState<string>(() => getAdminSyncToken());
 
   const handleCopyShareLink = (p: ProgramItem) => {
     const url = generateShareableCrtUrl(p);
@@ -1305,9 +1308,14 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                   <Cloud className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm sm:text-base">Đồng Bộ Kho CRT Cho Cả Đội Ngũ</h3>
+                  <h3 className="font-bold text-sm sm:text-base flex items-center gap-1.5">
+                    <span>Đồng Bộ Tự Động Cho Cả Đội Ngũ</span>
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                      Tự động 100%
+                    </span>
+                  </h3>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Đảm bảo toàn bộ người dùng nhận được CRT mới nhất từ Admin
+                    Admin cập nhật → Hệ thống tự động đẩy lên Cloud → Người dùng tự động nhận
                   </p>
                 </div>
               </div>
@@ -1317,6 +1325,21 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
               >
                 <X className="w-5 h-5" />
               </button>
+            </div>
+
+            {/* Auto-Sync Realtime Status Banner */}
+            <div
+              className={`p-3 rounded-xl border text-xs flex items-start gap-2.5 ${
+                isDark ? 'bg-indigo-950/40 border-indigo-800/60 text-indigo-200' : 'bg-indigo-50 border-indigo-200 text-indigo-900'
+              }`}
+            >
+              <Sparkles className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+              <div className="space-y-0.5">
+                <span className="font-bold block">Cơ Chế Đồng Bộ Tự Động Đang Hoạt Động</span>
+                <p className="text-[11px] opacity-80 leading-relaxed">
+                  Khi bạn thêm mới (kể cả bóc tách AI), chỉnh sửa hoặc xóa bất kỳ Workshop nào, hệ thống lập tức tự động ghi lên Central Cloud. Toàn bộ thành viên khi mở ứng dụng hoặc chuyển tab sẽ tự động tải về danh mục mới nhất mà bạn không cần phải gửi lại link cho từng người.
+                </p>
+              </div>
             </div>
 
             {/* Sync Feedback Message */}
@@ -1452,7 +1475,7 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
               <div className="flex items-center justify-between">
                 <span className="font-bold flex items-center gap-1.5">
                   <Globe className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Cấu Hình Cloud Endpoint (Tùy chọn)</span>
+                  <span>Cấu Hình Đồng Bộ Tự Động (Central Cloud)</span>
                 </span>
                 {cloudConfig.lastSyncedAt && (
                   <span className="text-[10px] text-slate-500">
@@ -1461,9 +1484,58 @@ export const ProgramManager: React.FC<ProgramManagerProps> = ({
                 )}
               </div>
 
+              {/* Central Admin Write Token Section */}
+              <div
+                className={`p-3 rounded-xl border space-y-2 ${
+                  isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <Key className="w-3.5 h-3.5 text-indigo-500" />
+                    <span>Mã Quyền Ghi Admin (GitHub Token)</span>
+                  </label>
+                  {getAdminSyncToken() ? (
+                    <span className="text-[10px] text-emerald-500 font-bold flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" /> Đã kết nối tự động đồng bộ
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-amber-500 font-medium">Chưa lưu token quyền ghi</span>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="password"
+                    value={adminTokenInput}
+                    onChange={(e) => setAdminTokenInput(e.target.value)}
+                    placeholder="Dán GitHub Personal Token (quyền gist) tại đây..."
+                    className={`flex-1 border rounded-xl p-2 text-xs ${
+                      isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      saveAdminSyncToken(adminTokenInput);
+                      setSyncStatusMsg({
+                        type: 'success',
+                        text: 'Đã lưu Token Quyền Ghi Admin thành công! Giờ đây mọi thao tác thêm/sửa/xóa sẽ tự động đồng bộ lên Cloud.',
+                      });
+                      setTimeout(() => setSyncStatusMsg(null), 5000);
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs cursor-pointer shadow-xs whitespace-nowrap"
+                  >
+                    Lưu Token
+                  </button>
+                </div>
+                <p className="text-[10px] text-slate-500 leading-tight">
+                  Token này được lưu an toàn trong trình duyệt của riêng bạn (LocalStorage), dùng để tự động đẩy các Workshop lên Cloud trung tâm cho toàn team.
+                </p>
+              </div>
+
               <div>
                 <label className="text-[11px] font-semibold block mb-1 text-slate-600 dark:text-slate-400">
-                  Cloud Endpoint URL (JSONBin / npoint / REST API / Cloudflare KV):
+                  Cloud Endpoint URL (Tùy chọn ghi đè JSONBin / npoint / REST API / Cloudflare KV):
                 </label>
                 <input
                   type="url"

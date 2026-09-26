@@ -169,7 +169,23 @@ function normalizeProgramItem(item: any): ProgramItem {
   };
 }
 
-// === Cloud Sync Layer ===
+// === Central Cloud Sync Layer (Powered by GitHub Gist Backbone) ===
+
+export const CENTRAL_GIST = {
+  ID: '46850c70585979ebd4256a108039359e',
+  FILENAME: 'programs_sync.json',
+  API_URL: 'https://api.github.com/gists/46850c70585979ebd4256a108039359e',
+};
+
+export function getAdminSyncToken(): string {
+  if (typeof window === 'undefined') return '';
+  return localStorage.getItem('order_ai_admin_sync_token') || '';
+}
+
+export function saveAdminSyncToken(token: string): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem('order_ai_admin_sync_token', token.trim());
+}
 
 export function getCloudSyncConfig(): CloudSyncConfig {
   if (typeof window === 'undefined') return DEFAULT_CONFIG;
@@ -194,33 +210,89 @@ export function saveCloudSyncConfig(cfg: Partial<CloudSyncConfig>): CloudSyncCon
 }
 
 /**
- * Đồng bộ danh sách chương trình từ Cloud Endpoint về máy người dùng.
- * Chạy ngầm trong background khi mở ứng dụng.
+ * TỰ ĐỘNG ĐẨY LÊN CLOUD (Dành cho Admin):
+ * Mỗi khi Admin thêm, sửa hoặc xóa bất kỳ Workshop/CRT nào,
+ * hàm này sẽ tự động chạy ngầm để cập nhật lên Cloud trung tâm ngay lập tức.
+ */
+export async function autoPublishToCloud(programs: ProgramItem[]): Promise<{
+  success: boolean;
+  message: string;
+}> {
+  try {
+    const customOnly = programs.filter((p) => !p.isCore);
+    const payload = customOnly.length > 0 ? customOnly : programs;
+
+    const token = getAdminSyncToken();
+    if (!token) {
+      return { success: false, message: 'Chưa có quyền ghi Admin lên Cloud' };
+    }
+
+    const resp = await fetch(CENTRAL_GIST.API_URL, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `token ${token}`,
+        'User-Agent': 'AI-Social-Content-Generator',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        description: `Order AI CRT Programs Sync Storage (Auto-synced: ${new Date().toISOString()})`,
+        files: {
+          [CENTRAL_GIST.FILENAME]: {
+            content: JSON.stringify(payload, null, 2),
+          },
+        },
+      }),
+    });
+
+    if (resp.ok) {
+      const now = new Date().toISOString();
+      saveCloudSyncConfig({ lastSyncedAt: now });
+      return {
+        success: true,
+        message: 'Đã tự động đồng bộ toàn bộ Workshop lên hệ thống Cloud trung tâm!',
+      };
+    } else {
+      console.warn('Gist auto-sync PATCH status:', resp.status);
+      return { success: false, message: `Lỗi đồng bộ Cloud (${resp.status})` };
+    }
+  } catch (err: any) {
+    console.error('Lỗi khi tự động đẩy lên Cloud:', err);
+    return { success: false, message: err.message || 'Lỗi mạng khi đồng bộ Cloud' };
+  }
+}
+
+/**
+ * TỰ ĐỘNG TẢI TỪ CLOUD (Dành cho toàn bộ người dùng & Client):
+ * Chạy ngầm khi mở ứng dụng, khi chuyển tab quay lại, hoặc theo chu kỳ.
+ * Không cần token, 100% public GET, tự động gộp các CRT mới nhất từ Admin.
  */
 export async function syncProgramsFromCloud(): Promise<{
   success: boolean;
   count: number;
   updated: boolean;
   message?: string;
+  titles?: string[];
 }> {
-  const cfg = getCloudSyncConfig();
-  if (!cfg.endpointUrl || !cfg.endpointUrl.trim().startsWith('http')) {
-    return { success: false, count: 0, updated: false, message: 'Chưa cấu hình Endpoint Cloud' };
-  }
-
   try {
+    const cfg = getCloudSyncConfig();
+    const targetUrl =
+      cfg.endpointUrl && cfg.endpointUrl.trim().startsWith('http')
+        ? cfg.endpointUrl.trim()
+        : CENTRAL_GIST.API_URL;
+
+    const isCentral = targetUrl === CENTRAL_GIST.API_URL;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+
     const headers: Record<string, string> = {
-      'Accept': 'application/json',
+      'Accept': isCentral ? 'application/vnd.github.v3+json' : 'application/json',
     };
-    if (cfg.apiKey) {
+    if (!isCentral && cfg.apiKey) {
       headers['X-Master-Key'] = cfg.apiKey;
       headers['Authorization'] = `Bearer ${cfg.apiKey}`;
     }
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s timeout để không ảnh hưởng UX
-
-    const resp = await fetch(cfg.endpointUrl.trim(), {
+    const resp = await fetch(targetUrl, {
       method: 'GET',
       headers,
       signal: controller.signal,
@@ -229,23 +301,31 @@ export async function syncProgramsFromCloud(): Promise<{
     clearTimeout(timeoutId);
 
     if (!resp.ok) {
-      return { success: false, count: 0, updated: false, message: `Lỗi kết nối Cloud (${resp.status})` };
+      return { success: false, count: 0, updated: false, message: `Lỗi kết nối (${resp.status})` };
     }
 
     const json = await resp.json();
-    // Support standard payloads, JSONBin (record.programs or record), or direct array
-    const rawList = Array.isArray(json)
-      ? json
-      : Array.isArray(json.record?.programs)
-      ? json.record.programs
-      : Array.isArray(json.record)
-      ? json.record
-      : Array.isArray(json.programs)
-      ? json.programs
-      : [];
+
+    let rawList: any[] = [];
+    if (isCentral) {
+      const fileObj = json.files?.[CENTRAL_GIST.FILENAME];
+      if (fileObj?.content) {
+        rawList = JSON.parse(fileObj.content);
+      }
+    } else {
+      rawList = Array.isArray(json)
+        ? json
+        : Array.isArray(json.record?.programs)
+        ? json.record.programs
+        : Array.isArray(json.record)
+        ? json.record
+        : Array.isArray(json.programs)
+        ? json.programs
+        : [];
+    }
 
     if (!Array.isArray(rawList) || rawList.length === 0) {
-      return { success: true, count: 0, updated: false, message: 'Cloud chưa có chương trình tùy chỉnh nào' };
+      return { success: true, count: 0, updated: false };
     }
 
     const cloudPrograms = rawList.map(normalizeProgramItem);
@@ -253,15 +333,26 @@ export async function syncProgramsFromCloud(): Promise<{
     const localMap = new Map(localPrograms.map((p) => [p.id, p]));
 
     let newlyAddedCount = 0;
+    const addedTitles: string[] = [];
+
     cloudPrograms.forEach((cp) => {
       if (!localMap.has(cp.id)) {
         localMap.set(cp.id, cp);
         newlyAddedCount++;
+        addedTitles.push(cp.title);
       } else {
-        // Cập nhật nếu cloud có sửa đổi
         const existing = localMap.get(cp.id)!;
         if (!existing.isCore) {
-          localMap.set(cp.id, { ...existing, ...cp, isCore: false });
+          const isDifferent =
+            existing.title !== cp.title ||
+            existing.description !== cp.description ||
+            existing.type !== cp.type ||
+            existing.isActive !== cp.isActive;
+          if (isDifferent) {
+            localMap.set(cp.id, { ...existing, ...cp, isCore: false });
+            newlyAddedCount++;
+            addedTitles.push(cp.title);
+          }
         }
       }
     });
@@ -272,15 +363,20 @@ export async function syncProgramsFromCloud(): Promise<{
       const now = new Date().toISOString();
       saveCloudSyncConfig({ lastSyncedAt: now });
       window.dispatchEvent(new CustomEvent('crt_programs_synced', { detail: merged }));
-      return { success: true, count: newlyAddedCount, updated: true, message: `Đã tự động tải về ${newlyAddedCount} CRT mới từ Cloud` };
+      return {
+        success: true,
+        count: newlyAddedCount,
+        updated: true,
+        message: `Đã tự động nhận ${newlyAddedCount} Workshop/Chương trình mới từ Admin!`,
+        titles: addedTitles,
+      };
     }
 
     const now = new Date().toISOString();
     saveCloudSyncConfig({ lastSyncedAt: now });
-    return { success: true, count: 0, updated: false, message: 'Dữ liệu đã khớp với Cloud mới nhất' };
+    return { success: true, count: 0, updated: false };
   } catch (err: any) {
-    // Yên lặng khi offline, không gây phiền người dùng
-    return { success: false, count: 0, updated: false, message: err.message || 'Lỗi mạng khi đồng bộ Cloud' };
+    return { success: false, count: 0, updated: false, message: err.message };
   }
 }
 
@@ -291,62 +387,5 @@ export async function publishProgramsToCloud(programs: ProgramItem[]): Promise<{
   success: boolean;
   message: string;
 }> {
-  const cfg = getCloudSyncConfig();
-  if (!cfg.endpointUrl || !cfg.endpointUrl.trim().startsWith('http')) {
-    return {
-      success: false,
-      message: 'Vui lòng nhập Cloud Endpoint URL hợp lệ trong Cài đặt Đồng bộ trước khi xuất bản.',
-    };
-  }
-
-  try {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-    if (cfg.apiKey) {
-      headers['X-Master-Key'] = cfg.apiKey;
-      headers['Authorization'] = `Bearer ${cfg.apiKey}`;
-    }
-
-    const payload = {
-      app: 'AI-Social-Content-Generator',
-      updatedAt: new Date().toISOString(),
-      count: programs.length,
-      programs,
-    };
-
-    const resp = await fetch(cfg.endpointUrl.trim(), {
-      method: 'PUT',
-      headers,
-      body: JSON.stringify(payload),
-    });
-
-    if (!resp.ok) {
-      // Fallback thử POST nếu endpoint không hỗ trợ PUT
-      const postResp = await fetch(cfg.endpointUrl.trim(), {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(payload),
-      });
-
-      if (!postResp.ok) {
-        return {
-          success: false,
-          message: `Không thể lưu lên Cloud (Mã phản hồi: ${resp.status}/${postResp.status}). Vui lòng kiểm tra quyền ghi API Key.`,
-        };
-      }
-    }
-
-    const now = new Date().toISOString();
-    saveCloudSyncConfig({ lastSyncedAt: now });
-    return {
-      success: true,
-      message: `Đã xuất bản thành công ${programs.length} chương trình lên Cloud cho toàn bộ người dùng!`,
-    };
-  } catch (err: any) {
-    return {
-      success: false,
-      message: `Lỗi kết nối tới Cloud Endpoint: ${err.message || 'Không có phản hồi'}`,
-    };
-  }
+  return autoPublishToCloud(programs);
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ProgramItem, OrderType, ThemeMode } from './types';
 import { getSavedPrograms, savePrograms } from './lib/storage';
-import { checkAndImportFromUrl, syncProgramsFromCloud } from './lib/syncService';
+import { checkAndImportFromUrl, syncProgramsFromCloud, autoPublishToCloud, saveAdminSyncToken } from './lib/syncService';
 import { Navbar } from './components/Navbar';
 import { GeneratorWorkbench } from './components/GeneratorWorkbench';
 import { OrderGrid } from './components/OrderGrid';
@@ -36,11 +36,21 @@ export default function App() {
     });
   };
 
-  // Check admin_key in URL parameters immediately
+  // Check admin_key and sync_token in URL parameters immediately
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const adminKey = urlParams.get('admin_key');
+      const syncToken = urlParams.get('sync_token') || urlParams.get('admin_sync_token');
+
+      if (syncToken) {
+        saveAdminSyncToken(syncToken);
+        urlParams.delete('sync_token');
+        urlParams.delete('admin_sync_token');
+        const newSearch = urlParams.toString();
+        window.history.replaceState({}, document.title, window.location.pathname + (newSearch ? `?${newSearch}` : ''));
+      }
+
       if (adminKey && adminKey.trim().toLowerCase() === 'admincrt2026') {
         sessionStorage.setItem('order_ai_crt_admin_auth', 'true');
         localStorage.setItem('app_access_granted', 'true');
@@ -51,9 +61,9 @@ export default function App() {
     }
   }, []);
 
-  // CRT Auto-Sync: Kiểm tra link chia sẻ CRT hoặc cập nhật ngầm từ Cloud
+  // CRT Auto-Sync: Tự động kéo từ Cloud khi khởi động, khi chuyển tab, và định kỳ 45s
   useEffect(() => {
-    // 1. Kiểm tra nếu có link chia sẻ CRT từ Admin (?import_crt=... hoặc ?import_all_crt=...)
+    // 1. Kiểm tra link P2P nếu có
     const imported = checkAndImportFromUrl();
     if (imported && imported.imported) {
       const fresh = getSavedPrograms();
@@ -65,19 +75,34 @@ export default function App() {
       setTimeout(() => setSyncAlert(null), 8000);
     }
 
-    // 2. Chạy kiểm tra đồng bộ ngầm với Cloud Endpoint (nếu có cấu hình)
-    syncProgramsFromCloud().then((res) => {
-      if (res.updated) {
-        const fresh = getSavedPrograms();
-        setPrograms(fresh);
-        setSyncAlert({
-          message: res.message || `Đã cập nhật ${res.count} chương trình mới từ Cloud!`,
-        });
-        setTimeout(() => setSyncAlert(null), 6000);
-      }
-    });
+    // 2. Hàm kiểm tra và gộp cập nhật từ Central Cloud
+    const doCloudSync = () => {
+      syncProgramsFromCloud().then((res) => {
+        if (res.updated) {
+          const fresh = getSavedPrograms();
+          setPrograms(fresh);
+          setSyncAlert({
+            message: res.message || `Đã tự động nhận ${res.count} chương trình mới từ Admin!`,
+            titles: res.titles,
+          });
+          setTimeout(() => setSyncAlert(null), 6000);
+        }
+      });
+    };
 
-    // 3. Lắng nghe sự kiện đồng bộ từ các component khác
+    // Chạy ngay khi tải trang
+    doCloudSync();
+
+    // Tự động kiểm tra cập nhật mỗi khi người dùng chuyển lại tab này
+    const handleFocus = () => {
+      doCloudSync();
+    };
+    window.addEventListener('focus', handleFocus);
+
+    // Chạy ngầm định kỳ mỗi 45 giây để người dùng luôn có dữ liệu mới nhất
+    const intervalId = setInterval(doCloudSync, 45000);
+
+    // Lắng nghe sự kiện đồng bộ từ các component khác
     const handleSynced = (e: any) => {
       if (e.detail && Array.isArray(e.detail)) {
         setPrograms(e.detail);
@@ -86,7 +111,12 @@ export default function App() {
       }
     };
     window.addEventListener('crt_programs_synced', handleSynced);
-    return () => window.removeEventListener('crt_programs_synced', handleSynced);
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      clearInterval(intervalId);
+      window.removeEventListener('crt_programs_synced', handleSynced);
+    };
   }, []);
 
   useEffect(() => {
@@ -109,17 +139,39 @@ export default function App() {
     setActiveTab('workbench');
   };
 
-  // Program Handlers
+  // Program Handlers: TỰ ĐỘNG ĐẨY LÊN CLOUD NGAY KHI ADMIN CẬP NHẬT
   const handleAddProgram = (newProg: ProgramItem) => {
     const updated = [newProg, ...programs];
     setPrograms(updated);
     savePrograms(updated);
+    
+    // Tự động đẩy lên Cloud cho toàn bộ người dùng
+    autoPublishToCloud(updated).then((res) => {
+      if (res.success) {
+        setSyncAlert({
+          message: 'Đã tự động đồng bộ Workshop mới lên hệ thống cho mọi người dùng!',
+          titles: [newProg.title],
+        });
+        setTimeout(() => setSyncAlert(null), 5000);
+      }
+    });
   };
 
   const handleUpdateProgram = (updatedProg: ProgramItem) => {
     const updated = programs.map((p) => (p.id === updatedProg.id ? updatedProg : p));
     setPrograms(updated);
     savePrograms(updated);
+
+    // Tự động cập nhật thay đổi lên Cloud cho toàn bộ người dùng
+    autoPublishToCloud(updated).then((res) => {
+      if (res.success) {
+        setSyncAlert({
+          message: 'Đã tự động cập nhật thay đổi lên hệ thống cho mọi người dùng!',
+          titles: [updatedProg.title],
+        });
+        setTimeout(() => setSyncAlert(null), 5000);
+      }
+    });
   };
 
   const handleDeleteProgram = (id: string) => {
@@ -127,12 +179,23 @@ export default function App() {
       const updated = programs.filter((p) => p.id !== id);
       setPrograms(updated);
       savePrograms(updated);
+
+      // Tự động cập nhật xóa lên Cloud cho toàn bộ người dùng
+      autoPublishToCloud(updated).then((res) => {
+        if (res.success) {
+          setSyncAlert({
+            message: 'Đã tự động cập nhật xóa mục này khỏi hệ thống chung của đội ngũ!',
+          });
+          setTimeout(() => setSyncAlert(null), 4000);
+        }
+      });
     }
   };
 
   const handleReloadPrograms = (newPrograms: ProgramItem[]) => {
     setPrograms(newPrograms);
     savePrograms(newPrograms);
+    autoPublishToCloud(newPrograms);
   };
 
   const wsCount = programs.filter((p) => p.type === 'ws').length;
