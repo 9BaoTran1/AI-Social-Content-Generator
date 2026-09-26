@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ProgramItem, OrderType, ThemeMode } from './types';
 import { getSavedPrograms, savePrograms } from './lib/storage';
+import { checkAndImportFromUrl, syncProgramsFromCloud } from './lib/syncService';
 import { Navbar } from './components/Navbar';
 import { GeneratorWorkbench } from './components/GeneratorWorkbench';
 import { OrderGrid } from './components/OrderGrid';
@@ -9,6 +10,7 @@ import { AssistantView } from './components/AssistantView';
 import { BenchmarkLibrary } from './components/BenchmarkLibrary';
 import { UserGuide } from './components/UserGuide';
 import { CommandPalette } from './components/CommandPalette';
+import { CheckCircle2, X, Sparkles } from 'lucide-react';
 
 export default function App() {
   const [programs, setPrograms] = useState<ProgramItem[]>(getSavedPrograms());
@@ -17,6 +19,7 @@ export default function App() {
   const [prefillContext, setPrefillContext] = useState<string>('');
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
+  const [syncAlert, setSyncAlert] = useState<{ message: string; titles?: string[] } | null>(null);
 
   // Theme State (stored preference or default 'light')
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -46,6 +49,44 @@ export default function App() {
         }
       }
     }
+  }, []);
+
+  // CRT Auto-Sync: Kiểm tra link chia sẻ CRT hoặc cập nhật ngầm từ Cloud
+  useEffect(() => {
+    // 1. Kiểm tra nếu có link chia sẻ CRT từ Admin (?import_crt=... hoặc ?import_all_crt=...)
+    const imported = checkAndImportFromUrl();
+    if (imported && imported.imported) {
+      const fresh = getSavedPrograms();
+      setPrograms(fresh);
+      setSyncAlert({
+        message: `Đã tự động đồng bộ ${imported.count} Workshop/Chương trình mới từ Admin!`,
+        titles: imported.titles,
+      });
+      setTimeout(() => setSyncAlert(null), 8000);
+    }
+
+    // 2. Chạy kiểm tra đồng bộ ngầm với Cloud Endpoint (nếu có cấu hình)
+    syncProgramsFromCloud().then((res) => {
+      if (res.updated) {
+        const fresh = getSavedPrograms();
+        setPrograms(fresh);
+        setSyncAlert({
+          message: res.message || `Đã cập nhật ${res.count} chương trình mới từ Cloud!`,
+        });
+        setTimeout(() => setSyncAlert(null), 6000);
+      }
+    });
+
+    // 3. Lắng nghe sự kiện đồng bộ từ các component khác
+    const handleSynced = (e: any) => {
+      if (e.detail && Array.isArray(e.detail)) {
+        setPrograms(e.detail);
+      } else {
+        setPrograms(getSavedPrograms());
+      }
+    };
+    window.addEventListener('crt_programs_synced', handleSynced);
+    return () => window.removeEventListener('crt_programs_synced', handleSynced);
   }, []);
 
   useEffect(() => {
@@ -118,6 +159,42 @@ export default function App() {
           onToggleTheme={toggleTheme}
           onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
         />
+
+        {/* Sync Success Alert Banner */}
+        {syncAlert && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 w-full">
+            <div
+              className={`p-3.5 rounded-2xl border flex items-center justify-between gap-3 shadow-sm transition-all animate-in fade-in slide-in-from-top-2 duration-300 ${
+                isDark
+                  ? 'bg-emerald-950/70 border-emerald-800 text-emerald-200'
+                  : 'bg-emerald-50 border-emerald-300 text-emerald-900'
+              }`}
+            >
+              <div className="flex items-center gap-2.5 text-xs sm:text-sm font-medium">
+                <span className="p-1 rounded-full bg-emerald-500/20 text-emerald-500">
+                  <CheckCircle2 className="w-4 h-4" />
+                </span>
+                <div>
+                  <span>{syncAlert.message}</span>
+                  {syncAlert.titles && syncAlert.titles.length > 0 && (
+                    <span className="opacity-90 ml-1.5 font-bold">
+                      ({syncAlert.titles.slice(0, 3).join(', ')}
+                      {syncAlert.titles.length > 3 ? '...' : ''})
+                    </span>
+                  )}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSyncAlert(null)}
+                className="p-1 rounded-lg hover:bg-emerald-500/20 transition-colors cursor-pointer"
+                title="Đóng thông báo"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Main Content Area */}
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
